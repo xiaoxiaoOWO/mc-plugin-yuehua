@@ -5,6 +5,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.xiaoxiao.yuehua.commands.Clearup;
+import org.xiaoxiao.yuehua.commands.IntoGame;
 import org.xiaoxiao.yuehua.data.Data;
 import org.xiaoxiao.yuehua.event.Spawner.Spawn;
 import org.xiaoxiao.yuehua.event.entity.*;
@@ -15,6 +16,7 @@ import org.xiaoxiao.yuehua.util.MySender;
 import org.xiaoxiao.yuehua.util.Scores;
 
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.UUID;
 
 public final class Yuehua extends JavaPlugin {
@@ -41,9 +43,6 @@ public final class Yuehua extends JavaPlugin {
 
         //Scores初始化
         Scores.init();
-
-        //PlayerDeath初始化
-        org.xiaoxiao.yuehua.event.player.Death.init();
 
         //注册监听器
         registerListener();
@@ -85,7 +84,10 @@ public final class Yuehua extends JavaPlugin {
     }
 
     private void registerCommand() {
-        Bukkit.getPluginCommand("clearup").setExecutor(new Clearup());
+        Objects.requireNonNull(Bukkit.getPluginCommand("clearup")).setExecutor(new Clearup());
+        Objects.requireNonNull(Bukkit.getPluginCommand("intogame")).setExecutor(new IntoGame());
+        Objects.requireNonNull(Bukkit.getPluginCommand("dataget")).setExecutor(new org.xiaoxiao.yuehua.commands.data.DataGet());
+        Objects.requireNonNull(Bukkit.getPluginCommand("dataset")).setExecutor(new org.xiaoxiao.yuehua.commands.data.DataSet());
 
     }
 

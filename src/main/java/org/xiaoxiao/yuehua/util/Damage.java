@@ -2,14 +2,14 @@ package org.xiaoxiao.yuehua.util;
 
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Player;
+import org.xiaoxiao.yuehua.Yuehua;
 
 import java.util.Objects;
 
 public final class Damage {
     public static void damage(Creature creature, Player player, double damage) {
-        String name = player.getName();
         //判断是否同队
-        if (Objects.equals(Scores.scoreboard.getEntityTeam(creature), Scores.scoreboard.getEntryTeam(name))) {
+        if (Objects.equals(Scores.scoreboard.getEntityTeam(creature), Scores.scoreboard.getPlayerTeam(player))) {
             return;
         }
         //仇恨
@@ -19,7 +19,7 @@ public final class Damage {
 
         //取数据
         int fakang = Scores.getFakang(creature);
-        int pofa = Scores.getPofa(name);
+        int pofa = Yuehua.playerData.get(player.getUniqueId()).pofa;
         int x = Math.max(0,fakang-pofa);
         int y = Math.min(100, x);
 
@@ -29,7 +29,7 @@ public final class Damage {
 
     public static void damage(Player player,double damage){
         //取数据
-        int fakang = Scores.getFakang(player.getName());
+        int fakang = Yuehua.playerData.get(player.getUniqueId()).fakang;
         //伤害
         player.damage(damage * (1 - fakang / 100.0));
     }

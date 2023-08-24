@@ -8,8 +8,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scoreboard.Score;
 import org.xiaoxiao.yuehua.Yuehua;
 import org.xiaoxiao.yuehua.data.DanData;
+import org.xiaoxiao.yuehua.data.Data;
 import org.xiaoxiao.yuehua.data.GongData;
 import org.xiaoxiao.yuehua.data.ZhanData;
 import org.xiaoxiao.yuehua.util.Scores;
@@ -43,6 +45,7 @@ public final class Join implements Listener {
             case 1 -> Yuehua.playerData.put(uuid,new ZhanData(name));
             case 2 -> Yuehua.playerData.put(uuid,new GongData(name));
             case 3 -> Yuehua.playerData.put(uuid,new DanData(name));
+            default -> Yuehua.playerData.put(uuid,new Data(name));
         }
 
 

@@ -6,3 +6,10 @@ depend: [NBTAPI]
 commands:
   clearup:
     description: clearup
+  intogame:
+    description: intogame
+  dataget:
+    description: dataget
+  dataset:
+    description: dataset
+

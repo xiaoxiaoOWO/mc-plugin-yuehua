@@ -16,6 +16,13 @@ public final class Scores {
     public static Objective mainland;
     public static Objective cool_reduce;
 
+    //五种族好感
+    public static Objective racefriend_shen;
+    public static Objective racefriend_xian;
+    public static Objective racefriend_ren;
+    public static Objective racefriend_yao;
+    public static Objective racefriend_zhan;
+
     //DLC数据
     public static Objective baoji;
     public static Objective baojixiaoguo;
@@ -31,11 +38,13 @@ public final class Scores {
     public static Objective arrow;
     public static Objective arrow_add;
     public static Objective arrow_mul;
+    public static Objective arrow_count;
 
     //丹师数据
     public static Objective zhenfa;
     public static Objective zhenfa_add;
     public static Objective zhenfa_mul;
+    public static Objective zhenfa_test;
 
     public static void init() {
         scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
@@ -74,6 +83,67 @@ public final class Scores {
 
     public static void updateZhenfa(String name) {
         zhenfa.getScore(name).setScore(getZhenfaAdd(name) * getZhenfaMul(name) / 100);
+    }
+
+    public static int getRaceFriendShen(String name) {
+        return racefriend_shen.getScore(name).getScore();
+    }
+
+    public static void setRaceFriendShen(String name, int value) {
+        racefriend_shen.getScore(name).setScore(value);
+    }
+
+    public static int getRaceFriendXian(String name) {
+        return racefriend_xian.getScore(name).getScore();
+    }
+
+    public static void setRaceFriendXian(String name, int value) {
+        racefriend_xian.getScore(name).setScore(value);
+    }
+
+    public static int getRaceFriendRen(String name) {
+        return racefriend_ren.getScore(name).getScore();
+    }
+
+    public static void setRaceFriendRen(String name, int value) {
+        racefriend_ren.getScore(name).setScore(value);
+    }
+
+    public static int getRaceFriendYao(String name) {
+        return racefriend_yao.getScore(name).getScore();
+    }
+
+    public static void setRaceFriendYao(String name, int value) {
+        racefriend_yao.getScore(name).setScore(value);
+    }
+
+    public static int getRaceFriendZhan(String name) {
+        return racefriend_zhan.getScore(name).getScore();
+    }
+
+    public static void setRaceFriendZhan(String name, int value) {
+        racefriend_zhan.getScore(name).setScore(value);
+    }
+
+    public static int getZhenfaTest(String name) {
+        return zhenfa_test.getScore(name).getScore();
+    }
+
+    public static void setZhenfaTest(String name, int value) {
+        zhenfa_test.getScore(name).setScore(value);
+    }
+
+    public static int getArrowCount(String name){
+        return arrow_count.getScore(name).getScore();
+    }
+
+    public static void setArrow_count(String name,int value){
+        arrow_count.getScore(name).setScore(value);
+    }
+
+    public static void updateArrowCount(String name,int value){
+        Score score = arrow_count.getScore(name);
+        score.setScore(score.getScore() + value);
     }
 
     //只取只设数据

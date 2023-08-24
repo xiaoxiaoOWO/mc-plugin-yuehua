@@ -18,6 +18,10 @@ public final class DanData extends Data{
         zhenfa_mul_buff = new HashMap<>(16);
     }
 
+    public String toString(){
+        return super.toString()+"\nzhenfa: "+zhenfa;
+    }
+
     public void updateZhenfa() {
         zhenfa = Math.max(0, zhenfa_score * zhenfa_mul / 100);
     }

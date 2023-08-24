@@ -38,9 +38,8 @@ public class Data {
     public int cool_reduce_add;
     public HashMap<String, Integer> cool_reduce_add_buff;
 
-    public int race;
     public int job;
-    public int mainland;
+
 
     public Data(String name) {
         //计分板数据
@@ -51,9 +50,7 @@ public class Data {
         pofa_score = Scores.getPofa(name);
         cool_reduce_score = Scores.getCoolReduce(name);
 
-        race = Scores.getRace(name);
         job = Scores.getJob(name);
-        mainland = Scores.getMainland(name);
 
         //其它数据
         attack = attack_score;
@@ -80,6 +77,10 @@ public class Data {
         cool_reduce_add = 0;
         cool_reduce_add_buff = new HashMap<>(8);
 
+    }
+
+    public String toString(){
+        return "attack: "+attack+"\nbaoji: "+baoji+"\nbaojixiaoguo: "+baojixiaoguo+"\nfakang: "+fakang+"\npofa: "+pofa+"\ncool_reduce: "+cool_reduce;
     }
 
     public void updateAttack() {

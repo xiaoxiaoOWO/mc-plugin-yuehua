@@ -18,6 +18,10 @@ public final class GongData extends Data {
         arrow_mul_buff = new HashMap<>(16);
     }
 
+    public String toString(){
+        return super.toString()+"\narrow: "+arrow;
+    }
+
     public void updateArrow() {
         arrow = Math.max(0, arrow_score * arrow_mul / 100);
     }
