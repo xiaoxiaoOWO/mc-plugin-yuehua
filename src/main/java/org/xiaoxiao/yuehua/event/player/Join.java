@@ -1,6 +1,5 @@
 package org.xiaoxiao.yuehua.event.player;
 
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -8,13 +7,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scoreboard.Score;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.xiaoxiao.yuehua.Yuehua;
 import org.xiaoxiao.yuehua.data.DanData;
 import org.xiaoxiao.yuehua.data.Data;
 import org.xiaoxiao.yuehua.data.GongData;
 import org.xiaoxiao.yuehua.data.ZhanData;
-import org.xiaoxiao.yuehua.util.Scores;
+import org.xiaoxiao.yuehua.system.Scores;
 
 import java.util.UUID;
 
@@ -27,25 +26,25 @@ public final class Join implements Listener {
         Player player = e.getPlayer();
         UUID uuid = player.getUniqueId();
         String name = player.getName();
-//        String ip = player.getAddress().getAddress().getHostAddress();
-//        //防止双开
-//        for (Player p : Bukkit.getOnlinePlayers()) {
-//            if (p != player) {
-//                if (p.getAddress().getAddress().getHostAddress().equals(ip)) {
-//                    p.banPlayer("§c禁止多开");
-//                    return;
-//                }
-//            }
-//        }
+        String ip = player.getAddress().getAddress().getHostAddress();
+        //防止双开
+        for (Player p : Yuehua.players) {
+            if (p != player) {
+                if (p.getAddress().getAddress().getHostAddress().equals(ip)) {
+                    p.banPlayer("§c禁止多开");
+                    return;
+                }
+            }
+        }
 
 
         //根据职业初始化数据
         int job = Scores.getJob(name);
-        switch (job){
-            case 1 -> Yuehua.playerData.put(uuid,new ZhanData(name));
-            case 2 -> Yuehua.playerData.put(uuid,new GongData(name));
-            case 3 -> Yuehua.playerData.put(uuid,new DanData(name));
-            default -> Yuehua.playerData.put(uuid,new Data(name));
+        switch (job) {
+            case 1 -> Yuehua.playerData.put(uuid, new ZhanData(player));
+            case 2 -> Yuehua.playerData.put(uuid, new GongData(player));
+            case 3 -> Yuehua.playerData.put(uuid, new DanData(player));
+            default -> Yuehua.playerData.put(uuid, new Data(player));
         }
 
 
@@ -60,5 +59,13 @@ public final class Join implements Listener {
                 player.sendPlainMessage("§c你不在大陆，已受到惩罚");
             }
         }
+
+        //1tick后ready
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                Yuehua.playerData.get(uuid).ready = true;
+            }
+        }.runTask(Yuehua.instance);
     }
 }

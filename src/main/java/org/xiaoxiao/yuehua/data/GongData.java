@@ -1,6 +1,7 @@
 package org.xiaoxiao.yuehua.data;
 
-import org.xiaoxiao.yuehua.util.Scores;
+import org.bukkit.entity.Player;
+import org.xiaoxiao.yuehua.system.Scores;
 
 import java.util.HashMap;
 
@@ -10,8 +11,9 @@ public final class GongData extends Data {
     public int arrow_mul;
     public HashMap<String, Integer> arrow_mul_buff;
 
-    public GongData(String name) {
-        super(name);
+    public GongData(Player player) {
+        super(player);
+        String name = player.getName();
         arrow_score = Scores.getArrow(name);
         arrow = arrow_score;
         arrow_mul = 100;

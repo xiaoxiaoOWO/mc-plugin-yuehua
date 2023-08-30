@@ -1,4 +1,4 @@
-package org.xiaoxiao.yuehua.util;
+package org.xiaoxiao.yuehua.system;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;

@@ -1,0 +1,66 @@
+Date : 2023-08-25 03:27:26
+Directory : c:\Users\xiaoxiaoOWO\Desktop\yuehua\src
+Total : 25 files,  1272 codes, 58 comments, 364 blanks, all 1694 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| Java     |         23 |      1,258 |         58 |        361 |      1,677 |
+| YAML     |          2 |         14 |          0 |          3 |         17 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++--------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                   | files      | code       | comment    | blank      | total      |
++--------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                      |         25 |      1,272 |         58 |        364 |      1,694 |
+| main                                                                                                   |         25 |      1,272 |         58 |        364 |      1,694 |
+| main\java                                                                                              |         23 |      1,258 |         58 |        361 |      1,677 |
+| main\java\org                                                                                          |         23 |      1,258 |         58 |        361 |      1,677 |
+| main\java\org\xiaoxiao                                                                                 |         23 |      1,258 |         58 |        361 |      1,677 |
+| main\java\org\xiaoxiao\yuehua                                                                          |         23 |      1,258 |         58 |        361 |      1,677 |
+| main\java\org\xiaoxiao\yuehua (Files)                                                                  |          1 |         61 |         12 |         24 |         97 |
+| main\java\org\xiaoxiao\yuehua\commands                                                                 |          4 |        174 |          4 |         42 |        220 |
+| main\java\org\xiaoxiao\yuehua\commands (Files)                                                         |          2 |         99 |          4 |         15 |        118 |
+| main\java\org\xiaoxiao\yuehua\commands\data                                                            |          2 |         75 |          0 |         27 |        102 |
+| main\java\org\xiaoxiao\yuehua\data                                                                     |          4 |        280 |          2 |         78 |        360 |
+| main\java\org\xiaoxiao\yuehua\event                                                                    |         10 |        190 |         19 |         43 |        252 |
+| main\java\org\xiaoxiao\yuehua\event\Spawner                                                            |          1 |         21 |          4 |          3 |         28 |
+| main\java\org\xiaoxiao\yuehua\event\entity                                                             |          6 |         85 |          1 |         20 |        106 |
+| main\java\org\xiaoxiao\yuehua\event\player                                                             |          3 |         84 |         14 |         20 |        118 |
+| main\java\org\xiaoxiao\yuehua\util                                                                     |          4 |        553 |         21 |        174 |        748 |
+| main\resources                                                                                         |          2 |         14 |          0 |          3 |         17 |
++--------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++--------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                                                               | language | code       | comment    | blank      | total      |
++--------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| c:\Users\xiaoxiaoOWO\Desktop\yuehua\src\main\java\org\xiaoxiao\yuehua\Yuehua.java                      | Java     |         61 |         12 |         24 |         97 |
+| c:\Users\xiaoxiaoOWO\Desktop\yuehua\src\main\java\org\xiaoxiao\yuehua\commands\Clearup.java            | Java     |         53 |          3 |          4 |         60 |
+| c:\Users\xiaoxiaoOWO\Desktop\yuehua\src\main\java\org\xiaoxiao\yuehua\commands\IntoGame.java           | Java     |         46 |          1 |         11 |         58 |
+| c:\Users\xiaoxiaoOWO\Desktop\yuehua\src\main\java\org\xiaoxiao\yuehua\commands\data\DataGet.java       | Java     |         28 |          0 |          4 |         32 |
+| c:\Users\xiaoxiaoOWO\Desktop\yuehua\src\main\java\org\xiaoxiao\yuehua\commands\data\DataSet.java       | Java     |         47 |          0 |         23 |         70 |
+| c:\Users\xiaoxiaoOWO\Desktop\yuehua\src\main\java\org\xiaoxiao\yuehua\data\DanData.java                | Java     |         41 |          0 |         11 |         52 |
+| c:\Users\xiaoxiaoOWO\Desktop\yuehua\src\main\java\org\xiaoxiao\yuehua\data\Data.java                   | Java     |        192 |          2 |         54 |        248 |
+| c:\Users\xiaoxiaoOWO\Desktop\yuehua\src\main\java\org\xiaoxiao\yuehua\data\GongData.java               | Java     |         41 |          0 |         11 |         52 |
+| c:\Users\xiaoxiaoOWO\Desktop\yuehua\src\main\java\org\xiaoxiao\yuehua\data\ZhanData.java               | Java     |          6 |          0 |          2 |          8 |
+| c:\Users\xiaoxiaoOWO\Desktop\yuehua\src\main\java\org\xiaoxiao\yuehua\event\Spawner\Spawn.java         | Java     |         21 |          4 |          3 |         28 |
+| c:\Users\xiaoxiaoOWO\Desktop\yuehua\src\main\java\org\xiaoxiao\yuehua\event\entity\Breed.java          | Java     |         10 |          0 |          4 |         14 |
+| c:\Users\xiaoxiaoOWO\Desktop\yuehua\src\main\java\org\xiaoxiao\yuehua\event\entity\DamageByEntity.java | Java     |         29 |          1 |          4 |         34 |
+| c:\Users\xiaoxiaoOWO\Desktop\yuehua\src\main\java\org\xiaoxiao\yuehua\event\entity\Death.java          | Java     |         10 |          0 |          3 |         13 |
+| c:\Users\xiaoxiaoOWO\Desktop\yuehua\src\main\java\org\xiaoxiao\yuehua\event\entity\PotionSpLash.java   | Java     |         16 |          0 |          3 |         19 |
+| c:\Users\xiaoxiaoOWO\Desktop\yuehua\src\main\java\org\xiaoxiao\yuehua\event\entity\SlimeSpilt.java     | Java     |         10 |          0 |          3 |         13 |
+| c:\Users\xiaoxiaoOWO\Desktop\yuehua\src\main\java\org\xiaoxiao\yuehua\event\entity\Transform.java      | Java     |         10 |          0 |          3 |         13 |
+| c:\Users\xiaoxiaoOWO\Desktop\yuehua\src\main\java\org\xiaoxiao\yuehua\event\player\Death.java          | Java     |         32 |          1 |          7 |         40 |
+| c:\Users\xiaoxiaoOWO\Desktop\yuehua\src\main\java\org\xiaoxiao\yuehua\event\player\Join.java           | Java     |         42 |         13 |         10 |         65 |
+| c:\Users\xiaoxiaoOWO\Desktop\yuehua\src\main\java\org\xiaoxiao\yuehua\event\player\Quit.java           | Java     |         10 |          0 |          3 |         13 |
+| c:\Users\xiaoxiaoOWO\Desktop\yuehua\src\main\java\org\xiaoxiao\yuehua\util\Damage.java                 | Java     |         24 |          6 |          7 |         37 |
+| c:\Users\xiaoxiaoOWO\Desktop\yuehua\src\main\java\org\xiaoxiao\yuehua\util\GetEntity.java              | Java     |        145 |          0 |         46 |        191 |
+| c:\Users\xiaoxiaoOWO\Desktop\yuehua\src\main\java\org\xiaoxiao\yuehua\util\MySender.java               | Java     |        121 |          0 |         43 |        164 |
+| c:\Users\xiaoxiaoOWO\Desktop\yuehua\src\main\java\org\xiaoxiao\yuehua\util\Scores.java                 | Java     |        263 |         15 |         78 |        356 |
+| c:\Users\xiaoxiaoOWO\Desktop\yuehua\src\main\resources\config.yml                                      | YAML     |          0 |          0 |          1 |          1 |
+| c:\Users\xiaoxiaoOWO\Desktop\yuehua\src\main\resources\plugin.yml                                      | YAML     |         14 |          0 |          2 |         16 |
+| Total                                                                                                  |          |      1,272 |         58 |        364 |      1,694 |
++--------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+

@@ -1,6 +1,7 @@
 package org.xiaoxiao.yuehua;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -9,12 +10,14 @@ import org.xiaoxiao.yuehua.commands.IntoGame;
 import org.xiaoxiao.yuehua.data.Data;
 import org.xiaoxiao.yuehua.event.Spawner.Spawn;
 import org.xiaoxiao.yuehua.event.entity.*;
+import org.xiaoxiao.yuehua.event.player.InventorySlotChange;
 import org.xiaoxiao.yuehua.event.player.Join;
 import org.xiaoxiao.yuehua.event.player.Quit;
 import org.xiaoxiao.yuehua.util.GetEntity;
 import org.xiaoxiao.yuehua.util.MySender;
-import org.xiaoxiao.yuehua.util.Scores;
+import org.xiaoxiao.yuehua.system.Scores;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.UUID;
@@ -27,13 +30,15 @@ public final class Yuehua extends JavaPlugin {
 
     public static HashMap<UUID, Data> playerData;
 
+    public static Collection<? extends Player> players;
+
 
     @Override
     public void onEnable() {
         instance = this;
         console = new MySender();
-        playerData = new HashMap<>(126, 0.5f);
-
+        playerData = new HashMap<>(200, 0.5f);
+        players = Bukkit.getOnlinePlayers();
 
         //默认配置文件
         saveDefaultConfig();
@@ -70,12 +75,14 @@ public final class Yuehua extends JavaPlugin {
         PluginManager pluginManager = Bukkit.getPluginManager();
         //entity
         pluginManager.registerEvents(new Breed(), this);
+        pluginManager.registerEvents(new DamageByEntity(), this);
         pluginManager.registerEvents(new Death(), this);
         pluginManager.registerEvents(new PotionSpLash(), this);
         pluginManager.registerEvents(new SlimeSpilt(), this);
         pluginManager.registerEvents(new Transform(), this);
         //player
         pluginManager.registerEvents(new Death(), this);
+        pluginManager.registerEvents(new InventorySlotChange(), this);
         pluginManager.registerEvents(new Join(), this);
         pluginManager.registerEvents(new Quit(), this);
         //Spawner

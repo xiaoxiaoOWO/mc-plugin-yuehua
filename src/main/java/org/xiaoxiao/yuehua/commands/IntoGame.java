@@ -6,6 +6,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.xiaoxiao.yuehua.Yuehua;
 import org.xiaoxiao.yuehua.data.DanData;
@@ -13,7 +14,7 @@ import org.xiaoxiao.yuehua.data.GongData;
 import org.xiaoxiao.yuehua.data.ZhanData;
 import org.xiaoxiao.yuehua.event.player.Death;
 import org.xiaoxiao.yuehua.util.GetEntity;
-import org.xiaoxiao.yuehua.util.Scores;
+import org.xiaoxiao.yuehua.system.Scores;
 
 import java.util.UUID;
 
@@ -46,10 +47,18 @@ public final class IntoGame implements CommandExecutor {
         Yuehua.playerData.remove(uuid);
         int job = Scores.getJob(name);
         switch (job) {
-            case 1 -> Yuehua.playerData.put(uuid, new ZhanData(name));
-            case 2 -> Yuehua.playerData.put(uuid, new GongData(name));
-            case 3 -> Yuehua.playerData.put(uuid, new DanData(name));
+            case 1 -> Yuehua.playerData.put(uuid, new ZhanData(player));
+            case 2 -> Yuehua.playerData.put(uuid, new GongData(player));
+            case 3 -> Yuehua.playerData.put(uuid, new DanData(player));
         }
+
+        //1tick后ready
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                Yuehua.playerData.get(uuid).ready = true;
+            }
+        }.runTask(Yuehua.instance);
 
 
         return true;

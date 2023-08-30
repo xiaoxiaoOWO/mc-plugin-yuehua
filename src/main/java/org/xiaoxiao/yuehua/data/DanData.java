@@ -1,6 +1,7 @@
 package org.xiaoxiao.yuehua.data;
 
-import org.xiaoxiao.yuehua.util.Scores;
+import org.bukkit.entity.Player;
+import org.xiaoxiao.yuehua.system.Scores;
 
 import java.util.HashMap;
 
@@ -10,8 +11,9 @@ public final class DanData extends Data{
     public int zhenfa_mul;
     public HashMap<String, Integer> zhenfa_mul_buff;
 
-    public DanData(String name) {
-        super(name);
+    public DanData(Player player) {
+        super(player);
+        String name = player.getName();
         zhenfa_score = Scores.getZhenfa(name);
         zhenfa = zhenfa_score;
         zhenfa_mul = 100;

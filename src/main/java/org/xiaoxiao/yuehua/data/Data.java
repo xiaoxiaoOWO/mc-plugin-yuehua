@@ -1,12 +1,15 @@
 package org.xiaoxiao.yuehua.data;
 
 
-import org.xiaoxiao.yuehua.util.Scores;
+import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.Team;
+import org.xiaoxiao.yuehua.system.Scores;
 
 import java.util.HashMap;
 
 public class Data {
-
+    //队伍
+    public Team team;
 
     public int attack;
     public int attack_score;
@@ -40,8 +43,16 @@ public class Data {
 
     public int job;
 
+    //完全登入后准备完成
+    public boolean ready;
 
-    public Data(String name) {
+
+    public Data(Player player) {
+        String name = player.getName();
+
+        //队伍
+        team = Scores.scoreboard.getPlayerTeam(player);
+
         //计分板数据
         attack_score = Scores.getAttack(name);
         baoji_score = Scores.getBaoji(name);
@@ -51,6 +62,8 @@ public class Data {
         cool_reduce_score = Scores.getCoolReduce(name);
 
         job = Scores.getJob(name);
+
+        ready = false;
 
         //其它数据
         attack = attack_score;
@@ -79,8 +92,8 @@ public class Data {
 
     }
 
-    public String toString(){
-        return "attack: "+attack+"\nbaoji: "+baoji+"\nbaojixiaoguo: "+baojixiaoguo+"\nfakang: "+fakang+"\npofa: "+pofa+"\ncool_reduce: "+cool_reduce;
+    public String toString() {
+        return "attack: " + attack + "\nbaoji: " + baoji + "\nbaojixiaoguo: " + baojixiaoguo + "\nfakang: " + fakang + "\npofa: " + pofa + "\ncool_reduce: " + cool_reduce;
     }
 
     public void updateAttack() {
