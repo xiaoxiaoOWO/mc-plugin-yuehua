@@ -15,21 +15,21 @@ import java.util.Arrays;
 import java.util.HashSet;
 
 public final class InventorySlotChange implements Listener {
-    private static final HashSet<Integer> zhan_slots = new HashSet<>(Arrays.asList(0, 1, 4, 9, 36, 37, 38, 39, 40));
-    private static final HashSet<Integer> gong_slots = new HashSet<>(Arrays.asList(0, 1, 4, 8, 9, 36, 37, 38, 39));
-    private static final HashSet<Integer> dan_slots = new HashSet<>(Arrays.asList(0, 4, 5, 6, 7, 8, 9, 36, 37, 38, 39, 40));
+    private static final HashSet<Integer> slots = new HashSet<>(Arrays.asList(0, 1, 4, 5, 6, 7, 8, 9, 36, 37, 38, 39, 40));
+    private static final HashSet<Integer> slots_zhan = new HashSet<>(Arrays.asList(5, 6, 7, 8));
+    private static final HashSet<Integer> slots_gong = new HashSet<>(Arrays.asList(5, 6, 7, 40));
 
 
     @EventHandler
     public void onInventorySlotChange(PlayerInventorySlotChangeEvent e) {
-        Player player = e.getPlayer();
-        Data data = Yuehua.playerData.get(player.getUniqueId());
-        if (data.ready) {
+        int slot = e.getSlot();
+        if (slots.contains(slot)) {
+            Player player = e.getPlayer();
+            Data data = Yuehua.playerData.get(player.getUniqueId());
             int job = data.job;
-            int slot = e.getSlot();
             switch (job) {
                 case 1 -> {
-                    if (zhan_slots.contains(slot)) {
+                    if (!slots_zhan.contains(slot)) {
                         ItemStack old = e.getOldItemStack();
                         ItemStack now = e.getNewItemStack();
                         //对旧进行是否需要去激活判断
@@ -37,7 +37,9 @@ public final class InventorySlotChange implements Listener {
                             if (NBT.get(old, nbt -> nbt.getInteger("slot")) == slot) {
                                 if (NBT.get(old, nbt -> nbt.getInteger("job")) == 1) {
                                     //去激活
-                                    Act.DeActZhan(player, old);
+                                    if (data.ready) {
+                                        Act.DeActZhan(player, old);
+                                    }
                                 }
                             }
                         }
@@ -46,14 +48,16 @@ public final class InventorySlotChange implements Listener {
                             if (NBT.get(now, nbt -> nbt.getInteger("slot")) == slot) {
                                 if (NBT.get(now, nbt -> nbt.getInteger("job")) == 1) {
                                     //激活
-                                    Act.ActZhan(player, now);
+                                    if (data.ready) {
+                                        Act.ActZhan(player, now);
+                                    }
                                 }
                             }
                         }
                     }
                 }
                 case 2 -> {
-                    if (gong_slots.contains(slot)) {
+                    if (!slots_gong.contains(slot)) {
                         ItemStack old = e.getOldItemStack();
                         ItemStack now = e.getNewItemStack();
                         //对旧进行是否需要去激活判断
@@ -61,7 +65,9 @@ public final class InventorySlotChange implements Listener {
                             if (NBT.get(old, nbt -> nbt.getInteger("slot")) == slot) {
                                 if (NBT.get(old, nbt -> nbt.getInteger("job")) == 2) {
                                     //去激活
-                                    Act.DeActGong(player, old);
+                                    if (data.ready) {
+                                        Act.DeActGong(player, old);
+                                    }
                                 }
                             }
                         }
@@ -70,14 +76,16 @@ public final class InventorySlotChange implements Listener {
                             if (NBT.get(now, nbt -> nbt.getInteger("slot")) == slot) {
                                 if (NBT.get(now, nbt -> nbt.getInteger("job")) == 2) {
                                     //激活
-                                    Act.ActGong(player, now);
+                                    if (data.ready) {
+                                        Act.ActGong(player, now);
+                                    }
                                 }
                             }
                         }
                     }
                 }
                 case 3 -> {
-                    if (dan_slots.contains(slot)) {
+                    if (slot != 1) {
                         ItemStack old = e.getOldItemStack();
                         ItemStack now = e.getNewItemStack();
                         //对旧进行是否需要去激活判断
@@ -85,7 +93,9 @@ public final class InventorySlotChange implements Listener {
                             if (NBT.get(old, nbt -> nbt.getInteger("slot")) == slot) {
                                 if (NBT.get(old, nbt -> nbt.getInteger("job")) == 3) {
                                     //去激活
-                                    Act.DeActDan(player, old);
+                                    if (data.ready) {
+                                        Act.DeActDan(player, old);
+                                    }
                                 }
                             }
                         }
@@ -94,7 +104,9 @@ public final class InventorySlotChange implements Listener {
                             if (NBT.get(now, nbt -> nbt.getInteger("slot")) == slot) {
                                 if (NBT.get(now, nbt -> nbt.getInteger("job")) == 3) {
                                     //激活
-                                    Act.ActDan(player, now);
+                                    if (data.ready) {
+                                        Act.ActDan(player, now);
+                                    }
                                 }
                             }
                         }
@@ -105,3 +117,4 @@ public final class InventorySlotChange implements Listener {
         }
     }
 }
+

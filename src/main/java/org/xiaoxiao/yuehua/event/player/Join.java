@@ -29,10 +29,12 @@ public final class Join implements Listener {
         String ip = player.getAddress().getAddress().getHostAddress();
         //防止双开
         for (Player p : Yuehua.players) {
-            if (p != player) {
-                if (p.getAddress().getAddress().getHostAddress().equals(ip)) {
-                    p.banPlayer("§c禁止多开");
-                    return;
+            if (p.getAddress().getAddress().getHostAddress().equals(ip)) {
+                {
+                    if (p != player) {
+                        p.banPlayer("§c禁止多开");
+                        return;
+                    }
                 }
             }
         }

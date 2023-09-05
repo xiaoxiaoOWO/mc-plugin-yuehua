@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/org.xiaoxiao.yuehua.main.iml" filepath="$PROJECT_DIR$/.idea/modules/org.xiaoxiao.yuehua.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/panling.yuehua.main.iml" filepath="$PROJECT_DIR$/.idea/modules/panling.yuehua.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/yuehua.main.iml" filepath="$PROJECT_DIR$/.idea/modules/yuehua.main.iml" />
     </modules>
   </component>
