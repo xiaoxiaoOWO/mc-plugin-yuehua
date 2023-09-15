@@ -1,12 +1,9 @@
 # Build and Release Folders
-bin-debug/
-bin-release/
-[Oo]bj/
-[Bb]in/
-
+build/
+.gradle/
 # Other files and folders
 .settings/
-
+.idea/
 # Executables
 *.swf
 *.air
