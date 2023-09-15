@@ -5,43 +5,46 @@ import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Team;
 import org.xiaoxiao.yuehua.system.Scores;
 
-import java.util.HashMap;
-
 public class Data {
+    //时效性的属性存储于这里，玩家退出后将会消失，为了避免对正常游戏造成影响，尽量少使用长时效的BUFF，DEBUFF不可存储这里以防玩家利用退出卡BUG
     //队伍
     public Team team;
 
     public int attack;
     public int attack_score;
     public int attack_mul;
-    public HashMap<String, Integer> attack_mul_buff;
+
 
     public int baoji;
     public int baoji_score;
     public int baoji_add;
-    public HashMap<String, Integer> baoji_add_buff;
+
 
     public int baojixiaoguo;
     public int baojixiaoguo_score;
     public int baojixiaoguo_add;
-    public HashMap<String, Integer> baojixiaoguo_add_buff;
+
 
     public int fakang;
     public int fakang_score;
     public int fakang_add;
-    public HashMap<String, Integer> fakang_add_buff;
+
 
     public int pofa;
     public int pofa_score;
     public int pofa_add;
-    public HashMap<String, Integer> pofa_add_buff;
+
 
     public int cool_reduce;
     public int cool_reduce_score;
     public int cool_reduce_add;
-    public HashMap<String, Integer> cool_reduce_add_buff;
+
+    public int branch;
+
 
     public int job;
+    public int race;
+    public int mainland;
 
     //完全登入后准备完成
     public boolean ready;
@@ -62,33 +65,37 @@ public class Data {
         cool_reduce_score = Scores.getCoolReduce(name);
 
         job = Scores.getJob(name);
+        race = Scores.getRace(name);
+        mainland = Scores.getMainland(name);
+
+        branch = Scores.getBranch(name);
 
         ready = false;
 
         //其它数据
         attack = attack_score;
         attack_mul = 100;
-        attack_mul_buff = new HashMap<>(16);
+
 
         baoji = baoji_score;
         baoji_add = 0;
-        baoji_add_buff = new HashMap<>(8);
+
 
         baojixiaoguo = baojixiaoguo_score;
         baojixiaoguo_add = 0;
-        baojixiaoguo_add_buff = new HashMap<>(8);
+
 
         fakang = fakang_score;
         fakang_add = 0;
-        fakang_add_buff = new HashMap<>(8);
+
 
         pofa = pofa_score;
         pofa_add = 0;
-        pofa_add_buff = new HashMap<>(8);
+
 
         cool_reduce = cool_reduce_score;
         cool_reduce_add = 0;
-        cool_reduce_add_buff = new HashMap<>(8);
+
 
     }
 
@@ -130,9 +137,9 @@ public class Data {
         updateBaoji();
     }
 
-    public void updateBaojixiaoguoScore(int value) {
+    public void updateBaoJiXiaoGuoScore(int value) {
         baojixiaoguo_score = value;
-        updateBaojixiaoguo();
+        updateBaoji();
     }
 
     public void updateFakangScore(int value) {
@@ -150,112 +157,33 @@ public class Data {
         updateCoolReduce();
     }
 
-    public void updateAttackMul() {
-        attack_mul = 100;
-        for (Integer value : attack_mul_buff.values()) {
-            attack_mul += value;
-        }
+    public void updateAttackMul(int value) {
+        attack_mul += value;
         updateAttack();
     }
 
-    public void updateBaojiAdd() {
-        baoji_add = 0;
-        for (Integer value : baoji_add_buff.values()) {
-            baoji_add += value;
-        }
+    public void updateBaojiAdd(int value) {
+        baoji_add += value;
         updateBaoji();
     }
 
-    public void updateBaojixiaoguoAdd() {
-        baojixiaoguo_add = 0;
-        for (Integer value : baojixiaoguo_add_buff.values()) {
-            baojixiaoguo_add += value;
-        }
+    public void updateBaojixiaoguoAdd(int value) {
+        baojixiaoguo_add += value;
         updateBaojixiaoguo();
     }
 
-    public void updateFakangAdd() {
-        fakang_add = 0;
-        for (Integer value : fakang_add_buff.values()) {
-            fakang_add += value;
-        }
+    public void updateFakangAdd(int value) {
+        fakang_add += value;
         updateFakang();
     }
 
-    public void updatePofaAdd() {
-        pofa_add = 0;
-        for (Integer value : pofa_add_buff.values()) {
-            pofa_add += value;
-        }
+    public void updatePofaAdd(int value) {
+        pofa_add += value;
         updatePofa();
     }
 
-    public void updateCoolReduceAdd() {
-        cool_reduce_add = 0;
-        for (Integer value : cool_reduce_add_buff.values()) {
-            cool_reduce_add += value;
-        }
+    public void updateCoolReduceAdd(int value) {
+        cool_reduce_add += value;
         updateCoolReduce();
     }
-
-    public void addAttackMulBuff(String key, int value) {
-        attack_mul_buff.put(key, value);
-        updateAttackMul();
-    }
-
-    public void addBaojiAddBuff(String key, int value) {
-        baoji_add_buff.put(key, value);
-        updateBaojiAdd();
-    }
-
-    public void addBaojixiaoguoAddBuff(String key, int value) {
-        baojixiaoguo_add_buff.put(key, value);
-        updateBaojixiaoguoAdd();
-    }
-
-    public void addFakangAddBuff(String key, int value) {
-        fakang_add_buff.put(key, value);
-        updateFakangAdd();
-    }
-
-    public void addPofaAddBuff(String key, int value) {
-        pofa_add_buff.put(key, value);
-        updatePofaAdd();
-    }
-
-    public void addCoolReduceAddBuff(String key, int value) {
-        cool_reduce_add_buff.put(key, value);
-        updateCoolReduceAdd();
-    }
-
-    public void removeAttackMulBuff(String key) {
-        attack_mul_buff.remove(key);
-        updateAttackMul();
-    }
-
-    public void removeBaojiAddBuff(String key) {
-        baoji_add_buff.remove(key);
-        updateBaojiAdd();
-    }
-
-    public void removeBaojixiaoguoAddBuff(String key) {
-        baojixiaoguo_add_buff.remove(key);
-        updateBaojixiaoguoAdd();
-    }
-
-    public void removeFakangAddBuff(String key) {
-        fakang_add_buff.remove(key);
-        updateFakangAdd();
-    }
-
-    public void removePofaAddBuff(String key) {
-        pofa_add_buff.remove(key);
-        updatePofaAdd();
-    }
-
-    public void removeCoolReduceAddBuff(String key) {
-        cool_reduce_add_buff.remove(key);
-        updateCoolReduceAdd();
-    }
-
 }

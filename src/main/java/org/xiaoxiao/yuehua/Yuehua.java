@@ -9,13 +9,13 @@ import org.xiaoxiao.yuehua.commands.Clearup;
 import org.xiaoxiao.yuehua.commands.IntoGame;
 import org.xiaoxiao.yuehua.data.Data;
 import org.xiaoxiao.yuehua.event.Spawner.Spawn;
+import org.xiaoxiao.yuehua.event.entity.Death;
 import org.xiaoxiao.yuehua.event.entity.*;
-import org.xiaoxiao.yuehua.event.player.InventorySlotChange;
-import org.xiaoxiao.yuehua.event.player.Join;
-import org.xiaoxiao.yuehua.event.player.Quit;
+import org.xiaoxiao.yuehua.event.player.*;
+import org.xiaoxiao.yuehua.system.Scores;
+import org.xiaoxiao.yuehua.system.act.Act;
 import org.xiaoxiao.yuehua.util.GetEntity;
 import org.xiaoxiao.yuehua.util.MySender;
-import org.xiaoxiao.yuehua.system.Scores;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -37,17 +37,12 @@ public final class Yuehua extends JavaPlugin {
     public void onEnable() {
         instance = this;
         console = new MySender();
-        playerData = new HashMap<>(200, 0.5f);
+        playerData = new HashMap<>(400);
         players = Bukkit.getOnlinePlayers();
 
-        //默认配置文件
+        //默认配置文件与初始化
         saveDefaultConfig();
-
-        //GetEntity初始化
-        GetEntity.init();
-
-        //Scores初始化
-        Scores.init();
+        init();
 
         //注册监听器
         registerListener();
@@ -71,20 +66,44 @@ public final class Yuehua extends JavaPlugin {
         Bukkit.getScheduler().cancelTasks(this);
     }
 
+    private void init(){
+        //@e
+        GetEntity.init();
+        //计分板
+        Scores.init();
+        //激活
+        Act.init();
+
+        //战士近战
+        DamageByEntity.init();
+
+        //射箭
+        ShootBow.init();
+
+        //右键
+        Interact.init();
+
+    }
+
     private void registerListener() {
         PluginManager pluginManager = Bukkit.getPluginManager();
         //entity
         pluginManager.registerEvents(new Breed(), this);
         pluginManager.registerEvents(new DamageByEntity(), this);
         pluginManager.registerEvents(new Death(), this);
+        pluginManager.registerEvents(new LoadCrossBow(), this);
         pluginManager.registerEvents(new PotionSpLash(), this);
+        pluginManager.registerEvents(new ShootBow(), this);
         pluginManager.registerEvents(new SlimeSpilt(), this);
         pluginManager.registerEvents(new Transform(), this);
         //player
-        pluginManager.registerEvents(new Death(), this);
+        pluginManager.registerEvents(new org.xiaoxiao.yuehua.event.player.Death(), this);
+        pluginManager.registerEvents(new DropItem(), this);
+        pluginManager.registerEvents(new Interact(), this);
         pluginManager.registerEvents(new InventorySlotChange(), this);
         pluginManager.registerEvents(new Join(), this);
         pluginManager.registerEvents(new Quit(), this);
+        pluginManager.registerEvents(new Swap(), this);
         //Spawner
         pluginManager.registerEvents(new Spawn(), this);
 
@@ -95,7 +114,8 @@ public final class Yuehua extends JavaPlugin {
         Objects.requireNonNull(Bukkit.getPluginCommand("intogame")).setExecutor(new IntoGame());
         Objects.requireNonNull(Bukkit.getPluginCommand("dataget")).setExecutor(new org.xiaoxiao.yuehua.commands.data.DataGet());
         Objects.requireNonNull(Bukkit.getPluginCommand("dataset")).setExecutor(new org.xiaoxiao.yuehua.commands.data.DataSet());
-
+        Objects.requireNonNull(Bukkit.getPluginCommand("test")).setExecutor(new org.xiaoxiao.yuehua.commands.Test());
+        Objects.requireNonNull(Bukkit.getPluginCommand("test2")).setExecutor(new org.xiaoxiao.yuehua.commands.Test2());
     }
 
     private void registerTask() {

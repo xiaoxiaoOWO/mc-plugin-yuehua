@@ -5,6 +5,7 @@ import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
@@ -13,8 +14,8 @@ import org.xiaoxiao.yuehua.data.DanData;
 import org.xiaoxiao.yuehua.data.GongData;
 import org.xiaoxiao.yuehua.data.ZhanData;
 import org.xiaoxiao.yuehua.event.player.Death;
-import org.xiaoxiao.yuehua.util.GetEntity;
 import org.xiaoxiao.yuehua.system.Scores;
+import org.xiaoxiao.yuehua.util.GetEntity;
 
 import java.util.UUID;
 
@@ -34,7 +35,7 @@ public final class IntoGame implements CommandExecutor {
         Bukkit.dispatchCommand(Yuehua.console, "execute as " + uuid + " run function yh:selections/into_pangu/into_pangu");
 
         //种族BUFF
-        int race = Scores.getRace(player.getName());
+        int race = Scores.getRace(name);
         switch (race) {
             case 1 -> player.addPotionEffect(Death.shen);
             case 2 -> player.addPotionEffect(Death.xian);
@@ -52,13 +53,14 @@ public final class IntoGame implements CommandExecutor {
             case 3 -> Yuehua.playerData.put(uuid, new DanData(player));
         }
 
-        //1tick后ready
+        //ready
         new BukkitRunnable() {
             @Override
             public void run() {
                 Yuehua.playerData.get(uuid).ready = true;
             }
         }.runTask(Yuehua.instance);
+
 
 
         return true;

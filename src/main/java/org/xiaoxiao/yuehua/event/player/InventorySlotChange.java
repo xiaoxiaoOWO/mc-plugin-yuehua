@@ -8,48 +8,44 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.xiaoxiao.yuehua.Yuehua;
+import org.xiaoxiao.yuehua.data.DanData;
 import org.xiaoxiao.yuehua.data.Data;
+import org.xiaoxiao.yuehua.data.GongData;
+import org.xiaoxiao.yuehua.data.ZhanData;
 import org.xiaoxiao.yuehua.system.act.Act;
 
-import java.util.Arrays;
-import java.util.HashSet;
-
 public final class InventorySlotChange implements Listener {
-    private static final HashSet<Integer> slots = new HashSet<>(Arrays.asList(0, 1, 4, 5, 6, 7, 8, 9, 36, 37, 38, 39, 40));
-    private static final HashSet<Integer> slots_zhan = new HashSet<>(Arrays.asList(5, 6, 7, 8));
-    private static final HashSet<Integer> slots_gong = new HashSet<>(Arrays.asList(5, 6, 7, 40));
 
 
     @EventHandler
     public void onInventorySlotChange(PlayerInventorySlotChangeEvent e) {
         int slot = e.getSlot();
-        if (slots.contains(slot)) {
+        if (slot < 6) {
             Player player = e.getPlayer();
             Data data = Yuehua.playerData.get(player.getUniqueId());
             int job = data.job;
             switch (job) {
                 case 1 -> {
-                    if (!slots_zhan.contains(slot)) {
-                        ItemStack old = e.getOldItemStack();
-                        ItemStack now = e.getNewItemStack();
-                        //对旧进行是否需要去激活判断
-                        if (old.getType() != Material.AIR) {
-                            if (NBT.get(old, nbt -> nbt.getInteger("slot")) == slot) {
-                                if (NBT.get(old, nbt -> nbt.getInteger("job")) == 1) {
-                                    //去激活
-                                    if (data.ready) {
-                                        Act.DeActZhan(player, old);
+                    if (slot < 3) {
+                        if (data.ready) {
+                            ItemStack old = e.getOldItemStack();
+                            ItemStack now = e.getNewItemStack();
+                            if (old.getType() == Material.DIAMOND_PICKAXE) {
+                                //当槽位和职业都满足时去除激活
+                                if (slot == NBT.get(old, nbt -> nbt.getInteger("slot"))) {
+                                    if (job == NBT.get(old, nbt -> nbt.getInteger("job"))) {
+                                        Act.DeActZhan(player, (ZhanData) data, old);
                                     }
                                 }
+
                             }
-                        }
-                        //对新是否需要激活判断
-                        if (now.getType() != Material.AIR) {
-                            if (NBT.get(now, nbt -> nbt.getInteger("slot")) == slot) {
-                                if (NBT.get(now, nbt -> nbt.getInteger("job")) == 1) {
-                                    //激活
-                                    if (data.ready) {
-                                        Act.ActZhan(player, now);
+                            if (now.getType() == Material.DIAMOND_PICKAXE) {
+                                //当槽位和职业都满足时激活
+                                if (slot == NBT.get(now, nbt -> nbt.getInteger("slot"))) {
+                                    if (job == NBT.get(now, nbt -> nbt.getInteger("job"))) {
+                                        Act.ActZhan(player, (ZhanData) data, now);
+                                    } else {
+                                        player.getInventory().setItem(slot, new ItemStack(Material.AIR));
                                     }
                                 }
                             }
@@ -57,64 +53,188 @@ public final class InventorySlotChange implements Listener {
                     }
                 }
                 case 2 -> {
-                    if (!slots_gong.contains(slot)) {
-                        ItemStack old = e.getOldItemStack();
-                        ItemStack now = e.getNewItemStack();
-                        //对旧进行是否需要去激活判断
-                        if (old.getType() != Material.AIR) {
-                            if (NBT.get(old, nbt -> nbt.getInteger("slot")) == slot) {
-                                if (NBT.get(old, nbt -> nbt.getInteger("job")) == 2) {
-                                    //去激活
-                                    if (data.ready) {
-                                        Act.DeActGong(player, old);
+                    if (slot != 0) {
+                        if (data.ready) {
+                            ItemStack old = e.getOldItemStack();
+                            Material oldType = old.getType();
+                            ItemStack now = e.getNewItemStack();
+                            Material nowType = now.getType();
+                            //若激活，可能是弓，弩，或者钻石镐
+                            if (oldType == Material.DIAMOND_PICKAXE) {
+                                //当槽位和职业都满足时去除激活
+                                if (slot == NBT.get(old, nbt -> nbt.getInteger("slot"))) {
+                                    if (job == NBT.get(old, nbt -> nbt.getInteger("job"))) {
+                                        Act.DeActGong(player, (GongData) data, old);
+                                    }
+                                }
+                            }
+                            //若要激活，只能是铁镐
+                            if (nowType == Material.DIAMOND_PICKAXE) {
+                                //当槽位和职业都满足时激活
+                                if (slot == NBT.get(now, nbt -> nbt.getInteger("slot"))) {
+                                    if (job == NBT.get(now, nbt -> nbt.getInteger("job"))) {
+                                        Act.ActGong(player, (GongData) data, now);
+                                    } else {
+                                        player.getInventory().setItem(slot, new ItemStack(Material.AIR));
                                     }
                                 }
                             }
                         }
-                        //对新是否需要激活判断
-                        if (now.getType() != Material.AIR) {
-                            if (NBT.get(now, nbt -> nbt.getInteger("slot")) == slot) {
-                                if (NBT.get(now, nbt -> nbt.getInteger("job")) == 2) {
-                                    //激活
-                                    if (data.ready) {
-                                        Act.ActGong(player, now);
-                                    }
+                    } else {
+                        GongData gongData = (GongData) data;
+                        if (gongData.ready && gongData.readyCrossBow) {
+                            ItemStack old = e.getOldItemStack();
+                            Material oldType = old.getType();
+                            ItemStack now = e.getNewItemStack();
+                            Material nowType = now.getType();
+                            //若激活，可能是弓，弩，或者钻石镐
+                            if (oldType == Material.BOW || oldType == Material.CROSSBOW) {
+                                //当槽位和职业都满足时去除激活
+                                Act.DeActGong(player, gongData, old);
+                            }
+
+                            //若要激活，只能是铁镐
+                            if (nowType == Material.BOW || nowType == Material.CROSSBOW) {
+                                //当槽位和职业都满足时激活
+                                Act.ActGong(player, gongData, now);
+                            }
+                        }
+                    }
+
+                }
+                case 3 -> {
+                    if (data.ready) {
+                        ItemStack old = e.getOldItemStack();
+                        ItemStack now = e.getNewItemStack();
+                        //若激活，一定是钻石镐
+                        if (old.getType() == Material.DIAMOND_PICKAXE) {
+                            //当槽位和职业都满足时去除激活
+                            if (slot == NBT.get(old, nbt -> nbt.getInteger("slot"))) {
+                                if (job == NBT.get(old, nbt -> nbt.getInteger("job"))) {
+                                    Act.DeActDan(player, (DanData) data, old);
+                                }
+                            }
+
+                        }
+                        //若要激活，一定是铁镐
+                        if (now.getType() == Material.DIAMOND_PICKAXE) {
+                            //当槽位和职业都满足时激活
+                            if (slot == NBT.get(now, nbt -> nbt.getInteger("slot"))) {
+                                if (job == NBT.get(now, nbt -> nbt.getInteger("job"))) {
+                                    Act.ActDan(player, (DanData) data, now);
+                                } else {
+                                    player.getInventory().setItem(slot, new ItemStack(Material.AIR));
                                 }
                             }
                         }
                     }
+
                 }
-                case 3 -> {
-                    if (slot != 1) {
-                        ItemStack old = e.getOldItemStack();
-                        ItemStack now = e.getNewItemStack();
-                        //对旧进行是否需要去激活判断
-                        if (old.getType() != Material.AIR) {
-                            if (NBT.get(old, nbt -> nbt.getInteger("slot")) == slot) {
-                                if (NBT.get(old, nbt -> nbt.getInteger("job")) == 3) {
-                                    //去激活
-                                    if (data.ready) {
-                                        Act.DeActDan(player, old);
-                                    }
-                                }
+            }
+        } else if (slot > 35) {
+            Player player = e.getPlayer();
+            Data data = Yuehua.playerData.get(player.getUniqueId());
+            if (data.ready) {
+                int job = data.job;
+                ItemStack old = e.getOldItemStack();
+                ItemStack now = e.getNewItemStack();
+                Material nowType = now.getType();
+                if (slot == 40) {
+                    //副手
+                    switch (job) {
+                        case 1 -> {
+                            //若激活，只可能是盾牌
+                            if (old.getType() == Material.SHIELD) {
+                                //当槽位和职业都满足时去除激活
+                                Act.DeActZhan(player, (ZhanData) data, old);
+                            }
+                            //若要激活，只可能是铁镐
+                            if (nowType == Material.SHIELD) {
+                                //当槽位和职业都满足时激活
+                                Act.ActZhan(player, (ZhanData) data, now);
+                            } else if (nowType == Material.BOW || nowType == Material.CROSSBOW) {
+                                player.getInventory().setItem(40, new ItemStack(Material.AIR));
                             }
                         }
-                        //对新是否需要激活判断
-                        if (now.getType() != Material.AIR) {
-                            if (NBT.get(now, nbt -> nbt.getInteger("slot")) == slot) {
-                                if (NBT.get(now, nbt -> nbt.getInteger("job")) == 3) {
-                                    //激活
-                                    if (data.ready) {
-                                        Act.ActDan(player, now);
+                        case 2 -> {
+                            //若激活，只可能是钻石镐
+                            if (old.getType() == Material.DIAMOND_PICKAXE) {
+                                //当槽位和职业都满足时去除激活
+                                if (slot == NBT.get(old, nbt -> nbt.getInteger("slot"))) {
+                                    if (job == NBT.get(old, nbt -> nbt.getInteger("job"))) {
+                                        Act.DeActGong(player, (GongData) data, old);
                                     }
                                 }
                             }
+                            //若要激活，只可能是铁镐
+                            if (nowType == Material.DIAMOND_PICKAXE) {
+                                if (slot == NBT.get(now, nbt -> nbt.getInteger("slot"))) {
+                                    if (job == NBT.get(now, nbt -> nbt.getInteger("job"))) {
+                                        Act.ActGong(player, (GongData) data, now);
+                                    } else {
+                                        player.getInventory().setItem(slot, new ItemStack(Material.AIR));
+                                    }
+                                }
+                            } else if (nowType == Material.SHIELD) {
+                                player.getInventory().setItem(40, new ItemStack(Material.AIR));
+                            }
+                        }
+                        case 3 -> {
+                            //若激活，只可能是钻石镐
+                            if (old.getType() == Material.DIAMOND_PICKAXE) {
+                                //当槽位和职业都满足时去除激活
+                                if (slot == NBT.get(old, nbt -> nbt.getInteger("slot"))) {
+                                    if (job == NBT.get(old, nbt -> nbt.getInteger("job"))) {
+                                        Act.DeActDan(player, (DanData) data, old);
+                                    }
+                                }
+                            }
+                            //若要激活，只可能是铁镐
+                            if (now.getType() == Material.DIAMOND_PICKAXE) {
+                                if (slot == NBT.get(now, nbt -> nbt.getInteger("slot"))) {
+                                    if (job == NBT.get(now, nbt -> nbt.getInteger("job"))) {
+                                        Act.ActDan(player, (DanData) data, now);
+                                    } else {
+                                        player.getInventory().setItem(slot, new ItemStack(Material.AIR));
+                                    }
+                                }
+                            } else if (nowType == Material.SHIELD || nowType == Material.BOW || nowType == Material.CROSSBOW) {
+                                player.getInventory().setItem(40, new ItemStack(Material.AIR));
+                            }
+                        }
+                    }
+                } else {
+                    //装备
+                    //若激活，则不为空即可
+                    if (old.getType() != Material.AIR) {
+                        //当职业都满足时去除激活
+                        if (job == NBT.get(old, nbt -> nbt.getInteger("job"))) {
+                            switch (job) {
+                                case 1 -> Act.DeActZhan(player, (ZhanData) data, old);
+                                case 2 -> Act.DeActGong(player, (GongData) data, old);
+                                case 3 -> Act.DeActDan(player, (DanData) data, old);
+                            }
+                        } else {
+                            player.getInventory().setItem(slot, new ItemStack(Material.AIR));
+                        }
+                    }
+                    //若要激活，不为空即可
+                    if (now.getType() != Material.AIR) {
+                        //当职业都满足时激活
+                        if (job == NBT.get(now, nbt -> nbt.getInteger("job"))) {
+                            switch (job) {
+                                case 1 -> Act.ActZhan(player, (ZhanData) data, now);
+                                case 2 -> Act.ActGong(player, (GongData) data, now);
+                                case 3 -> Act.ActDan(player, (DanData) data, now);
+                            }
+                        } else {
+                            player.getInventory().setItem(slot, new ItemStack(Material.AIR));
                         }
                     }
                 }
             }
-
         }
     }
 }
+
 

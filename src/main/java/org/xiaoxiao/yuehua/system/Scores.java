@@ -28,6 +28,7 @@ public final class Scores {
     public static Objective baojixiaoguo;
     public static Objective fakang;
     public static Objective pofa;
+    public static Objective branch;
 
     //战士数据
     public static Objective attack;
@@ -39,6 +40,7 @@ public final class Scores {
     public static Objective arrow_add;
     public static Objective arrow_mul;
     public static Objective arrow_count;
+    public static Objective auto_arrow;
 
     //丹师数据
     public static Objective zhenfa;
@@ -58,6 +60,7 @@ public final class Scores {
         baojixiaoguo = scoreboard.getObjective("baojixiaoguo");
         fakang = scoreboard.getObjective("fakang");
         pofa = scoreboard.getObjective("pofa");
+        branch = scoreboard.getObjective("branch");
         //战士
         attack = scoreboard.getObjective("attack");
         attack_add = scoreboard.getObjective("attack_add");
@@ -66,10 +69,13 @@ public final class Scores {
         arrow = scoreboard.getObjective("arrow");
         arrow_add = scoreboard.getObjective("arrow_add");
         arrow_mul = scoreboard.getObjective("arrow_mul");
+        arrow_count = scoreboard.getObjective("arrow_count");
+        auto_arrow = scoreboard.getObjective("auto_arrow");
         //丹师
         zhenfa = scoreboard.getObjective("zhenfa");
         zhenfa_add = scoreboard.getObjective("zhenfa_add");
         zhenfa_mul = scoreboard.getObjective("zhenfa_mul");
+        zhenfa_test = scoreboard.getObjective("zhenfa_test");
     }
 
     //关联数据自动更新
@@ -133,15 +139,23 @@ public final class Scores {
         zhenfa_test.getScore(name).setScore(value);
     }
 
-    public static int getArrowCount(String name){
+    public static int getArrowCount(String name) {
         return arrow_count.getScore(name).getScore();
     }
 
-    public static void setArrow_count(String name,int value){
+    public static void setArrow_count(String name, int value) {
         arrow_count.getScore(name).setScore(value);
     }
 
-    public static void updateArrowCount(String name,int value){
+    public static void setAuto_arrow(String name, int value) {
+        auto_arrow.getScore(name).setScore(value);
+    }
+
+    public static int getAuto_arrow(String name) {
+        return auto_arrow.getScore(name).getScore();
+    }
+
+    public static void updateArrowCount(String name, int value) {
         Score score = arrow_count.getScore(name);
         score.setScore(score.getScore() + value);
     }
@@ -182,7 +196,7 @@ public final class Scores {
         cool_reduce.getScore(name).setScore(value);
     }
 
-    public static void updateCoolReduce(String name,int value) {
+    public static void updateCoolReduce(String name, int value) {
         Score score = cool_reduce.getScore(name);
         score.setScore(score.getScore() + value);
     }
@@ -195,7 +209,7 @@ public final class Scores {
         baoji.getScore(name).setScore(value);
     }
 
-    public static void updateBaoji(String name,int value){
+    public static void updateBaoji(String name, int value) {
         Score score = baoji.getScore(name);
         score.setScore(score.getScore() + value);
     }
@@ -208,7 +222,7 @@ public final class Scores {
         baojixiaoguo.getScore(name).setScore(value);
     }
 
-    public static void updateBaojixiaoguo(String name,int value){
+    public static void updateBaojixiaoguo(String name, int value) {
         Score score = baojixiaoguo.getScore(name);
         score.setScore(score.getScore() + value);
     }
@@ -221,7 +235,7 @@ public final class Scores {
         fakang.getScore(name).setScore(value);
     }
 
-    public static void updateFakang(String name,int value){
+    public static void updateFakang(String name, int value) {
         Score score = fakang.getScore(name);
         score.setScore(score.getScore() + value);
     }
@@ -243,9 +257,17 @@ public final class Scores {
         pofa.getScore(name).setScore(value);
     }
 
-    public static void updatePofa(String name,int value){
+    public static void updatePofa(String name, int value) {
         Score score = pofa.getScore(name);
         score.setScore(score.getScore() + value);
+    }
+
+    public static int getBranch(String name) {
+        return branch.getScore(name).getScore();
+    }
+
+    public static void setBranch(String name, int value) {
+        branch.getScore(name).setScore(value);
     }
 
     public static int getAttack(String name) {
@@ -262,7 +284,7 @@ public final class Scores {
         updateAttack(name);
     }
 
-    public static void updateAttackAdd(String name,int value){
+    public static void updateAttackAdd(String name, int value) {
         Score score = attack_add.getScore(name);
         score.setScore(score.getScore() + value);
         updateAttack(name);
@@ -277,7 +299,7 @@ public final class Scores {
         updateAttack(name);
     }
 
-    public static void updateAttackMul(String name,int value){
+    public static void updateAttackMul(String name, int value) {
         Score score = attack_mul.getScore(name);
         score.setScore(score.getScore() + value);
         updateAttack(name);
@@ -296,7 +318,7 @@ public final class Scores {
         updateArrow(name);
     }
 
-    public static void updateArrowAdd(String name,int value){
+    public static void updateArrowAdd(String name, int value) {
         Score score = arrow_add.getScore(name);
         score.setScore(score.getScore() + value);
         updateArrow(name);
@@ -311,7 +333,7 @@ public final class Scores {
         updateArrow(name);
     }
 
-    public static void updateArrowMul(String name,int value){
+    public static void updateArrowMul(String name, int value) {
         Score score = arrow_mul.getScore(name);
         score.setScore(score.getScore() + value);
         updateArrow(name);
@@ -330,7 +352,7 @@ public final class Scores {
         updateZhenfa(name);
     }
 
-    public static void updateZhenfaAdd(String name,int value){
+    public static void updateZhenfaAdd(String name, int value) {
         Score score = zhenfa_add.getScore(name);
         score.setScore(score.getScore() + value);
         updateZhenfa(name);
@@ -345,7 +367,7 @@ public final class Scores {
         updateZhenfa(name);
     }
 
-    public static void updateZhenfaMul(String name,int value){
+    public static void updateZhenfaMul(String name, int value) {
         Score score = zhenfa_mul.getScore(name);
         score.setScore(score.getScore() + value);
         updateZhenfa(name);

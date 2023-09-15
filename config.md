@@ -1,21 +1,21 @@
 # 优化
 
-| Server.properties             | 值                            |
-| ----------------------------- | ----------------------------- |
-| network-compression-threshold | -1,CPU才是最累的，带宽足够    |
-| broadcast-rcon-to-ops         | false,减少broadcast           |
-| sync-chunk-writes             | false,异步提高性能            |
-| broadcast-console-to-ops      | false，减少broadcast          |
-| spawn-protection              | 0，盘出生点在选种族出，没意义 |
+| Server.properties             | 值                          |
+| ----------------------------- | --------------------------- |
+| network-compression-threshold | -1,CPU才是最累的，带宽足够  |
+| broadcast-rcon-to-ops         | false,减少broadcast         |
+| sync-chunk-writes             | false,异步提高性能          |
+| broadcast-console-to-ops      | false，减少broadcast        |
+| spawn-protection              | 0，盘出生点在选种族，没意义 |
 
-| Bukkit.yml                   | 值                               |
-| ---------------------------- | -------------------------------- |
-| use-map-color-cache          | false,地图直接删除，自然无需缓存 |
-| spawn-limits                 | 0，不使用自然生成                |
-| chunk-gc.period-in-ticks     | 200，更快回收区块垃圾            |
-| ticks-per                    | 0，不使用自然生成                |
-| autosave                     | 18000，15分钟自动保存一次足矣    |
-| moved-too-quickly-multiplier | 10000.0                          |
+| Bukkit.yml               | 值                               |
+| ------------------------ | -------------------------------- |
+| use-map-color-cache      | false,地图直接删除，自然无需缓存 |
+| spawn-limits             | 0，不使用自然生成                |
+| chunk-gc.period-in-ticks | 200，更快回收区块垃圾            |
+| ticks-per                | 0，不使用自然生成                |
+| autosave                 | 18000，15分钟自动保存一次足矣    |
+|                          |                                  |
 
 | Spigot.yml                         | 值                                                |
 | ---------------------------------- | ------------------------------------------------- |
@@ -43,7 +43,7 @@
 | lag-compensate-block-breaking                  | false                       |
 | max-joins-per-tick                             | 1                           |
 | region-file-cache-size                         | 1024                        |
-| max-packet-rate                                | 300                         |
+| ServerboundUseItemPacket                       | 防连点器                    |
 | interval                                       | 10                          |
 | save-empty-scoreboard-teams                    | true                        |
 | player-auto-save.rate                          | 20                          |
@@ -92,62 +92,62 @@
 
 # 
 
-| Server.properties    | 值        |
-| -------------------- | --------- |
-| gamemode             | adventure |
-| enable-command-block | true      |
-| generate-structures  | false     |
-| difficulty           | hard      |
-| allow-nether         | false     |
-| view-distance        | 3         |
-| simulation-distance  | 3         |
-| player-idle-timeout  | 2         |
-| force-gamemode       | true      |
+| Server.properties       | 值        |
+| ----------------------- | --------- |
+| **gamemode**            | adventure |
+| enable-command-block    | true      |
+| generate-structures     | false     |
+| **difficulty**          | hard      |
+| allow-nether            | false     |
+| **view-distance**       | 3         |
+| **simulation-distance** | 3         |
+| **player-idle-timeout** | 2         |
+| **force-gamemode**      | true      |
 
 | Bukkit.yml | 值             |
 | ---------- | -------------- |
 | allow-end  | false,关闭末地 |
 
-| Spigot.yml                               | 值                                 |
-| ---------------------------------------- | ---------------------------------- |
-| attribute                                | 自行修改                           |
-| moved-too-quickly-multiplier             | 2.5,减少移速过快报错以及拉回的概率 |
-| below-zero-generation-in-existing-chunks | false                              |
-| item-despawn-rate                        | 300                                |
-| merge-radius.item                        | 3.0                                |
-| thunder-chance                           | 0                                  |
-| mob-spawn-range                          | 0                                  |
-| growth                                   | 0                                  |
-| entity-activation-range                  | 自行调整,方块为单位                |
-| hunger                                   | ***自行设置***                     |
-| ticks-per.hopper-transfer                | 20                                 |
-| ticks-per.hopper-check                   | 20                                 |
-| max-tick-time                            | 10000                              |
-| enable-zombie-pigmen-portal-spawns       | false                              |
+| Spigot.yml                               | 值                  |
+| ---------------------------------------- | ------------------- |
+| **attribute**                            | 自行修改            |
+| moved-too-quickly-multiplier             | 10000.0             |
+| below-zero-generation-in-existing-chunks | false               |
+| **item-despawn-rate**                    | 300                 |
+| merge-radius.item                        | 3.0                 |
+| thunder-chance                           | 0                   |
+| mob-spawn-range                          | 0                   |
+| growth                                   | 0                   |
+| entity-activation-range                  | 自行调整,方块为单位 |
+| **hunger**                               | ***自行设置***      |
+| ticks-per.hopper-transfer                | 20                  |
+| ticks-per.hopper-check                   | 20                  |
+| max-tick-time                            | 10000               |
+| enable-zombie-pigmen-portal-spawns       | false               |
 
 | Paper-world-defaults.yml | 值         |
 | ------------------------ | ---------- |
-| disable-player-crits     | ***true*** |
+| **disable-player-crits** | ***true*** |
 
-| Purpur.yml                         | 值             |
-| ---------------------------------- | -------------- |
-| allow-infinity-on-crossbow         | ***true***     |
-| clamp-levels                       | ***false***    |
-| six-rows                           | ***true***     |
-| food-properties                    | ***自行设置*** |
-| clamp-attributes                   | ***false***    |
-| starvation-damage                  | ***秒杀伤害*** |
-| bypass-mob-griefing                | true           |
-| disable-trampling                  | true           |
-| explosion-power                    | 12.0           |
-| chest.open-with-solid-block-on-top | true           |
-| magma-block.damage-when-sneaking   | true           |
-| powder_snow.bypass-mob-griefing    | true           |
-| allow-colors                       | true           |
-| stonecutter.damage                 | ***秒杀伤害*** |
-| poison-degeneration-amount         | ***2.0***      |
-| wither-degeneration-amount         | ***2.0***      |
-| hunger-exhaustion-amount           | ***0.005***    |
-| void-damage-dealt                  | ***秒杀***     |
-| damage-from-drowning               | ***10***       |
+| Purpur.yml                           | 值             |
+| ------------------------------------ | -------------- |
+| **allow-infinity-on-crossbow**       | ***true***     |
+| **clamp-levels**                     | ***false***    |
+| **six-rows**                         | ***true***     |
+| **food-properties**                  | ***自行设置*** |
+| **clamp-attributes**                 | ***false***    |
+| **starvation-damage**                | ***秒杀伤害*** |
+| **bypass-mob-griefing**              | true           |
+| **disable-trampling**                | true           |
+| **explosion-power**                  | 12.0           |
+| chest.open-with-solid-block-on-top   | true           |
+| **magma-block.damage-when-sneaking** | true           |
+| **powder_snow.bypass-mob-griefing**  | true           |
+| allow-colors                         | true           |
+| **stonecutter.damage**               | ***秒杀伤害*** |
+| **poison-degeneration-amount**       | ***2.0***      |
+| **wither-degeneration-amount**       | ***2.0***      |
+| **hunger-exhaustion-amount**         | ***0.005***    |
+| **void-damage-dealt**                | ***秒杀***     |
+| **damage-from-drowning**             | ***10***       |
 

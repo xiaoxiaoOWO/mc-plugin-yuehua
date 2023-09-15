@@ -12,5 +12,12 @@ commands:
     description: dataget
   dataset:
     description: dataset
+  test:
+    description: test
+  test2:
+    description: test2
+
+
+
 
 

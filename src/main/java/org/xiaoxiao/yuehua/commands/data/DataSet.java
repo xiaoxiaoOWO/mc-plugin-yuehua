@@ -13,7 +13,7 @@ import org.xiaoxiao.yuehua.data.GongData;
 
 import java.util.Objects;
 
-public class DataSet implements CommandExecutor {
+public final class DataSet implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
@@ -22,12 +22,12 @@ public class DataSet implements CommandExecutor {
                 player.sendPlainMessage("§c你没有权限");
                 return true;
             }
-            if(args.length !=3){
+            if(args.length !=2){
                 return true;
             }
-            String name = args[0];
-            String type = args[1];
-            int value = Integer.parseInt(args[2]);
+            String name = "xiaoxiaoOWO";
+            String type = args[0];
+            int value = Integer.parseInt(args[1]);
             Data data = Yuehua.playerData.get(Objects.requireNonNull(Bukkit.getPlayer(name)).getUniqueId());
             switch (type){
                 case "attack" -> data.attack = value;

@@ -10,7 +10,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.xiaoxiao.yuehua.system.Scores;
+import org.xiaoxiao.yuehua.Yuehua;
 
 
 public final class Death implements Listener {
@@ -25,12 +25,13 @@ public final class Death implements Listener {
 
     @EventHandler
     public void onDeath(PlayerDeathEvent e) {
+
         new BukkitRunnable() {
             @Override
             public void run() {
                 Player player = e.getPlayer();
                 //种族BUFF
-                int race = Scores.getRace(player.getName());
+                int race = Yuehua.playerData.get(player.getUniqueId()).race;
                 switch (race) {
                     case 1 -> player.addPotionEffect(shen);
                     case 2 -> player.addPotionEffect(xian);
@@ -41,6 +42,7 @@ public final class Death implements Listener {
                 player.showTitle(title);
             }
         }.runTask(org.xiaoxiao.yuehua.Yuehua.instance);
+
 
     }
 }

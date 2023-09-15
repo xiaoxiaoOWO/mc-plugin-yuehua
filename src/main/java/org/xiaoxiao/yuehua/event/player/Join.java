@@ -26,18 +26,18 @@ public final class Join implements Listener {
         Player player = e.getPlayer();
         UUID uuid = player.getUniqueId();
         String name = player.getName();
-        String ip = player.getAddress().getAddress().getHostAddress();
-        //防止双开
-        for (Player p : Yuehua.players) {
-            if (p.getAddress().getAddress().getHostAddress().equals(ip)) {
-                {
-                    if (p != player) {
-                        p.banPlayer("§c禁止多开");
-                        return;
-                    }
-                }
-            }
-        }
+//        String ip = player.getAddress().getAddress().getHostAddress();
+//        //防止双开
+//        for (Player p : Yuehua.players) {
+//            if (p.getAddress().getAddress().getHostAddress().equals(ip)) {
+//                {
+//                    if (p != player) {
+//                        p.banPlayer("§c禁止多开");
+//                        return;
+//                    }
+//                }
+//            }
+//        }
 
 
         //根据职业初始化数据
@@ -56,11 +56,12 @@ public final class Join implements Listener {
             player.addPotionEffect(effect);
         } else {
             //判断是否在大陆
-            if (Scores.getMainland(name) == -1) {
+            if (Yuehua.playerData.get(player.getUniqueId()).mainland == -1) {
                 player.setHealth(0);
                 player.sendPlainMessage("§c你不在大陆，已受到惩罚");
             }
         }
+
 
         //1tick后ready
         new BukkitRunnable() {
