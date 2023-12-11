@@ -2,7 +2,7 @@ plugins {
     id 'java'
 }
 
-group = 'org.xiaoxiao'
+group = 'com.xiaoxiaoowo'
 version = '1.0.0'
 
 repositories {
@@ -17,24 +17,18 @@ repositories {
 }
 
 dependencies {
-    compileOnly "org.purpurmc.purpur:purpur-api:1.20.1-R0.1-SNAPSHOT"
-    compileOnly("de.tr7zw:item-nbt-api-plugin:2.11.3")
+    implementation "org.xerial:sqlite-jdbc:3.44.1.0"
+    compileOnly "org.purpurmc.purpur:purpur-api:1.20.2-R0.1-SNAPSHOT"
+    compileOnly("de.tr7zw:item-nbt-api-plugin:2.12.1")
 }
 
-def targetJavaVersion = 17
+
 java {
-    def javaVersion = JavaVersion.toVersion(targetJavaVersion)
-    sourceCompatibility = javaVersion
-    targetCompatibility = javaVersion
-    if (JavaVersion.current() < javaVersion) {
-        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
-    }
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
 tasks.withType(JavaCompile).configureEach {
-    if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
-        options.release = targetJavaVersion
-    }
     options.encoding = 'UTF-8'
 }
 

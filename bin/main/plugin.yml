@@ -6,8 +6,6 @@ depend: [NBTAPI]
 commands:
   intogame:
     description: intogame
-  renou:
-    description: renou
   select:
     description: select
   dataget:
