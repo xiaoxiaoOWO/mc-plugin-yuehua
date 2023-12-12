@@ -5,6 +5,7 @@ import com.xiaoxiaoowo.yuehua.itemstack.other.Food;
 import com.xiaoxiaoowo.yuehua.itemstack.other.Money;
 import com.xiaoxiaoowo.yuehua.itemstack.other.Other;
 import com.xiaoxiaoowo.yuehua.itemstack.other.RaceProvince;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -19,7 +20,9 @@ public final class GI implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender instanceof Player player) {
             if (!player.isOp()) {
-                player.sendPlainMessage("§c你没有权限执行此命令");
+                player.sendMessage(
+                        Component.translatable("notpermit")
+                );
                 return true;
             }
             if (args.length != 1) {

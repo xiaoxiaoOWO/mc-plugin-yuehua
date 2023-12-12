@@ -7,6 +7,7 @@ import com.xiaoxiaoowo.yuehua.data.GongData;
 import com.xiaoxiaoowo.yuehua.data.ZhanData;
 import com.xiaoxiaoowo.yuehua.itemstack.Air;
 import com.xiaoxiaoowo.yuehua.utils.GetEntity;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -34,7 +35,9 @@ public final class Interact implements Listener {
                                     gongData.time_pulling = GetEntity.world.getGameTime();
                                 } else {
                                     e.setCancelled(true);
-                                    player.sendPlainMessage("§c请将弓放在第一格");
+                                    player.sendMessage(
+                                            Component.translatable("not1b")
+                                    );
                                 }
                             } else {
                                 player.getInventory().setItemInMainHand(Air.air);
@@ -75,7 +78,9 @@ public final class Interact implements Listener {
                                 player.getInventory().setItemInMainHand(Air.air);
                             } else {
                                 e.setCancelled(true);
-                                player.sendPlainMessage("§c请将盾牌放在副手");
+                                player.sendMessage(
+                                        Component.translatable("notfs")
+                                );
                             }
                         }
                     }
@@ -93,7 +98,9 @@ public final class Interact implements Listener {
                             Data data = Yuehua.playerData.get(player.getUniqueId());
                             if (data.job == 2) {
                                 e.setCancelled(true);
-                                player.sendPlainMessage("§c请将弓放在第一格");
+                                player.sendMessage(
+                                        Component.translatable("not1b")
+                                );
                             } else {
                                 player.getInventory().setItemInOffHand(Air.air);
                             }

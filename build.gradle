@@ -19,7 +19,7 @@ repositories {
 dependencies {
     implementation "org.xerial:sqlite-jdbc:3.44.1.0"
     compileOnly "org.purpurmc.purpur:purpur-api:1.20.2-R0.1-SNAPSHOT"
-    compileOnly("de.tr7zw:item-nbt-api-plugin:2.12.1")
+    compileOnly("de.tr7zw:item-nbt-api-plugin:2.12.2")
 }
 
 

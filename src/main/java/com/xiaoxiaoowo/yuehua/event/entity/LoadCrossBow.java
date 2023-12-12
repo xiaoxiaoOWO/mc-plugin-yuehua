@@ -5,6 +5,7 @@ import com.xiaoxiaoowo.yuehua.data.Data;
 import com.xiaoxiaoowo.yuehua.data.GongData;
 import com.xiaoxiaoowo.yuehua.itemstack.Air;
 import io.papermc.paper.event.entity.EntityLoadCrossbowEvent;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -33,7 +34,9 @@ public final class LoadCrossBow implements Listener {
                     }.runTaskLater(Yuehua.instance, 2);
                 } else {
                     e.setCancelled(true);
-                    player.sendPlainMessage("§c请将弩放在第一格");
+                    player.sendMessage(
+                            Component.translatable("not1c")
+                    );
                 }
             } else {
                 PlayerInventory inventory = player.getInventory();

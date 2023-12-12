@@ -2,6 +2,7 @@
 build/
 out/
 .gradle/
+bin/
 # Other files and folders
 .settings/
 .idea/

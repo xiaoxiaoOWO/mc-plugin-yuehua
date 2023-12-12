@@ -44,7 +44,9 @@ public final class DamageByEntity implements Listener {
                                     e.setDamage(attack);
                                     runZhan(player, zhanData, (Creature) e.getEntity());
                                 } else {
-                                    player.sendMessage(Component.text("只有蓄满力才能普攻哦").color(NamedTextColor.DARK_RED));
+                                    player.sendMessage(
+                                            Component.translatable("notfull")
+                                    );
                                     e.setCancelled(true);
                                 }
                             } else {
@@ -77,7 +79,9 @@ public final class DamageByEntity implements Listener {
                                 int attack = data.attack;
                                 e.setDamage(attack);
                             } else {
-                                player.sendMessage(Component.text("只有蓄满力才能普攻哦").color(NamedTextColor.DARK_RED));
+                                player.sendMessage(
+                                        Component.translatable("notfull")
+                                );
                                 e.setCancelled(true);
                             }
                         }
@@ -89,14 +93,18 @@ public final class DamageByEntity implements Listener {
 
                                 runDan(player, danData, (Creature) e.getEntity());
                             } else {
-                                player.sendMessage(Component.text("只有蓄满力才能普攻哦").color(NamedTextColor.DARK_RED));
+                                player.sendMessage(
+                                        Component.translatable("notfull")
+                                );
                                 e.setCancelled(true);
                             }
                         }
                         default -> e.setCancelled(true);
                     }
                 } else {
-                    player.sendMessage(Component.text("只能使用一号位普攻哦").color(NamedTextColor.DARK_RED));
+                    player.sendMessage(
+                            Component.translatable("not1a")
+                    );
                     e.setCancelled(true);
                 }
             }

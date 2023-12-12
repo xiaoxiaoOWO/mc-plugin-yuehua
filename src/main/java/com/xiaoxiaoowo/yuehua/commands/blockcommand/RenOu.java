@@ -19,7 +19,9 @@ public final class RenOu implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender instanceof Player player) {
-            player.sendPlainMessage("§c你没有权限执行此命令！");
+            player.sendMessage(
+                    Component.translatable("notpermit")
+            );
             return true;
         }
 
@@ -38,7 +40,8 @@ public final class RenOu implements CommandExecutor {
             }
             for (Player player : GetEntity.getPlayers(location, 8, 8, 3)) {
                 player.sendMessage(
-                        Component.text("伤害为： ").color(NamedTextColor.GREEN)
+                        Component
+                                .translatable("renou")
                                 .append(Component.text(damage).color(NamedTextColor.RED))
                 );
             }

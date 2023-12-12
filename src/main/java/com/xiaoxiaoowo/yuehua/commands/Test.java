@@ -73,7 +73,9 @@ public final class Test implements CommandExecutor {
         final int WUSHIWAN = 500000;
         final int BAIWAN = 1000000;
         if (sender instanceof Player player) {
-            player.sendPlainMessage("§c你没有权限执行该指令！");
+            player.sendMessage(
+                    Component.translatable("notpermit")
+            );
             return true;
         }
 

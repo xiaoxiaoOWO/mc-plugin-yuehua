@@ -2,6 +2,7 @@ package com.xiaoxiaoowo.yuehua.commands.opcommand.data;
 
 import com.xiaoxiaoowo.yuehua.Yuehua;
 import com.xiaoxiaoowo.yuehua.data.Data;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -16,7 +17,9 @@ public final class DataGet implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender instanceof Player player) {
             if (!player.isOp()) {
-                player.sendPlainMessage("§c你没有权限");
+                player.sendMessage(
+                        Component.translatable("notpermit")
+                );
                 return true;
             }
             String name = "xiaoxiaoOWO";

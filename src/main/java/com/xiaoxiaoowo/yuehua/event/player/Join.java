@@ -110,7 +110,9 @@ public final class Join implements Listener {
                             //判断是否在大陆
                             if (!persistentDataContainer.get(DataContainer.mainland, PersistentDataType.BOOLEAN)) {
                                 player.setHealth(0);
-                                player.sendPlainMessage("§c妄图逃离副本机制，已受到惩罚");
+                                player.sendMessage(
+                                        Component.translatable("notmainland")
+                                );
                             }
                         }
                         player.teleport(location);
