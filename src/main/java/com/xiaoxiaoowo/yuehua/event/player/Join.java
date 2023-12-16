@@ -63,7 +63,6 @@ public final class Join implements Listener {
             PersistentDataContainer persistentDataContainer = player.getPersistentDataContainer();
 
 
-            persistentDataContainer.set(DataContainer.money,PersistentDataType.INTEGER,0);
             if (!persistentDataContainer.has(DataContainer.attack)) {
                 //初始化视频槽
                 Inventory shipinBar = Bukkit.createInventory(player, 9, Component.translatable("sp"));

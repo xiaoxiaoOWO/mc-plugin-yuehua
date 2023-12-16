@@ -50,19 +50,27 @@ public final class Dan {
         );
 
         itemMeta1.lore(
-                List.of(Component.translatable("rare2"))
+                List.of(Component.translatable("rare2"),
+                        Component.translatable("yaoyin1lore")
+                )
         );
 
         itemMeta2.lore(
-                List.of(Component.translatable("rare3"))
+                List.of(Component.translatable("rare3")
+                        , Component.translatable("yaoyin2lore")
+                )
         );
 
         itemMeta3.lore(
-                List.of(Component.translatable("rare4"))
+                List.of(Component.translatable("rare4")
+                        , Component.translatable("yaoyin3lore")
+                )
         );
 
         itemMeta4.lore(
-                List.of(Component.translatable("rare5"))
+                List.of(Component.translatable("rare5")
+                       , Component.translatable("yaoyin4lore")
+                )
         );
 
         YAOYIN1.setItemMeta(itemMeta1);

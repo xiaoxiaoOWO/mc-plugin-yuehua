@@ -127,41 +127,65 @@ public final class Herb {
         );
 
         itemMeta1.lore(
-                List.of(Component.translatable("rare3"))
+                List.of(Component.translatable("rare3"),
+                Component.translatable("renshenlore")
+                )
         );
 
         itemMeta2.lore(
-                List.of(Component.translatable("rare3"))
+                List.of(Component.translatable("rare3")
+                        , Component.translatable("lingzhilore")
+                )
         );
         itemMeta3.lore(
-                List.of(Component.translatable("rare3"))
+                List.of(Component.translatable("rare3")
+                       , Component.translatable("heshouwulore")
+                )
         );
         itemMeta4.lore(
-                List.of(Component.translatable("rare5"))
+                List.of(Component.translatable("rare5")
+                       , Component.translatable("zhenzhulore")
+                )
         );
         itemMeta5.lore(
-                List.of(Component.translatable("rare4"))
+                List.of(Component.translatable("rare4","gouqilore")
+                , Component.translatable("gouqilore")
+                )
         );
         itemMeta6.lore(
-                List.of(Component.translatable("rare4"))
+                List.of(Component.translatable("rare4")
+                      , Component.translatable("hetunlore")
+                )
         );
         itemMeta7.lore(
-                List.of(Component.translatable("rare4"))
+                List.of(Component.translatable("rare4")
+                      , Component.translatable("haimalore")
+                )
         );
         itemMeta8.lore(
-                List.of(Component.translatable("rare5"))
+                List.of(Component.translatable("rare5")
+                     , Component.translatable("luronglore")
+                )
         );
         itemMeta9.lore(
-                List.of(Component.translatable("rare5"))
+                List.of(Component.translatable("rare5")
+                     , Component.translatable("ejiaolore")
+                )
         );
         itemMeta10.lore(
-                List.of(Component.translatable("rare6"))
+                List.of(Component.translatable("rare6")
+                     , Component.translatable("dongchongxiacaolore")
+                )
         );
         itemMeta11.lore(
-                List.of(Component.translatable("rare6"))
+                List.of(Component.translatable("rare6")
+                    , Component.translatable("tiepishihulore")
+                )
         );
         itemMeta12.lore(
-                List.of(Component.translatable("rare6"))
+                List.of(Component.translatable("rare6")
+                   , Component.translatable("tianranniuhaunglore")
+                )
         );
 
         RenShen.setItemMeta(itemMeta1);
