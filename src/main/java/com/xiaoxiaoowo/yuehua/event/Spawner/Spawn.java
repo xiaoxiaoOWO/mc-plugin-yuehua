@@ -15,7 +15,7 @@ public final class Spawn implements Listener {
         Entity entity = e.getEntity();
         //获取位置与Tag
         Location location = entity.getLocation();
-        String tag = entity.getScoreboardTags().toArray()[0].toString();
+        String tag = entity.getScoreboardTags().iterator().next();
         //清除实体
         entity.remove();
         //生成

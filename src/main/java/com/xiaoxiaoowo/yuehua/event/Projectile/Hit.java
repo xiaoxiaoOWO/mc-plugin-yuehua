@@ -21,8 +21,7 @@ public final class Hit implements Listener {
         }
 
         switch (tags.iterator().next()) {
-            default -> {
-            }
+
         }
 
     }

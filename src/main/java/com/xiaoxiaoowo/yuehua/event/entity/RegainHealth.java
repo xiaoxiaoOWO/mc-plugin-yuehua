@@ -16,7 +16,7 @@ public final class RegainHealth implements Listener {
             if (shengji == 0) {
                 e.setCancelled(true);
             } else {
-                e.setAmount(e.getAmount() * shengji / 100);
+                e.setAmount(e.getAmount() * shengji / 100.0);
             }
         }
     }

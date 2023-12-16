@@ -5,7 +5,7 @@ import com.xiaoxiaoowo.yuehua.data.DanData;
 import com.xiaoxiaoowo.yuehua.data.Data;
 import com.xiaoxiaoowo.yuehua.data.GongData;
 import com.xiaoxiaoowo.yuehua.data.ZhanData;
-import com.xiaoxiaoowo.yuehua.itemstack.Air;
+import com.xiaoxiaoowo.yuehua.system.DataContainer;
 import com.xiaoxiaoowo.yuehua.utils.GetEntity;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
@@ -15,6 +15,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataType;
 
 public final class Interact implements Listener {
     @EventHandler
@@ -40,7 +41,7 @@ public final class Interact implements Listener {
                                     );
                                 }
                             } else {
-                                player.getInventory().setItemInMainHand(Air.air);
+                                player.getInventory().setItemInMainHand(null);
                             }
                         }
                         case DIAMOND_PICKAXE -> {
@@ -51,15 +52,15 @@ public final class Interact implements Listener {
                             switch (job) {
                                 case 1 -> {
                                     ZhanData zhanData = (ZhanData) data;
-                                    rightClickZhan(slot, zhanData, player);
+                                    rightClickZhan(slot, zhanData);
                                 }
                                 case 2 -> {
                                     GongData gongData = (GongData) data;
-                                    rightClickGong(slot, gongData, player);
+                                    rightClickGong(slot, gongData);
                                 }
                                 case 3 -> {
                                     DanData danData = (DanData) data;
-                                    rightClickDan(slot, danData, player);
+                                    rightClickDan(slot, danData);
                                 }
                             }
                         }
@@ -68,14 +69,44 @@ public final class Interact implements Listener {
                             int slot = player.getInventory().getHeldItemSlot();
                             if (slot == 8) {
                                 Data data = Yuehua.playerData.get(player.getUniqueId());
-                                rightClickAll(data, player);
+                                rightClickAll(data);
                             }
                         }
+
+                        case KELP -> {
+                            Player player = e.getPlayer();
+                            Data data = Yuehua.playerData.get(player.getUniqueId());
+                            if (data.job != 3) {
+                                return;
+                            }
+                            String id = item.getPersistentDataContainer().get(DataContainer.id, PersistentDataType.STRING);
+                            zhenfa(id, (DanData) data);
+
+                        }
+
+                        case RAW_GOLD -> {
+                            Player player = e.getPlayer();
+                            int cmd = item.getCustomModelData();
+                            int xp = switch (cmd) {
+                                case 1 -> 10;
+                                case 2 -> 20;
+                                case 3 -> 50;
+                                case 4 -> 100;
+                                case 5 -> 200;
+                                case 6 -> 500;
+                                default -> 0;
+                            };
+                            int amount = item.getAmount();
+                            xp *= amount;
+                            player.getInventory().setItemInMainHand(null);
+                            player.giveExp(xp, false);
+                        }
+
                         case SHIELD -> {
                             Player player = e.getPlayer();
                             Data data = Yuehua.playerData.get(player.getUniqueId());
                             if (data.job != 1) {
-                                player.getInventory().setItemInMainHand(Air.air);
+                                player.getInventory().setItemInMainHand(null);
                             } else {
                                 e.setCancelled(true);
                                 player.sendMessage(
@@ -90,7 +121,7 @@ public final class Interact implements Listener {
                             Player player = e.getPlayer();
                             Data data = Yuehua.playerData.get(player.getUniqueId());
                             if (data.job != 1) {
-                                player.getInventory().setItemInOffHand(Air.air);
+                                player.getInventory().setItemInOffHand(null);
                             }
                         }
                         case BOW -> {
@@ -102,7 +133,7 @@ public final class Interact implements Listener {
                                         Component.translatable("not1b")
                                 );
                             } else {
-                                player.getInventory().setItemInOffHand(Air.air);
+                                player.getInventory().setItemInOffHand(null);
                             }
                         }
                     }
@@ -111,8 +142,8 @@ public final class Interact implements Listener {
         }
     }
 
-    private static void rightClickZhan(int num, ZhanData zhanData, Player player) {
-        String id = switch (num){
+    private static void rightClickZhan(int num, ZhanData zhanData) {
+        String id = switch (num) {
             case 1 -> zhanData.slot1.id;
             case 2 -> zhanData.slot2.id;
             default -> "null";
@@ -122,8 +153,8 @@ public final class Interact implements Listener {
 
     }
 
-    private static void rightClickDan(int num, DanData danData, Player player) {
-        String id = switch (num){
+    private static void rightClickDan(int num, DanData danData) {
+        String id = switch (num) {
             case 1 -> danData.slot1.id;
             case 2 -> danData.slot2.id;
             case 3 -> danData.slot3.id;
@@ -136,8 +167,8 @@ public final class Interact implements Listener {
 
     }
 
-    private static void rightClickGong(int num, GongData gongData, Player player) {
-        String id = switch (num){
+    private static void rightClickGong(int num, GongData gongData) {
+        String id = switch (num) {
             case 1 -> gongData.slot1.id;
             case 2 -> gongData.slot2.id;
             default -> "null";
@@ -147,8 +178,15 @@ public final class Interact implements Listener {
 
     }
 
-    private static void rightClickAll(Data data, Player player) {
-        switch (data.slot8.id){
+    private static void rightClickAll(Data data) {
+        switch (data.slot8.id) {
+
+        }
+    }
+
+
+    private static void zhenfa(String id, DanData danData) {
+        switch (id) {
 
         }
     }

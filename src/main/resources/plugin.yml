@@ -10,6 +10,8 @@ commands:
     description: renou
   select:
     description: select
+  datacountget:
+    description: datacountget
   dataget:
     description: dataget
   dataset:
@@ -20,7 +22,29 @@ commands:
     description: clearup
   gi:
     description: gi
+    aliases:
+      - GI
+      - gI
+      - Gi
+  mytp:
+    description: mytp
+  perget:
+    description: perget
+  arrow:
+    description: arrow
+  money:
+    description: money
   yh:
     description: yh
+    aliases:
+      - YH
+      - yH
+      - Yh
+  ys:
+    description: ys
+    aliases:
+      - YS
+      - yS
+      - Ys
   test:
     description: test

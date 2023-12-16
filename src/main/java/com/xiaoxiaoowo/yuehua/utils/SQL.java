@@ -62,6 +62,11 @@ public final class SQL {
             VALUES (?, ?);
             """;
 
+    private static final String storeShiPin = """
+            INSERT OR REPLACE INTO shipin (player_name, data)
+            VALUES (?, ?);
+            """;
+
     private static final String getInventory1 = """
             SELECT data
             FROM inventory1
@@ -115,11 +120,17 @@ public final class SQL {
             FROM inventory9
             WHERE player_name = ?;
             """;
+    private static final String getShiPin = """
+            SELECT  data
+            FROM shipin
+            WHERE player_name = ?;
+            """;
 
 
     public static void connect() {
         try {
             connection = DriverManager.getConnection(url);
+            init();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -223,6 +234,13 @@ public final class SQL {
                     data TEXT NOT NULL
                 );""";
 
+        String CREATE_TABLE10 = """
+                CREATE TABLE IF NOT EXISTS shipin (
+                    id INTEGER PRIMARY KEY,
+                    player_name TEXT NOT NULL UNIQUE,
+                    data TEXT NOT NULL
+                );""";
+
         // 假设 hikariDataSource 是您的 HikariCP 数据源
         // 创建一个 Statement 来执行 SQL 语句
         try (Statement statement = connection.createStatement()) {
@@ -289,11 +307,16 @@ public final class SQL {
             throw new RuntimeException(e);
         }
 
+        try (Statement statement = connection.createStatement()) {
+            // 执行创建表的 SQL 语句
+            statement.execute(CREATE_TABLE10);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
 
     }
-    public static void initPlayerInventory(String playerName){
 
-    }
 
 
     public static void storePlayerInventory1(String playerName, Inventory inventory) {
@@ -411,9 +434,22 @@ public final class SQL {
         }
     }
 
+    public static void storeShiPin(String playerName, Inventory inventory) {
+        checkConnection();
+        try (PreparedStatement pstmt = connection.prepareStatement(storeShiPin)
+        ) {
+            pstmt.setString(1, playerName);
+            pstmt.setString(2, NBTItem.convertItemArraytoNBT(inventory.getContents()).toString());
+            pstmt.execute();
+        } // try-with-resources 将自动关闭 pstmt
+        catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static Inventory retrievePlayerInventory1(Player player) {
         checkConnection();
-        Inventory inventory = Bukkit.createInventory(player, 54, Component.text("§l§b乾坤袋☯一"));
+        Inventory inventory = Bukkit.createInventory(player, 54, Component.translatable("qkd1"));
         String playerName = player.getName();
         try (PreparedStatement pstmt = connection.prepareStatement(getInventory1)) {
             pstmt.setString(1, playerName);
@@ -432,7 +468,7 @@ public final class SQL {
 
     public static Inventory retrievePlayerInventory2(Player player) {
         checkConnection();
-        Inventory inventory = Bukkit.createInventory(player, 54, Component.text("§l§b乾坤袋☯二"));
+        Inventory inventory = Bukkit.createInventory(player, 54, Component.translatable("qkd2"));
         String playerName = player.getName();
         try (PreparedStatement pstmt = connection.prepareStatement(getInventory2)) {
             pstmt.setString(1, playerName);
@@ -451,7 +487,7 @@ public final class SQL {
 
     public static Inventory retrievePlayerInventory3(Player player) {
         checkConnection();
-        Inventory inventory = Bukkit.createInventory(player, 54, Component.text("§l§b乾坤袋☯三"));
+        Inventory inventory = Bukkit.createInventory(player, 54, Component.translatable("qkd3"));
         String playerName = player.getName();
         try (PreparedStatement pstmt = connection.prepareStatement(getInventory3)) {
             pstmt.setString(1, playerName);
@@ -470,7 +506,7 @@ public final class SQL {
 
     public static Inventory retrievePlayerInventory4(Player player) {
         checkConnection();
-        Inventory inventory = Bukkit.createInventory(player, 54, Component.text("§l§b乾坤袋☯四"));
+        Inventory inventory = Bukkit.createInventory(player, 54, Component.translatable("qkd4"));
         String playerName = player.getName();
         try (PreparedStatement pstmt = connection.prepareStatement(getInventory4)) {
             pstmt.setString(1, playerName);
@@ -489,7 +525,7 @@ public final class SQL {
 
     public static Inventory retrievePlayerInventory5(Player player) {
         checkConnection();
-        Inventory inventory = Bukkit.createInventory(player, 54, Component.text("§l§b乾坤袋☯五"));
+        Inventory inventory = Bukkit.createInventory(player, 54, Component.translatable("qkd5"));
         String playerName = player.getName();
         try (PreparedStatement pstmt = connection.prepareStatement(getInventory5)) {
             pstmt.setString(1, playerName);
@@ -508,7 +544,7 @@ public final class SQL {
 
     public static Inventory retrievePlayerInventory6(Player player) {
         checkConnection();
-        Inventory inventory = Bukkit.createInventory(player, 54, Component.text("§l§b乾坤袋☯六"));
+        Inventory inventory = Bukkit.createInventory(player, 54, Component.translatable("qkd6"));
         String playerName = player.getName();
         try (PreparedStatement pstmt = connection.prepareStatement(getInventory6)) {
             pstmt.setString(1, playerName);
@@ -527,7 +563,7 @@ public final class SQL {
 
     public static Inventory retrievePlayerInventory7(Player player) {
         checkConnection();
-        Inventory inventory = Bukkit.createInventory(player, 54, Component.text("§l§b乾坤袋☯七"));
+        Inventory inventory = Bukkit.createInventory(player, 54, Component.translatable("qkd7"));
         String playerName = player.getName();
         try (PreparedStatement pstmt = connection.prepareStatement(getInventory7)) {
             pstmt.setString(1, playerName);
@@ -546,7 +582,7 @@ public final class SQL {
 
     public static Inventory retrievePlayerInventory8(Player player) {
         checkConnection();
-        Inventory inventory = Bukkit.createInventory(player, 54, Component.text("§l§b乾坤袋☯八"));
+        Inventory inventory = Bukkit.createInventory(player, 54, Component.translatable("qkd8"));
         String playerName = player.getName();
         try (PreparedStatement pstmt = connection.prepareStatement(getInventory8)) {
             pstmt.setString(1, playerName);
@@ -565,9 +601,28 @@ public final class SQL {
 
     public static Inventory retrievePlayerInventory9(Player player) {
         checkConnection();
-        Inventory inventory = Bukkit.createInventory(player, 54, Component.text("§l§b乾坤袋☯九"));
+        Inventory inventory = Bukkit.createInventory(player, 54, Component.translatable("qkd9"));
         String playerName = player.getName();
         try (PreparedStatement pstmt = connection.prepareStatement(getInventory9)) {
+            pstmt.setString(1, playerName);
+
+            ResultSet resultSet = pstmt.executeQuery();
+            while (resultSet.next()) {
+                String data = resultSet.getString("data");
+                inventory.setContents(NBTItem.convertNBTtoItemArray((NBTCompound) NBT.parseNBT(data)));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return inventory;
+    }
+
+    public static Inventory retrieveShipin(Player player) {
+        checkConnection();
+        Inventory inventory = Bukkit.createInventory(player, 9, Component.translatable("sp"));
+        String playerName = player.getName();
+        try (PreparedStatement pstmt = connection.prepareStatement(getShiPin)) {
             pstmt.setString(1, playerName);
 
             ResultSet resultSet = pstmt.executeQuery();

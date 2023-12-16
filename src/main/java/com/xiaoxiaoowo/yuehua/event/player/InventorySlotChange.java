@@ -7,8 +7,9 @@ import com.xiaoxiaoowo.yuehua.data.GongData;
 import com.xiaoxiaoowo.yuehua.data.ZhanData;
 import com.xiaoxiaoowo.yuehua.system.Act;
 import com.xiaoxiaoowo.yuehua.system.DataContainer;
-import io.papermc.paper.event.player.PlayerFlowerPotManipulateEvent;
 import io.papermc.paper.event.player.PlayerInventorySlotChangeEvent;
+import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -28,30 +29,21 @@ public final class InventorySlotChange implements Listener {
             case 0 -> {
                 Player player = e.getPlayer();
                 Data data = Yuehua.playerData.get(player.getUniqueId());
-                if (data == null) {
+                if (data == null || data.open) {
                     return;
                 }
                 int job = data.job;
                 switch (job) {
                     case 1 -> {
-                        ItemStack old = e.getOldItemStack();
+                        ZhanData zhanData = (ZhanData) data;
+                        Act.deActZhan(zhanData, data.slot0.id);
                         ItemStack now = e.getNewItemStack();
-                        if (old.getType() == Material.DIAMOND_PICKAXE) {
-                            //当槽位和职业都满足时去除激活
-                            PersistentDataContainer pdc = old.getItemMeta().getPersistentDataContainer();
-                            if (slot == pdc.get(DataContainer.slot, PersistentDataType.INTEGER)) {
-                                if (job == pdc.get(DataContainer.job, PersistentDataType.INTEGER)) {
-                                    Act.deActZhan(player, (ZhanData) data, pdc.get(DataContainer.id, PersistentDataType.STRING));
-                                }
-                            }
-
-                        }
                         if (now.getType() == Material.DIAMOND_PICKAXE) {
                             //当槽位和职业都满足时激活
                             PersistentDataContainer pdc = now.getItemMeta().getPersistentDataContainer();
                             if (slot == pdc.get(DataContainer.slot, PersistentDataType.INTEGER)) {
                                 if (job == pdc.get(DataContainer.job, PersistentDataType.INTEGER)) {
-                                    Act.actZhan(player, (ZhanData) data, pdc.get(DataContainer.id, PersistentDataType.STRING));
+                                    Act.actZhan(zhanData, pdc.get(DataContainer.id, PersistentDataType.STRING));
                                 }
                             }
                         }
@@ -59,44 +51,31 @@ public final class InventorySlotChange implements Listener {
                     case 2 -> {
                         GongData gongData = (GongData) data;
                         if (gongData.readyBow && gongData.readyCrossBow) {
-                            ItemStack old = e.getOldItemStack();
-                            Material oldType = old.getType();
+
+                            Act.deActGong(gongData, gongData.slot0.id);
+
                             ItemStack now = e.getNewItemStack();
                             Material nowType = now.getType();
-                            //若激活，可能是弓，弩
-                            if (oldType == Material.BOW || oldType == Material.CROSSBOW) {
-                                //当槽位和职业都满足时去除激活
-                                PersistentDataContainer pdc = old.getItemMeta().getPersistentDataContainer();
-                                Act.deActGong(player, gongData, pdc.get(DataContainer.id, PersistentDataType.STRING));
-                            }
-
                             //若要激活
                             if (nowType == Material.BOW || nowType == Material.CROSSBOW) {
                                 //当槽位和职业都满足时激活
                                 PersistentDataContainer pdc = now.getItemMeta().getPersistentDataContainer();
-                                Act.actGong(player, gongData, pdc.get(DataContainer.id, PersistentDataType.STRING));
+                                Act.actGong(gongData, pdc.get(DataContainer.id, PersistentDataType.STRING));
                             }
                         }
                     }
                     case 3 -> {
-                        ItemStack old = e.getOldItemStack();
-                        ItemStack now = e.getNewItemStack();
-                        if (old.getType() == Material.DIAMOND_PICKAXE) {
-                            //当槽位和职业都满足时去除激活
-                            PersistentDataContainer pdc = old.getItemMeta().getPersistentDataContainer();
-                            if (slot == pdc.get(DataContainer.slot, PersistentDataType.INTEGER)) {
-                                if (job == pdc.get(DataContainer.job, PersistentDataType.INTEGER)) {
-                                    Act.deActDan(player, (DanData) data, pdc.get(DataContainer.id, PersistentDataType.STRING));
-                                }
-                            }
+                        DanData danData = (DanData) data;
 
-                        }
+                        Act.deActDan(danData, danData.slot0.id);
+
+                        ItemStack now = e.getNewItemStack();
                         if (now.getType() == Material.DIAMOND_PICKAXE) {
                             //当槽位和职业都满足时激活
                             PersistentDataContainer pdc = now.getItemMeta().getPersistentDataContainer();
                             if (slot == pdc.get(DataContainer.slot, PersistentDataType.INTEGER)) {
                                 if (job == pdc.get(DataContainer.job, PersistentDataType.INTEGER)) {
-                                    Act.actDan(player, (DanData) data, pdc.get(DataContainer.id, PersistentDataType.STRING));
+                                    Act.actDan(danData, pdc.get(DataContainer.id, PersistentDataType.STRING));
                                 }
                             }
                         }
@@ -105,79 +84,194 @@ public final class InventorySlotChange implements Listener {
             }
 
 
-            case 1, 2 -> {
+            case 1 -> {
                 Player player = e.getPlayer();
                 Data data = Yuehua.playerData.get(player.getUniqueId());
-                if (data == null) {
+                if (data == null || data.open) {
                     return;
                 }
                 int job = data.job;
-                ItemStack old = e.getOldItemStack();
-                ItemStack now = e.getNewItemStack();
-                if (old.getType() == Material.DIAMOND_PICKAXE) {
-                    //当槽位和职业都满足时去除激活
-                    PersistentDataContainer pdc = old.getItemMeta().getPersistentDataContainer();
-                    if (slot == pdc.get(DataContainer.slot, PersistentDataType.INTEGER)) {
-                        if (job == pdc.get(DataContainer.job, PersistentDataType.INTEGER)) {
-                            switch (job) {
-                                case 1 ->
-                                        Act.deActZhan(player, (ZhanData) data, pdc.get(DataContainer.id, PersistentDataType.STRING));
-                                case 2 ->
-                                        Act.deActGong(player, (GongData) data, pdc.get(DataContainer.id, PersistentDataType.STRING));
-                                case 3 ->
-                                        Act.deActDan(player, (DanData) data, pdc.get(DataContainer.id, PersistentDataType.STRING));
+
+                switch (job) {
+                    case 1 -> {
+                        ZhanData zhanData = (ZhanData) data;
+                        Act.deActZhan(zhanData, data.slot1.id);
+
+                        ItemStack now = e.getNewItemStack();
+                        if (now.getType() == Material.DIAMOND_PICKAXE) {
+                            //当槽位和职业都满足时激活
+                            PersistentDataContainer pdc = now.getItemMeta().getPersistentDataContainer();
+                            if (slot == pdc.get(DataContainer.slot, PersistentDataType.INTEGER)) {
+                                if (job == pdc.get(DataContainer.job, PersistentDataType.INTEGER)) {
+                                    Act.actZhan(zhanData, pdc.get(DataContainer.id, PersistentDataType.STRING));
+                                }
                             }
                         }
                     }
+                    case 2 -> {
+                        GongData gongData = (GongData) data;
+                        Act.deActGong(gongData, data.slot1.id);
 
-                }
-                if (now.getType() == Material.DIAMOND_PICKAXE) {
-                    //当槽位和职业都满足时激活
-                    PersistentDataContainer pdc = now.getItemMeta().getPersistentDataContainer();
-                    if (slot == pdc.get(DataContainer.slot, PersistentDataType.INTEGER)) {
-                        if (job == pdc.get(DataContainer.job, PersistentDataType.INTEGER)) {
-                            switch (job) {
-                                case 1 ->
-                                        Act.actZhan(player, (ZhanData) data, pdc.get(DataContainer.id, PersistentDataType.STRING));
-                                case 2 ->
-                                        Act.actGong(player, (GongData) data, pdc.get(DataContainer.id, PersistentDataType.STRING));
-                                case 3 ->
-                                        Act.actDan(player, (DanData) data, pdc.get(DataContainer.id, PersistentDataType.STRING));
+                        ItemStack now = e.getNewItemStack();
+                        if (now.getType() == Material.DIAMOND_PICKAXE) {
+                            //当槽位和职业都满足时激活
+                            PersistentDataContainer pdc = now.getItemMeta().getPersistentDataContainer();
+                            if (slot == pdc.get(DataContainer.slot, PersistentDataType.INTEGER)) {
+                                if (job == pdc.get(DataContainer.job, PersistentDataType.INTEGER)) {
+                                    Act.actGong(gongData, pdc.get(DataContainer.id, PersistentDataType.STRING));
+                                }
+                            }
+                        }
+                    }
+                    case 3 -> {
+                        DanData danData = (DanData) data;
+                        Act.deActDan(danData, data.slot1.id);
+
+                        ItemStack now = e.getNewItemStack();
+                        if (now.getType() == Material.DIAMOND_PICKAXE) {
+                            //当槽位和职业都满足时激活
+                            PersistentDataContainer pdc = now.getItemMeta().getPersistentDataContainer();
+                            if (slot == pdc.get(DataContainer.slot, PersistentDataType.INTEGER)) {
+                                if (job == pdc.get(DataContainer.job, PersistentDataType.INTEGER)) {
+                                    Act.actDan(danData, pdc.get(DataContainer.id, PersistentDataType.STRING));
+                                }
                             }
                         }
                     }
                 }
             }
 
-
-            case 3, 4, 5 -> {
+            case 2 -> {
                 Player player = e.getPlayer();
                 Data data = Yuehua.playerData.get(player.getUniqueId());
-                if (data == null) {
+                if (data == null || data.open) {
+                    return;
+                }
+                int job = data.job;
+
+                switch (job) {
+                    case 1 -> {
+                        ZhanData zhanData = (ZhanData) data;
+                        Act.deActZhan(zhanData, data.slot2.id);
+                        ItemStack now = e.getNewItemStack();
+                        if (now.getType() == Material.DIAMOND_PICKAXE) {
+                            //当槽位和职业都满足时激活
+                            PersistentDataContainer pdc = now.getItemMeta().getPersistentDataContainer();
+                            if (slot == pdc.get(DataContainer.slot, PersistentDataType.INTEGER)) {
+                                if (job == pdc.get(DataContainer.job, PersistentDataType.INTEGER)) {
+                                    Act.actZhan(zhanData, pdc.get(DataContainer.id, PersistentDataType.STRING));
+                                }
+                            }
+                        }
+                    }
+                    case 2 -> {
+                        GongData gongData = (GongData) data;
+                        Act.deActGong(gongData, data.slot2.id);
+                        ItemStack now = e.getNewItemStack();
+                        if (now.getType() == Material.DIAMOND_PICKAXE) {
+                            //当槽位和职业都满足时激活
+                            PersistentDataContainer pdc = now.getItemMeta().getPersistentDataContainer();
+                            if (slot == pdc.get(DataContainer.slot, PersistentDataType.INTEGER)) {
+                                if (job == pdc.get(DataContainer.job, PersistentDataType.INTEGER)) {
+                                    Act.actGong(gongData, pdc.get(DataContainer.id, PersistentDataType.STRING));
+                                }
+                            }
+                        }
+                    }
+                    case 3 -> {
+                        DanData danData = (DanData) data;
+                        Act.deActDan(danData, data.slot2.id);
+                        ItemStack now = e.getNewItemStack();
+                        if (now.getType() == Material.DIAMOND_PICKAXE) {
+                            //当槽位和职业都满足时激活
+                            PersistentDataContainer pdc = now.getItemMeta().getPersistentDataContainer();
+                            if (slot == pdc.get(DataContainer.slot, PersistentDataType.INTEGER)) {
+                                if (job == pdc.get(DataContainer.job, PersistentDataType.INTEGER)) {
+                                    Act.actDan(danData, pdc.get(DataContainer.id, PersistentDataType.STRING));
+                                }
+                            }
+                        }
+                    }
+                }
+
+
+            }
+
+
+            case 3 -> {
+                Player player = e.getPlayer();
+                Data data = Yuehua.playerData.get(player.getUniqueId());
+                if (data == null || data.open) {
                     return;
                 }
                 int job = data.job;
                 if (job != 3) {
                     return;
                 }
-                ItemStack old = e.getOldItemStack();
-                ItemStack now = e.getNewItemStack();
-                if (old.getType() == Material.DIAMOND_PICKAXE) {
-                    //当槽位和职业都满足时去除激活
-                    PersistentDataContainer pdc = old.getItemMeta().getPersistentDataContainer();
-                    if (slot == pdc.get(DataContainer.slot, PersistentDataType.INTEGER)) {
-                        if (job == pdc.get(DataContainer.job, PersistentDataType.INTEGER)) {
-                            Act.deActDan(player, (DanData) data, pdc.get(DataContainer.id, PersistentDataType.STRING));
-                        }
-                    }
+                DanData danData = (DanData) data;
 
-                }
+                Act.deActDan(danData, danData.slot3.id);
+
+
+                ItemStack now = e.getNewItemStack();
                 if (now.getType() == Material.DIAMOND_PICKAXE) {
                     //当槽位和职业都满足时激活
                     PersistentDataContainer pdc = now.getItemMeta().getPersistentDataContainer();
                     if (slot == pdc.get(DataContainer.slot, PersistentDataType.INTEGER)) {
                         if (job == pdc.get(DataContainer.job, PersistentDataType.INTEGER)) {
-                            Act.actDan(player, (DanData) data, pdc.get(DataContainer.id, PersistentDataType.STRING));
+                            Act.actDan((DanData) data, pdc.get(DataContainer.id, PersistentDataType.STRING));
+                        }
+                    }
+                }
+            }
+
+            case 4 -> {
+                Player player = e.getPlayer();
+                Data data = Yuehua.playerData.get(player.getUniqueId());
+                if (data == null || data.open) {
+                    return;
+                }
+                int job = data.job;
+                if (job != 3) {
+                    return;
+                }
+                DanData danData = (DanData) data;
+                Act.deActDan(danData, danData.slot4.id);
+
+
+                ItemStack now = e.getNewItemStack();
+                if (now.getType() == Material.DIAMOND_PICKAXE) {
+                    //当槽位和职业都满足时激活
+                    PersistentDataContainer pdc = now.getItemMeta().getPersistentDataContainer();
+                    if (slot == pdc.get(DataContainer.slot, PersistentDataType.INTEGER)) {
+                        if (job == pdc.get(DataContainer.job, PersistentDataType.INTEGER)) {
+                            Act.actDan((DanData) data, pdc.get(DataContainer.id, PersistentDataType.STRING));
+                        }
+                    }
+                }
+            }
+
+            case 5 -> {
+                Player player = e.getPlayer();
+                Data data = Yuehua.playerData.get(player.getUniqueId());
+                if (data == null || data.open) {
+                    return;
+                }
+                int job = data.job;
+                if (job != 3) {
+                    return;
+                }
+                DanData danData = (DanData) data;
+                Act.deActDan(danData, danData.slot5.id);
+
+
+                ItemStack now = e.getNewItemStack();
+                if (now.getType() == Material.DIAMOND_PICKAXE) {
+                    //当槽位和职业都满足时激活
+                    PersistentDataContainer pdc = now.getItemMeta().getPersistentDataContainer();
+                    if (slot == pdc.get(DataContainer.slot, PersistentDataType.INTEGER)) {
+                        if (job == pdc.get(DataContainer.job, PersistentDataType.INTEGER)) {
+                            Act.actDan((DanData) data, pdc.get(DataContainer.id, PersistentDataType.STRING));
                         }
                     }
                 }
@@ -187,57 +281,222 @@ public final class InventorySlotChange implements Listener {
             case 8 -> {
                 Player player = e.getPlayer();
                 Data data = Yuehua.playerData.get(player.getUniqueId());
-                if (data == null) {
+                if (data == null || data.open) {
                     return;
                 }
-                ItemStack old = e.getOldItemStack();
-                ItemStack now = e.getNewItemStack();
-                //铁镐，去激活
-                if (old.getType() == Material.IRON_PICKAXE) {
-                    Act.deActAll(player, data, old.getItemMeta().getPersistentDataContainer().get(DataContainer.id, PersistentDataType.STRING));
+
+                switch (data.job) {
+                    case 1 -> Act.deActZhan((ZhanData) data, data.slot8.id);
+                    case 2 -> Act.deActGong((GongData) data, data.slot8.id);
+                    case 3 -> Act.deActDan((DanData) data, data.slot8.id);
                 }
+
+                ItemStack now = e.getNewItemStack();
                 if (now.getType() == Material.IRON_PICKAXE) {
-                    Act.actAll(player, data, now.getItemMeta().getPersistentDataContainer().get(DataContainer.id, PersistentDataType.STRING));
+                    Act.actAll(data, now.getItemMeta().getPersistentDataContainer().get(DataContainer.id, PersistentDataType.STRING));
+                }
+            }
+
+            case 36 -> {
+                Player player = e.getPlayer();
+                Data data = Yuehua.playerData.get(player.getUniqueId());
+                if (data == null || data.open) {
+                    return;
+                }
+                int job = data.job;
+
+                switch (job) {
+                    case 1 -> {
+                        ZhanData zhanData = (ZhanData) data;
+                        Act.deActZhan(zhanData, data.slot36.id);
+                        ItemStack now = e.getNewItemStack();
+                        //若要激活，不为空即可
+                        if (now.getType() != Material.AIR) {
+                            //当职业都满足时激活
+                            PersistentDataContainer pdc = now.getPersistentDataContainer();
+                            if (job == pdc.get(DataContainer.job, PersistentDataType.INTEGER)) {
+                                Act.actZhan(zhanData, pdc.get(DataContainer.id, PersistentDataType.STRING));
+                            }
+                        }
+                    }
+                    case 2 -> {
+                        GongData gongData = (GongData) data;
+                        Act.deActGong(gongData, data.slot36.id);
+                        ItemStack now = e.getNewItemStack();
+                        //若要激活，不为空即可
+                        if (now.getType() != Material.AIR) {
+                            //当职业都满足时激活
+                            PersistentDataContainer pdc = now.getPersistentDataContainer();
+                            if (job == pdc.get(DataContainer.job, PersistentDataType.INTEGER)) {
+                                Act.actGong(gongData, pdc.get(DataContainer.id, PersistentDataType.STRING));
+                            }
+                        }
+                    }
+                    case 3 -> {
+                        DanData danData = (DanData) data;
+                        Act.deActDan(danData, data.slot36.id);
+                        ItemStack now = e.getNewItemStack();
+                        //若要激活，不为空即可
+                        if (now.getType() != Material.AIR) {
+                            //当职业都满足时激活
+                            PersistentDataContainer pdc = now.getPersistentDataContainer();
+                            if (job == pdc.get(DataContainer.job, PersistentDataType.INTEGER)) {
+                                Act.actDan(danData, pdc.get(DataContainer.id, PersistentDataType.STRING));
+                            }
+                        }
+                    }
                 }
             }
 
 
-            case 36, 37, 38, 39 -> {
+            case 37 -> {
                 Player player = e.getPlayer();
                 Data data = Yuehua.playerData.get(player.getUniqueId());
-                if (data == null) {
+                if (data == null || data.open) {
                     return;
                 }
                 int job = data.job;
-                ItemStack old = e.getOldItemStack();
-                ItemStack now = e.getNewItemStack();
-                //若激活，则不为空即可
-                if (old.getType() != Material.AIR) {
-                    //当职业都满足时去除激活
-                    PersistentDataContainer pdc = old.getPersistentDataContainer();
-                    if (job == pdc.get(DataContainer.job, PersistentDataType.INTEGER)) {
-                        switch (job) {
-                            case 1 ->
-                                    Act.deActZhan(player, (ZhanData) data, pdc.get(DataContainer.id, PersistentDataType.STRING));
-                            case 2 ->
-                                    Act.deActGong(player, (GongData) data, pdc.get(DataContainer.id, PersistentDataType.STRING));
-                            case 3 ->
-                                    Act.deActDan(player, (DanData) data, pdc.get(DataContainer.id, PersistentDataType.STRING));
+
+                switch (job) {
+                    case 1 -> {
+                        ZhanData zhanData = (ZhanData) data;
+                        Act.deActZhan(zhanData, data.slot37.id);
+                        ItemStack now = e.getNewItemStack();
+                        //若要激活，不为空即可
+                        if (now.getType() != Material.AIR) {
+                            //当职业都满足时激活
+                            PersistentDataContainer pdc = now.getPersistentDataContainer();
+                            if (job == pdc.get(DataContainer.job, PersistentDataType.INTEGER)) {
+                                Act.actZhan(zhanData, pdc.get(DataContainer.id, PersistentDataType.STRING));
+                            }
+                        }
+                    }
+                    case 2 -> {
+                        GongData gongData = (GongData) data;
+                        Act.deActGong(gongData, data.slot37.id);
+                        ItemStack now = e.getNewItemStack();
+                        //若要激活，不为空即可
+                        if (now.getType() != Material.AIR) {
+                            //当职业都满足时激活
+                            PersistentDataContainer pdc = now.getPersistentDataContainer();
+                            if (job == pdc.get(DataContainer.job, PersistentDataType.INTEGER)) {
+                                Act.actGong(gongData, pdc.get(DataContainer.id, PersistentDataType.STRING));
+                            }
+                        }
+                    }
+                    case 3 -> {
+                        DanData danData = (DanData) data;
+                        Act.deActDan(danData, data.slot37.id);
+                        ItemStack now = e.getNewItemStack();
+                        //若要激活，不为空即可
+                        if (now.getType() != Material.AIR) {
+                            //当职业都满足时激活
+                            PersistentDataContainer pdc = now.getPersistentDataContainer();
+                            if (job == pdc.get(DataContainer.job, PersistentDataType.INTEGER)) {
+                                Act.actDan(danData, pdc.get(DataContainer.id, PersistentDataType.STRING));
+                            }
                         }
                     }
                 }
-                //若要激活，不为空即可
-                if (now.getType() != Material.AIR) {
-                    //当职业都满足时激活
-                    PersistentDataContainer pdc = now.getPersistentDataContainer();
-                    if (job == pdc.get(DataContainer.job, PersistentDataType.INTEGER)) {
-                        switch (job) {
-                            case 1 ->
-                                    Act.actZhan(player, (ZhanData) data, pdc.get(DataContainer.id, PersistentDataType.STRING));
-                            case 2 ->
-                                    Act.actGong(player, (GongData) data, pdc.get(DataContainer.id, PersistentDataType.STRING));
-                            case 3 ->
-                                    Act.actDan(player, (DanData) data, pdc.get(DataContainer.id, PersistentDataType.STRING));
+            }
+
+            case 38 -> {
+                Player player = e.getPlayer();
+                Data data = Yuehua.playerData.get(player.getUniqueId());
+                if (data == null || data.open) {
+                    return;
+                }
+                int job = data.job;
+
+                switch (job) {
+                    case 1 -> {
+                        ZhanData zhanData = (ZhanData) data;
+                        Act.deActZhan(zhanData, data.slot38.id);
+                        ItemStack now = e.getNewItemStack();
+                        //若要激活，不为空即可
+                        if (now.getType() != Material.AIR) {
+                            //当职业都满足时激活
+                            PersistentDataContainer pdc = now.getPersistentDataContainer();
+                            if (job == pdc.get(DataContainer.job, PersistentDataType.INTEGER)) {
+                                Act.actZhan(zhanData, pdc.get(DataContainer.id, PersistentDataType.STRING));
+                            }
+                        }
+                    }
+                    case 2 -> {
+                        GongData gongData = (GongData) data;
+                        Act.deActGong(gongData, data.slot38.id);
+                        ItemStack now = e.getNewItemStack();
+                        //若要激活，不为空即可
+                        if (now.getType() != Material.AIR) {
+                            //当职业都满足时激活
+                            PersistentDataContainer pdc = now.getPersistentDataContainer();
+                            if (job == pdc.get(DataContainer.job, PersistentDataType.INTEGER)) {
+                                Act.actGong(gongData, pdc.get(DataContainer.id, PersistentDataType.STRING));
+                            }
+                        }
+                    }
+                    case 3 -> {
+                        DanData danData = (DanData) data;
+                        Act.deActDan(danData, data.slot38.id);
+                        ItemStack now = e.getNewItemStack();
+                        //若要激活，不为空即可
+                        if (now.getType() != Material.AIR) {
+                            //当职业都满足时激活
+                            PersistentDataContainer pdc = now.getPersistentDataContainer();
+                            if (job == pdc.get(DataContainer.job, PersistentDataType.INTEGER)) {
+                                Act.actDan(danData, pdc.get(DataContainer.id, PersistentDataType.STRING));
+                            }
+                        }
+                    }
+                }
+            }
+
+            case 39 -> {
+                Player player = e.getPlayer();
+                Data data = Yuehua.playerData.get(player.getUniqueId());
+                if (data == null || data.open) {
+                    return;
+                }
+                int job = data.job;
+
+                switch (job) {
+                    case 1 -> {
+                        ZhanData zhanData = (ZhanData) data;
+                        Act.deActZhan(zhanData, data.slot39.id);
+                        ItemStack now = e.getNewItemStack();
+                        //若要激活，不为空即可
+                        if (now.getType() != Material.AIR) {
+                            //当职业都满足时激活
+                            PersistentDataContainer pdc = now.getPersistentDataContainer();
+                            if (job == pdc.get(DataContainer.job, PersistentDataType.INTEGER)) {
+                                Act.actZhan(zhanData, pdc.get(DataContainer.id, PersistentDataType.STRING));
+                            }
+                        }
+                    }
+                    case 2 -> {
+                        GongData gongData = (GongData) data;
+                        Act.deActGong(gongData, data.slot39.id);
+                        ItemStack now = e.getNewItemStack();
+                        //若要激活，不为空即可
+                        if (now.getType() != Material.AIR) {
+                            //当职业都满足时激活
+                            PersistentDataContainer pdc = now.getPersistentDataContainer();
+                            if (job == pdc.get(DataContainer.job, PersistentDataType.INTEGER)) {
+                                Act.actGong(gongData, pdc.get(DataContainer.id, PersistentDataType.STRING));
+                            }
+                        }
+                    }
+                    case 3 -> {
+                        DanData danData = (DanData) data;
+                        Act.deActDan(danData, data.slot39.id);
+                        ItemStack now = e.getNewItemStack();
+                        //若要激活，不为空即可
+                        if (now.getType() != Material.AIR) {
+                            //当职业都满足时激活
+                            PersistentDataContainer pdc = now.getPersistentDataContainer();
+                            if (job == pdc.get(DataContainer.job, PersistentDataType.INTEGER)) {
+                                Act.actDan(danData, pdc.get(DataContainer.id, PersistentDataType.STRING));
+                            }
                         }
                     }
                 }
@@ -247,55 +506,40 @@ public final class InventorySlotChange implements Listener {
             case 40 -> {
                 Player player = e.getPlayer();
                 Data data = Yuehua.playerData.get(player.getUniqueId());
-                if (data == null) {
+                if (data == null || data.open) {
                     return;
                 }
                 int job = data.job;
-                ItemStack old = e.getOldItemStack();
                 ItemStack now = e.getNewItemStack();
                 Material nowType = now.getType();
                 //副手
                 switch (job) {
                     case 1 -> {
-                        //若激活，只可能是盾牌
-                        if (old.getType() == Material.SHIELD) {
-                            //当槽位和职业都满足时去除激活
-                            Act.deActZhan(player, (ZhanData) data, old.getPersistentDataContainer().get(DataContainer.id, PersistentDataType.STRING));
-                        }
+                        ZhanData zhanData = (ZhanData) data;
+                        Act.deActZhan(zhanData, data.slot40.id);
                         //若要激活
                         if (nowType == Material.SHIELD) {
                             //当槽位和职业都满足时激活
-
-                            Act.actZhan(player, (ZhanData) data, now.getPersistentDataContainer().get(DataContainer.id, PersistentDataType.STRING));
+                            Act.actZhan(zhanData, now.getPersistentDataContainer().get(DataContainer.id, PersistentDataType.STRING));
                         }
                     }
                     case 2 -> {
-                        if (old.getType() == Material.GOLDEN_PICKAXE) {
-                            //当槽位和职业都满足时去除激活
-                            PersistentDataContainer pdc = old.getPersistentDataContainer();
-                            if (job == pdc.get(DataContainer.id, PersistentDataType.INTEGER)) {
-                                Act.deActGong(player, (GongData) data, pdc.get(DataContainer.id, PersistentDataType.STRING));
-                            }
-                        }
+                        GongData gongData = (GongData) data;
+                        Act.deActGong(gongData, data.slot40.id);
                         if (nowType == Material.GOLDEN_PICKAXE) {
                             PersistentDataContainer pdc = now.getPersistentDataContainer();
                             if (job == pdc.get(DataContainer.id, PersistentDataType.INTEGER)) {
-                                Act.actGong(player, (GongData) data, pdc.get(DataContainer.id, PersistentDataType.STRING));
+                                Act.actGong(gongData, pdc.get(DataContainer.id, PersistentDataType.STRING));
                             }
                         }
                     }
                     case 3 -> {
-                        if (old.getType() == Material.GOLDEN_PICKAXE) {
-                            //当槽位和职业都满足时去除激活
-                            PersistentDataContainer pdc = old.getPersistentDataContainer();
-                            if (job == pdc.get(DataContainer.id, PersistentDataType.INTEGER)) {
-                                Act.deActDan(player, (DanData) data, pdc.get(DataContainer.id, PersistentDataType.STRING));
-                            }
-                        }
+                        DanData danData = (DanData) data;
+                        Act.deActDan(danData, data.slot40.id);
                         if (nowType == Material.GOLDEN_PICKAXE) {
                             PersistentDataContainer pdc = now.getPersistentDataContainer();
                             if (job == pdc.get(DataContainer.id, PersistentDataType.INTEGER)) {
-                                Act.actDan(player, (DanData) data, pdc.get(DataContainer.id, PersistentDataType.STRING));
+                                Act.actDan(danData, pdc.get(DataContainer.id, PersistentDataType.STRING));
                             }
                         }
                     }
@@ -303,6 +547,9 @@ public final class InventorySlotChange implements Listener {
             }
 
         }
+
+
+
     }
 }
 

@@ -5,23 +5,22 @@ import com.xiaoxiaoowo.yuehua.data.DanData;
 import com.xiaoxiaoowo.yuehua.data.GongData;
 import com.xiaoxiaoowo.yuehua.data.ZhanData;
 import com.xiaoxiaoowo.yuehua.event.player.Death;
-import com.xiaoxiaoowo.yuehua.itemstack.other.Food;
+import com.xiaoxiaoowo.yuehua.itemstack.other.*;
 import com.xiaoxiaoowo.yuehua.system.DataContainer;
 import com.xiaoxiaoowo.yuehua.utils.GetEntity;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.block.CommandBlock;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
@@ -47,7 +46,7 @@ public final class IntoGame implements CommandExecutor {
         Location location = blockCommandSender.getBlock().getLocation();
 
         Player player = GetEntity.getNearestPlayer(location, 5, 5, 5);
-        if(player == null){
+        if (player == null) {
             return true;
         }
         UUID uuid = player.getUniqueId();
@@ -55,22 +54,60 @@ public final class IntoGame implements CommandExecutor {
 
         //设置tpsBar与ramBar
 
-        CommandSender commandSender = Bukkit.getConsoleSender();
-        String name = player.getName();
-        Bukkit.dispatchCommand(commandSender,"tpsbar "+name);
-        Bukkit.dispatchCommand(commandSender,"rambar "+name);
 
+        String name = player.getName();
+        Bukkit.dispatchCommand(Yuehua.console, "tpsbar " + name);
+        Bukkit.dispatchCommand(Yuehua.console, "rambar " + name);
+
+        PersistentDataContainer pdc = player.getPersistentDataContainer();
+        int race = pdc.get(DataContainer.race, PersistentDataType.INTEGER);
+        int job = pdc.get(DataContainer.job, PersistentDataType.INTEGER);
 
         //给予物品
         //包子64个
         ItemStack baozi = Food.baoZi;
-
+        baozi.setAmount(64);
         //铜钱64枚
+        ItemStack tongqian = Money.tongQian;
+        tongqian.setAmount(64);
         //NPC对话泡泡
+        ItemStack npc_paopao = Other.NPC_PAOPAO;
         //战士特供道具 额外120个包子
+        ItemStack baozi2 = Food.baoZi;
+        baozi2.setAmount(120);
         //弓箭手特供道具 十组箭
+        ItemStack arrow = Other.ARROW;
+        arrow.setAmount(640);
         //炼丹师特供道具 初级药引五枚、木元素三十枚、金元素三十枚
+        ItemStack yaoyin1 = Dan.YAOYIN1;
+        yaoyin1.setAmount(5);
+        ItemStack muyuansu = YuanSu.mu;
+        muyuansu.setAmount(30);
+        ItemStack jinyuansu = YuanSu.jin;
+        jinyuansu.setAmount(30);
+        //种族证明
+        ItemStack race_province = switch (race) {
+            case 1 -> RaceProvince.shen;
+            case 2 -> RaceProvince.xian;
+            case 3 -> RaceProvince.ren;
+            case 4 -> RaceProvince.yao;
+            case 5 -> RaceProvince.zhanShen;
+            default -> null;
+        };
+        //给予物品
+        PlayerInventory inventory = player.getInventory();
+        switch (job) {
+            case 1 ->
+                inventory.addItem(baozi, tongqian, npc_paopao, race_province, baozi2);
 
+            case 2 ->
+                inventory.addItem(baozi, tongqian, npc_paopao, race_province, arrow);
+
+
+            case 3 ->
+                inventory.addItem(baozi, tongqian, npc_paopao, race_province, yaoyin1, muyuansu, jinyuansu);
+
+        }
 
         //设置重生点
         player.setBedSpawnLocation(SPAWN, true);
@@ -83,8 +120,6 @@ public final class IntoGame implements CommandExecutor {
 
         //种族BUFF与TP到种族点
         player.getActivePotionEffects().forEach(it -> player.removePotionEffect(it.getType()));
-        PersistentDataContainer pdc = player.getPersistentDataContainer();
-        int race = pdc.get(DataContainer.race, PersistentDataType.INTEGER);
         switch (race) {
             case 1 -> {
                 player.addPotionEffect(Death.shen);
@@ -108,19 +143,11 @@ public final class IntoGame implements CommandExecutor {
             }
         }
 
-
-        int job = pdc.get(DataContainer.job, PersistentDataType.INTEGER);
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                switch (job) {
-                    case 1 -> Yuehua.playerData.put(uuid, new ZhanData(player));
-                    case 2 -> Yuehua.playerData.put(uuid, new GongData(player));
-                    case 3 -> Yuehua.playerData.put(uuid, new DanData(player));
-                }
-            }
-        }.runTaskLaterAsynchronously(Yuehua.instance, 1);
-
+        switch (job) {
+            case 1 -> Yuehua.playerData.put(uuid, new ZhanData(player));
+            case 2 -> Yuehua.playerData.put(uuid, new GongData(player));
+            case 3 -> Yuehua.playerData.put(uuid, new DanData(player));
+        }
 
         return true;
     }

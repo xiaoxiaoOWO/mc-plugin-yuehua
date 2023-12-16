@@ -3,316 +3,314 @@ package com.xiaoxiaoowo.yuehua.event.Inventory;
 import com.xiaoxiaoowo.yuehua.Yuehua;
 import com.xiaoxiaoowo.yuehua.commands.playercommand.Yh;
 import com.xiaoxiaoowo.yuehua.data.Data;
+import com.xiaoxiaoowo.yuehua.event.player.Join;
 import com.xiaoxiaoowo.yuehua.system.DataContainer;
 import com.xiaoxiaoowo.yuehua.utils.SQL;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Material;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.potion.PotionEffectType;
 
 public final class Click implements Listener {
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         String title = event.getView().getOriginalTitle();
         switch (title) {
-            case "§l§b主菜单" -> {
+            case "main" -> {
                 event.setCancelled(true);
-                ItemStack currentItem = event.getCurrentItem();
-                if (currentItem == null) {
-                    return;
-                }
                 Player whoClicked = (Player) event.getWhoClicked();
-                switch (currentItem.getType()) {
-                    case BLUE_DYE -> {
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                if (whoClicked.getPersistentDataContainer().get(DataContainer.mainland, PersistentDataType.BOOLEAN)) {
-                                    whoClicked.openInventory(Yh.QIAN_KUN_BAG);
-                                } else {
-                                    new BukkitRunnable() {
-                                        @Override
-                                        public void run() {
-                                            whoClicked.sendMessage(Component.translatable("nomainland"));
-                                            whoClicked.closeInventory();
-                                        }
-                                    }.runTask(Yuehua.instance);
-                                }
+                switch (event.getRawSlot()) {
+                    case 0 -> Yuehua.scheduler.runTask(Yuehua.instance, () -> {
+                        if (whoClicked.getPersistentDataContainer().get(DataContainer.fuben, PersistentDataType.INTEGER) == 0) {
+                            whoClicked.openInventory(Yh.QIAN_KUN_BAG);
+                        } else {
 
-                            }
-                        }.runTask(Yuehua.instance);
+                            whoClicked.sendMessage(Component.translatable("nomainland"));
+                            whoClicked.closeInventory();
+
+                        }
+                    });
+
+
+                    case 2 -> {
+                        String name = whoClicked.getName();
+                        Bukkit.dispatchCommand(Yuehua.console, "tpsbar " + name);
+                    }
+                    case 4 -> {
+                        String name = whoClicked.getName();
+                        Bukkit.dispatchCommand(Yuehua.console, "rambar " + name);
+                    }
+                    case 6 -> {
+                        if (whoClicked.getPotionEffect(PotionEffectType.NIGHT_VISION) == null) {
+                            whoClicked.addPotionEffect(Join.effect);
+                        } else {
+                            whoClicked.removePotionEffect(PotionEffectType.NIGHT_VISION);
+                        }
+                    }
+
+                    case 8 -> {
+                        Data data = Yuehua.playerData.get(whoClicked.getUniqueId());
+                        Yuehua.scheduler.runTaskAsynchronously(
+                                Yuehua.instance, () -> {
+                                    if (data.shipinBar == null) {
+                                        data.shipinBar = SQL.retrieveShipin(whoClicked);
+                                    }
+                                    Yuehua.scheduler.runTask(
+                                            Yuehua.instance, () -> whoClicked.openInventory(data.shipinBar)
+                                    );
+                                }
+                        );
                     }
                 }
             }
-            case "§l§b乾坤袋" -> {
+            case "qkd" -> {
                 event.setCancelled(true);
-
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        ItemStack currentItem = event.getCurrentItem();
-                        if (currentItem == null) {
-                            return;
-                        }
-                        Player whoClicked = (Player) event.getWhoClicked();
-                        if (currentItem.getType() == Material.BLUE_DYE) {
-                            switch (currentItem.getPersistentDataContainer().get(DataContainer.id, PersistentDataType.INTEGER)) {
-                                case 1 -> {
-                                    Data data = Yuehua.playerData.get(whoClicked.getUniqueId());
+                Player whoClicked = (Player) event.getWhoClicked();
+                Data data = Yuehua.playerData.get(whoClicked.getUniqueId());
+                Yuehua.scheduler.runTaskAsynchronously(
+                        Yuehua.instance, () -> {
+                            switch (event.getRawSlot()) {
+                                case 0 -> {
                                     if (data.inventory1 == null) {
-                                        PersistentDataContainer pdc = whoClicked.getPersistentDataContainer();
-                                        if (pdc.get(DataContainer.qkd1, PersistentDataType.BOOLEAN)) {
+                                        if (whoClicked.getScoreboardTags().contains("qkd1")) {
                                             data.inventory1 = SQL.retrievePlayerInventory1(whoClicked);
                                         } else {
-                                            new BukkitRunnable() {
-                                                @Override
-                                                public void run() {
-                                                    whoClicked.sendMessage(Component.translatable("unqkd"));
-                                                    whoClicked.closeInventory();
-                                                }
-                                            }.runTask(Yuehua.instance);
+                                            Yuehua.scheduler.runTask(
+                                                    Yuehua.instance, () -> {
+                                                        whoClicked.sendMessage(Component.translatable("unqkd"));
+                                                        whoClicked.closeInventory();
+                                                    }
+                                            );
                                             return;
                                         }
                                     }
-                                    new BukkitRunnable() {
-                                        @Override
-                                        public void run() {
-                                            whoClicked.openInventory(data.inventory1);
-                                        }
-                                    }.runTask(Yuehua.instance);
+                                    Yuehua.scheduler.runTask(
+                                            Yuehua.instance, () -> whoClicked.openInventory(data.inventory1)
+                                    );
+
                                 }
-                                case 2 -> {
-                                    Data data = Yuehua.playerData.get(whoClicked.getUniqueId());
+                                case 1 -> {
                                     if (data.inventory2 == null) {
-                                        PersistentDataContainer pdc = whoClicked.getPersistentDataContainer();
-                                        if (pdc.get(DataContainer.qkd2, PersistentDataType.BOOLEAN)) {
-                                            data.inventory2 = SQL.retrievePlayerInventory1(whoClicked);
+                                        if (whoClicked.getScoreboardTags().contains("qkd2")) {
+                                            data.inventory2 = SQL.retrievePlayerInventory2(whoClicked);
                                         } else {
-                                            new BukkitRunnable() {
-                                                @Override
-                                                public void run() {
-                                                    whoClicked.sendMessage(Component.translatable("unqkd"));
-                                                    whoClicked.closeInventory();
-                                                }
-                                            }.runTask(Yuehua.instance);
+                                            Yuehua.scheduler.runTask(
+                                                    Yuehua.instance, () -> {
+                                                        whoClicked.sendMessage(Component.translatable("unqkd"));
+                                                        whoClicked.closeInventory();
+                                                    }
+                                            );
                                             return;
                                         }
                                     }
-                                    new BukkitRunnable() {
-                                        @Override
-                                        public void run() {
-                                            whoClicked.openInventory(data.inventory2);
+                                    Yuehua.scheduler.runTask(
+                                            Yuehua.instance, () -> whoClicked.openInventory(data.inventory2)
+                                    );
+                                }
+
+                                case 2 -> {
+                                    if (data.inventory3 == null) {
+                                        if (whoClicked.getScoreboardTags().contains("qkd3")) {
+                                            data.inventory3 = SQL.retrievePlayerInventory3(whoClicked);
+                                        } else {
+                                            Yuehua.scheduler.runTask(
+                                                    Yuehua.instance, () -> {
+                                                        whoClicked.sendMessage(Component.translatable("unqkd"));
+                                                        whoClicked.closeInventory();
+                                                    }
+                                            );
+                                            return;
                                         }
-                                    }.runTask(Yuehua.instance);
+                                    }
+                                    Yuehua.scheduler.runTask(
+                                            Yuehua.instance, () -> whoClicked.openInventory(data.inventory3)
+                                    );
                                 }
 
                                 case 3 -> {
-                                    Data data = Yuehua.playerData.get(whoClicked.getUniqueId());
-                                    if (data.inventory3 == null) {
-                                        PersistentDataContainer pdc = whoClicked.getPersistentDataContainer();
-                                        if (pdc.get(DataContainer.qkd3, PersistentDataType.BOOLEAN)) {
-                                            data.inventory3 = SQL.retrievePlayerInventory1(whoClicked);
+                                    if (data.inventory4 == null) {
+                                        if (whoClicked.getScoreboardTags().contains("qkd4")) {
+                                            data.inventory4 = SQL.retrievePlayerInventory4(whoClicked);
                                         } else {
-                                            new BukkitRunnable() {
-                                                @Override
-                                                public void run() {
-                                                    whoClicked.sendMessage(Component.translatable("unqkd"));
-                                                    whoClicked.closeInventory();
-                                                }
-                                            }.runTask(Yuehua.instance);
+                                            Yuehua.scheduler.runTask(
+                                                    Yuehua.instance, () -> {
+                                                        whoClicked.sendMessage(Component.translatable("unqkd"));
+                                                        whoClicked.closeInventory();
+                                                    }
+                                            );
                                             return;
                                         }
                                     }
-                                    new BukkitRunnable() {
-                                        @Override
-                                        public void run() {
-                                            whoClicked.openInventory(data.inventory3);
-                                        }
-                                    }.runTask(Yuehua.instance);
+                                    Yuehua.scheduler.runTask(
+                                            Yuehua.instance, () -> whoClicked.openInventory(data.inventory4)
+                                    );
                                 }
 
                                 case 4 -> {
-                                    Data data = Yuehua.playerData.get(whoClicked.getUniqueId());
-                                    if (data.inventory4 == null) {
-                                        PersistentDataContainer pdc = whoClicked.getPersistentDataContainer();
-                                        if (pdc.get(DataContainer.qkd4, PersistentDataType.BOOLEAN)) {
-                                            data.inventory4 = SQL.retrievePlayerInventory1(whoClicked);
+                                    if (data.inventory5 == null) {
+
+                                        if (whoClicked.getScoreboardTags().contains("qkd5")) {
+                                            data.inventory5 = SQL.retrievePlayerInventory5(whoClicked);
                                         } else {
-                                            new BukkitRunnable() {
-                                                @Override
-                                                public void run() {
-                                                    whoClicked.sendMessage(Component.translatable("unqkd"));
-                                                    whoClicked.closeInventory();
-                                                }
-                                            }.runTask(Yuehua.instance);
+                                            Yuehua.scheduler.runTask(
+                                                    Yuehua.instance, () -> {
+                                                        whoClicked.sendMessage(Component.translatable("unqkd"));
+                                                        whoClicked.closeInventory();
+                                                    }
+                                            );
                                             return;
                                         }
                                     }
-                                    new BukkitRunnable() {
-                                        @Override
-                                        public void run() {
-                                            whoClicked.openInventory(data.inventory4);
-                                        }
-                                    }.runTask(Yuehua.instance);
+                                    Yuehua.scheduler.runTask(
+                                            Yuehua.instance, () -> whoClicked.openInventory(data.inventory5)
+                                    );
                                 }
 
                                 case 5 -> {
-                                    Data data = Yuehua.playerData.get(whoClicked.getUniqueId());
-                                    if (data.inventory5 == null) {
-                                        PersistentDataContainer pdc = whoClicked.getPersistentDataContainer();
-                                        if (pdc.get(DataContainer.qkd5, PersistentDataType.BOOLEAN)) {
-                                            data.inventory5 = SQL.retrievePlayerInventory1(whoClicked);
+                                    if (data.inventory6 == null) {
+
+                                        if (whoClicked.getScoreboardTags().contains("qkd6")) {
+                                            data.inventory6 = SQL.retrievePlayerInventory6(whoClicked);
                                         } else {
-                                            new BukkitRunnable() {
-                                                @Override
-                                                public void run() {
-                                                    whoClicked.sendMessage(Component.translatable("unqkd"));
-                                                    whoClicked.closeInventory();
-                                                }
-                                            }.runTask(Yuehua.instance);
+                                            Yuehua.scheduler.runTask(
+                                                    Yuehua.instance, () -> {
+                                                        whoClicked.sendMessage(Component.translatable("unqkd"));
+                                                        whoClicked.closeInventory();
+                                                    }
+                                            );
                                             return;
                                         }
                                     }
-                                    new BukkitRunnable() {
-                                        @Override
-                                        public void run() {
-                                            whoClicked.openInventory(data.inventory5);
-                                        }
-                                    }.runTask(Yuehua.instance);
+                                    Yuehua.scheduler.runTask(
+                                            Yuehua.instance, () -> whoClicked.openInventory(data.inventory6)
+                                    );
                                 }
 
                                 case 6 -> {
-                                    Data data = Yuehua.playerData.get(whoClicked.getUniqueId());
-                                    if (data.inventory6 == null) {
-                                        PersistentDataContainer pdc = whoClicked.getPersistentDataContainer();
-                                        if (pdc.get(DataContainer.qkd6, PersistentDataType.BOOLEAN)) {
-                                            data.inventory6 = SQL.retrievePlayerInventory1(whoClicked);
+                                    if (data.inventory7 == null) {
+                                        if (whoClicked.getScoreboardTags().contains("qkd7")) {
+                                            data.inventory7 = SQL.retrievePlayerInventory7(whoClicked);
                                         } else {
-                                            new BukkitRunnable() {
-                                                @Override
-                                                public void run() {
-                                                    whoClicked.sendMessage(Component.translatable("unqkd"));
-                                                    whoClicked.closeInventory();
-                                                }
-                                            }.runTask(Yuehua.instance);
+                                            Yuehua.scheduler.runTask(
+                                                    Yuehua.instance, () -> {
+                                                        whoClicked.sendMessage(Component.translatable("unqkd"));
+                                                        whoClicked.closeInventory();
+                                                    }
+                                            );
                                             return;
                                         }
                                     }
-                                    new BukkitRunnable() {
-                                        @Override
-                                        public void run() {
-                                            whoClicked.openInventory(data.inventory6);
-                                        }
-                                    }.runTask(Yuehua.instance);
+                                    Yuehua.scheduler.runTask(
+                                            Yuehua.instance, () -> whoClicked.openInventory(data.inventory7)
+                                    );
                                 }
 
                                 case 7 -> {
-                                    Data data = Yuehua.playerData.get(whoClicked.getUniqueId());
-                                    if (data.inventory7 == null) {
-                                        PersistentDataContainer pdc = whoClicked.getPersistentDataContainer();
-                                        if (pdc.get(DataContainer.qkd7, PersistentDataType.BOOLEAN)) {
-                                            data.inventory7 = SQL.retrievePlayerInventory1(whoClicked);
+                                    if (data.inventory8 == null) {
+                                        if (whoClicked.getScoreboardTags().contains("qkd8")) {
+                                            data.inventory8 = SQL.retrievePlayerInventory8(whoClicked);
                                         } else {
-                                            new BukkitRunnable() {
-                                                @Override
-                                                public void run() {
-                                                    whoClicked.sendMessage(Component.translatable("unqkd"));
-                                                    whoClicked.closeInventory();
-                                                }
-                                            }.runTask(Yuehua.instance);
+                                            Yuehua.scheduler.runTask(
+                                                    Yuehua.instance, () -> {
+                                                        whoClicked.sendMessage(Component.translatable("unqkd"));
+                                                        whoClicked.closeInventory();
+                                                    }
+                                            );
                                             return;
                                         }
                                     }
-                                    new BukkitRunnable() {
-                                        @Override
-                                        public void run() {
-                                            whoClicked.openInventory(data.inventory7);
-                                        }
-                                    }.runTask(Yuehua.instance);
+                                    Yuehua.scheduler.runTask(
+                                            Yuehua.instance, () -> whoClicked.openInventory(data.inventory8)
+                                    );
                                 }
 
                                 case 8 -> {
-                                    Data data = Yuehua.playerData.get(whoClicked.getUniqueId());
-                                    if (data.inventory8 == null) {
-                                        PersistentDataContainer pdc = whoClicked.getPersistentDataContainer();
-                                        if (pdc.get(DataContainer.qkd8, PersistentDataType.BOOLEAN)) {
-                                            data.inventory8 = SQL.retrievePlayerInventory1(whoClicked);
+                                    if (data.inventory9 == null) {
+                                        if (whoClicked.getScoreboardTags().contains("qkd9")) {
+                                            data.inventory9 = SQL.retrievePlayerInventory9(whoClicked);
                                         } else {
-                                            new BukkitRunnable() {
-                                                @Override
-                                                public void run() {
-                                                    whoClicked.sendMessage(Component.translatable("unqkd"));
-                                                    whoClicked.closeInventory();
-                                                }
-                                            }.runTask(Yuehua.instance);
+                                            Yuehua.scheduler.runTask(
+                                                    Yuehua.instance, () -> {
+                                                        whoClicked.sendMessage(Component.translatable("unqkd"));
+                                                        whoClicked.closeInventory();
+                                                    }
+                                            );
                                             return;
                                         }
                                     }
-                                    new BukkitRunnable() {
-                                        @Override
-                                        public void run() {
-                                            whoClicked.openInventory(data.inventory8);
-                                        }
-                                    }.runTask(Yuehua.instance);
+                                    Yuehua.scheduler.runTask(
+                                            Yuehua.instance, () -> whoClicked.openInventory(data.inventory9)
+                                    );
                                 }
 
-                                case 9 -> {
-                                    Data data = Yuehua.playerData.get(whoClicked.getUniqueId());
-                                    if (data.inventory9 == null) {
-                                        PersistentDataContainer pdc = whoClicked.getPersistentDataContainer();
-                                        if (pdc.get(DataContainer.qkd9, PersistentDataType.BOOLEAN)) {
-                                            data.inventory9 = SQL.retrievePlayerInventory1(whoClicked);
-                                        } else {
-                                            new BukkitRunnable() {
-                                                @Override
-                                                public void run() {
-                                                    whoClicked.sendMessage(Component.translatable("unqkd"));
-                                                    whoClicked.closeInventory();
-                                                }
-                                            }.runTask(Yuehua.instance);
-                                            return;
-                                        }
-                                    }
-                                    new BukkitRunnable() {
-                                        @Override
-                                        public void run() {
-                                            whoClicked.openInventory(data.inventory9);
-                                        }
-                                    }.runTask(Yuehua.instance);
+                                case 17 -> {
+                                    Yuehua.scheduler.runTask(
+                                            Yuehua.instance, () -> whoClicked.openInventory(Yh.MAIN_MENU)
+                                    );
                                 }
                             }
-                        } else {
-                            new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    whoClicked.openInventory(Yh.MAIN_MENU);
-                                }
-                            }.runTask(Yuehua.instance);
+
+
                         }
-                    }
-                }.runTaskAsynchronously(Yuehua.instance);
+                );
+
             }
 
-            case "§l§b乾坤袋☯一", "§l§b乾坤袋☯二", "§l§b乾坤袋☯三", "§l§b乾坤袋☯四", "§l§b乾坤袋☯五",
-                    "§l§b乾坤袋☯六", "§l§b乾坤袋☯七", "§l§b乾坤袋☯八", "§l§b乾坤袋☯九" -> {
+            case "qkd1", "qkd2", "qkd3", "qkd4", "qkd5", "qkd6", "qkd7", "qkd8", "qkd9" -> {
                 if (event.getSlot() == 53) {
                     event.setCancelled(true);
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
+                    Yuehua.scheduler.runTask(Yuehua.instance, () -> {
+                        Player whoClicked = (Player) event.getWhoClicked();
+                        whoClicked.openInventory(Yh.QIAN_KUN_BAG);
+                    });
+                }
+            }
+
+            case "sp" -> {
+                ItemStack item = event.getCurrentItem();
+                if(item == null){
+                    return;
+                }
+                switch (item.getType()){
+                    case GREEN_DYE -> {
+                        event.setCancelled(true);
+                        Yuehua.scheduler.runTask(Yuehua.instance, () -> {
                             Player whoClicked = (Player) event.getWhoClicked();
-                            whoClicked.openInventory(Yh.QIAN_KUN_BAG);
-                        }
-                    }.runTask(Yuehua.instance);
+                            whoClicked.openInventory(Yh.MAIN_MENU);
+                        });
+                    }
+                    case YELLOW_DYE -> {
+                        event.setCancelled(true);
+                        Player whoClicked = (Player) event.getWhoClicked();
+                        Yuehua.scheduler.runTask(
+                                Yuehua.instance, () -> {
+                                    whoClicked.sendMessage(Component.translatable("unsp"));
+                                    whoClicked.closeInventory();
+                                }
+                        );
+                    }
+                    case WOODEN_PICKAXE -> {
+                    }
+                    default -> {
+                        event.setCancelled(true);
+                        Player whoClicked = (Player) event.getWhoClicked();
+                        Yuehua.scheduler.runTask(
+                                Yuehua.instance, () -> {
+                                    whoClicked.sendMessage(Component.translatable("unother"));
+                                    whoClicked.closeInventory();
+                                }
+                        );
+                    }
                 }
             }
 
         }
+
+
     }
 }

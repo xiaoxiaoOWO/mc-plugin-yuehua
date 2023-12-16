@@ -8,6 +8,7 @@ import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Skeleton;
 import org.jetbrains.annotations.NotNull;
@@ -30,6 +31,9 @@ public final class RenOu implements CommandExecutor {
             BlockCommandSender blockCommandSender = (BlockCommandSender) sender;
             Location location1 = blockCommandSender.getBlock().getLocation();
             skeleton = (Skeleton) GetEntity.getNearestMonster(location1, 4, 4, 4);
+            if (skeleton == null) {
+                return true;
+            }
             location = skeleton.getLocation();
         } else {
             double hp = skeleton.getHealth();
@@ -38,15 +42,16 @@ public final class RenOu implements CommandExecutor {
             if (damage < 1e-6) {
                 return true;
             }
-            for (Player player : GetEntity.getPlayers(location, 8, 8, 3)) {
+            for (Entity entity : GetEntity.getPlayers(location, 8, 8, 3)) {
+                Player player = (Player) entity;
                 player.sendMessage(
                         Component
-                                .translatable("renou")
-                                .append(Component.text(damage).color(NamedTextColor.RED))
+                                .translatable("renou",
+                                        Component.text(damage).color(NamedTextColor.RED))
+
                 );
             }
         }
-
         return true;
     }
 }

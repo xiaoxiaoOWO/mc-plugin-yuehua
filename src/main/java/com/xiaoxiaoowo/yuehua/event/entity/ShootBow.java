@@ -8,9 +8,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityShootBowEvent;
-import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.Random;
 
 public final class ShootBow implements Listener {
+
+    private static final Random random = new Random();
 
     @EventHandler
     public void onShootBow(EntityShootBowEvent e) {
@@ -28,7 +31,7 @@ public final class ShootBow implements Listener {
                 int baojixiaoguo = data.baojixiaoguo;
 
                 //判断是否暴击
-                if (GetEntity.random.nextInt(100) < baoji) {
+                if (random.nextInt(100) < baoji) {
                     arrow = arrow * baojixiaoguo / 100;
                 }
                 arrowEntity.setDamage(arrow);
@@ -38,21 +41,17 @@ public final class ShootBow implements Listener {
 
             }
             //射箭技能
-            shoot(data, player, arrowEntity);
+            shoot(data, arrowEntity);
 
-            new BukkitRunnable() {
-
-                @Override
-                public void run() {
-                    data.readyBow = true;
-                }
-            }.runTaskLater(Yuehua.instance, 2);
+            Yuehua.scheduler.runTaskLater(
+                    Yuehua.instance, () -> data.readyBow = true, 2L
+            );
 
 
         }
     }
 
-    private static void shoot(GongData data, Player player, Arrow arrow) {
+    private static void shoot(GongData data, Arrow arrow) {
         switch (data.slot0.id) {
 
         }

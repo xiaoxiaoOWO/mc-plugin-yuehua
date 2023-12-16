@@ -47,6 +47,8 @@ public final class DataSet implements CommandExecutor {
                 case "pofa" -> data.pofa = value;
                 case "fakang" -> data.fakang = value;
                 case "cool_reduce" -> data.cool_reduce = value;
+                case "shengji" -> data.shengji = value;
+                case "renxing" -> data.renxing = value;
             }
 
 

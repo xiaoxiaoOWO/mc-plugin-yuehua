@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 public final class Act {
 
 
-    public static void actZhan(Player player, ZhanData data, String id) {
+    public static void actZhan(ZhanData data, String id) {
         switch (id) {
             case "taomujian" -> {
 
@@ -19,63 +19,95 @@ public final class Act {
         }
     }
 
-    public static void deActZhan(Player player, ZhanData data, String id) {
+    public static void deActZhan(ZhanData data, String id) {
+        switch (id) {
+        }
+
+    }
+
+    public static void actGong(GongData data, String id) {
         switch (id) {
         }
     }
 
-    public static void actGong(Player player, GongData data, String id) {
+    public static void deActGong(GongData data, String id) {
+        switch (id) {
+        }
+
+    }
+
+    public static void actDan(DanData data, String id) {
         switch (id) {
         }
     }
 
-    public static void deActGong(Player player, GongData data, String id) {
+    public static void deActDan(DanData data, String id) {
         switch (id) {
         }
+
     }
 
-    public static void actDan(Player player, DanData data, String id) {
+
+    public static void actAll(Data data, String id) {
         switch (id) {
         }
+
     }
 
-    public static void deActDan(Player player, DanData data, String id) {
+    public static void deActAll(Data data, String id) {
         switch (id) {
         }
+
     }
 
-    public static void actAll(Player player, Data data, String id) {
+    public static void actAllEnderChest(Data data, String id) {
         switch (id) {
         }
+
     }
 
-    public static void deActAll(Player player, Data data, String id) {
+
+    public static void deActAllEnderChest(Data data, String id) {
         switch (id) {
         }
+
     }
 
     public static void initZhan(ZhanData data, String id) {
         switch (id) {
 
         }
+
     }
 
     public static void initGong(GongData data, String id) {
         switch (id) {
 
         }
+
     }
 
     public static void initDan(DanData data, String id) {
         switch (id) {
 
         }
+
     }
 
     public static void initAll(Data data, String id) {
         switch (id) {
 
         }
+
+
+    }
+
+    public static void initAllEnderChest(Data data, String id) {
+        switch (id) {
+
+        }
+
+
     }
 
 

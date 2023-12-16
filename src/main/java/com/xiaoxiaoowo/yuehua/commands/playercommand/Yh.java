@@ -2,8 +2,6 @@ package com.xiaoxiaoowo.yuehua.commands.playercommand;
 
 import com.xiaoxiaoowo.yuehua.system.DataContainer;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -21,12 +19,13 @@ import java.util.List;
 
 
 public final class Yh implements CommandExecutor {
-    public static final Inventory MAIN_MENU = Bukkit.createInventory(null, 54,
-            Component.text("§l§b主菜单"));
+    public static final Inventory MAIN_MENU = Bukkit.createInventory(null, 18,
+            Component.translatable("main"));
     public static final Inventory QIAN_KUN_BAG = Bukkit.createInventory(null, 18,
-            Component.text("§l§b乾坤袋"));
+            Component.translatable("qkd"));
 
-    public static final ItemStack BACK_BEFORE = new ItemStack(Material.GREEN_DYE,1);
+    public static final ItemStack BACK_BEFORE = new ItemStack(Material.GREEN_DYE);
+    public static final ItemStack NO = new ItemStack(Material.YELLOW_DYE);
 
 
     static {
@@ -207,7 +206,67 @@ public final class Yh implements CommandExecutor {
                         .translatable("toGUIBefore")
         );
         BACK_BEFORE.setItemMeta(itemMeta11);
-        QIAN_KUN_BAG.setItem(17,BACK_BEFORE);
+        QIAN_KUN_BAG.setItem(17, BACK_BEFORE);
+
+        ItemStack itemStack12 = new ItemStack(Material.ORANGE_DYE);
+        ItemMeta itemMeta12 = itemStack12.getItemMeta();
+        itemMeta12.displayName(
+                Component
+                        .translatable("toggletps")
+        );
+        itemStack12.setItemMeta(itemMeta12);
+        MAIN_MENU.setItem(2, itemStack12);
+
+        ItemStack itemStack13 = new ItemStack(Material.PURPLE_DYE);
+        ItemMeta itemMeta13 = itemStack13.getItemMeta();
+        itemMeta13.displayName(
+                Component
+                        .translatable("toggleram")
+        );
+        itemStack13.setItemMeta(itemMeta13);
+        MAIN_MENU.setItem(4, itemStack13);
+
+        ItemStack itemStack14 = new ItemStack(Material.PINK_DYE);
+        ItemMeta itemMeta14 = itemStack14.getItemMeta();
+        itemMeta14.displayName(
+                Component
+                        .translatable("togglenightvision")
+        );
+        itemStack14.setItemMeta(itemMeta14);
+        MAIN_MENU.setItem(6, itemStack14);
+
+        ItemStack itemStack15 = new ItemStack(Material.YELLOW_DYE);
+        itemStack15.setCustomModelData(1);
+        ItemMeta itemMeta15 = itemStack15.getItemMeta();
+        itemMeta15.displayName(
+                Component
+                        .translatable("sp")
+        );
+        itemMeta15.lore(
+                List.of(
+                        Component
+                                .translatable("splore")
+                )
+        );
+        itemStack15.setItemMeta(itemMeta15);
+        MAIN_MENU.setItem(8, itemStack15);
+
+        NO.setCustomModelData(2);
+        ItemMeta itemMeta16 = NO.getItemMeta();
+        itemMeta16.displayName(
+                Component
+                        .translatable("no")
+        );
+        itemMeta16.lore(
+                List.of(
+                        Component
+                                .translatable("nolore")
+                )
+        );
+
+        NO.setItemMeta(itemMeta16);
+
+
     }
 
     @Override

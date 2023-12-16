@@ -9,308 +9,156 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.scheduler.BukkitRunnable;
-
-import java.util.Objects;
 
 public final class Close implements Listener {
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent event) {
-        Inventory inventory = event.getInventory();
-        //是否为末影箱
-        if (inventory.getType() != InventoryType.ENDER_CHEST) {
-            return;
-        }
+        String title = event.getView().getOriginalTitle();
+        if (title.equals("sp")) {
+            Inventory inventory = event.getInventory();
+            Player player = (Player) event.getPlayer();
+            Data data = Yuehua.playerData.get(player.getUniqueId());
 
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                Player player = (Player) event.getPlayer();
-                Data data = Yuehua.playerData.get(player.getUniqueId());
-                ItemStack item0 = inventory.getItem(0);
-                ItemStack item1 = inventory.getItem(1);
-                ItemStack item2 = inventory.getItem(2);
-                ItemStack item3 = inventory.getItem(3);
-                ItemStack item4 = inventory.getItem(4);
-                ItemStack item5 = inventory.getItem(5);
-                ItemStack item6 = inventory.getItem(6);
-                ItemStack item7 = inventory.getItem(7);
-                ItemStack item8 = inventory.getItem(8);
-                ItemStack item9 = inventory.getItem(9);
-                ItemStack item10 = inventory.getItem(10);
-
-
-                if (Objects.equals(data.eSlot0.id, "null")) {
-                    if (item0 != null && item0.getType() == Material.WOODEN_PICKAXE) {
-                        PersistentDataContainer pdc = item0.getPersistentDataContainer();
+            ItemStack itemStack0 = inventory.getItem(0);
+            String oldId0 = data.eSlot0.id;
+            if (itemStack0 == null) {
+                Act.deActAllEnderChest(data, oldId0);
+            } else {
+                if (itemStack0.getType() == Material.WOODEN_PICKAXE) {
+                    PersistentDataContainer pdc = itemStack0.getPersistentDataContainer();
+                    String newId = pdc.get(DataContainer.id, PersistentDataType.STRING);
+                    if (!newId.equals(oldId0)) {
+                        Act.deActAllEnderChest(data, oldId0);
                         if (0 == pdc.get(DataContainer.slot, PersistentDataType.INTEGER)) {
-                            Act.actAll(player, data, pdc.get(DataContainer.id, PersistentDataType.STRING));
+                            Act.actAllEnderChest(data, newId);
                         }
-                    }
-                } else {
-                    if (item0 != null && item0.getType() == Material.WOODEN_PICKAXE) {
-                        PersistentDataContainer pdc = item0.getPersistentDataContainer();
-                        if (0 == pdc.get(DataContainer.slot, PersistentDataType.INTEGER)) {
-                            String id = pdc.get(DataContainer.id, PersistentDataType.STRING);
-                            if (!Objects.equals(id, data.eSlot0.id)) {
-                                Act.deActAll(player, data, data.eSlot0.id);
-                                Act.actAll(player, data, id);
-                            }
-                        } else {
-                            Act.deActAll(player, data, data.eSlot0.id);
-                        }
-                    } else {
-                        Act.deActAll(player, data, data.eSlot0.id);
                     }
                 }
-
-                if (Objects.equals(data.eSlot1.id, "null")) {
-                    if (item1 != null && item1.getType() == Material.WOODEN_PICKAXE) {
-                        PersistentDataContainer pdc = item1.getPersistentDataContainer();
-                        if (1 == pdc.get(DataContainer.slot, PersistentDataType.INTEGER)) {
-                            Act.actAll(player, data, pdc.get(DataContainer.id, PersistentDataType.STRING));
-                        }
-                    }
-                } else {
-                    if (item1 != null && item1.getType() == Material.WOODEN_PICKAXE) {
-                        PersistentDataContainer pdc = item1.getPersistentDataContainer();
-                        if (1 == pdc.get(DataContainer.slot, PersistentDataType.INTEGER)) {
-                            String id = pdc.get(DataContainer.id, PersistentDataType.STRING);
-                            if (!Objects.equals(id, data.eSlot1.id)) {
-                                Act.deActAll(player, data, data.eSlot1.id);
-                                Act.actAll(player, data, id);
-                            }
-                        } else {
-                            Act.deActAll(player, data, data.eSlot1.id);
-                        }
-                    } else {
-                        Act.deActAll(player, data, data.eSlot1.id);
-                    }
-                }
-
-                if (Objects.equals(data.eSlot2.id, "null")) {
-                    if (item2 != null && item2.getType() == Material.WOODEN_PICKAXE) {
-                        PersistentDataContainer pdc = item2.getPersistentDataContainer();
-                        if (2 == pdc.get(DataContainer.slot, PersistentDataType.INTEGER)) {
-                            Act.actAll(player, data, pdc.get(DataContainer.id, PersistentDataType.STRING));
-                        }
-                    }
-                } else {
-                    if (item2 != null && item2.getType() == Material.WOODEN_PICKAXE) {
-                        PersistentDataContainer pdc = item2.getPersistentDataContainer();
-                        if (2 == pdc.get(DataContainer.slot, PersistentDataType.INTEGER)) {
-                            String id = pdc.get(DataContainer.id, PersistentDataType.STRING);
-                            if (!Objects.equals(id, data.eSlot2.id)) {
-                                Act.deActAll(player, data, data.eSlot2.id);
-                                Act.actAll(player, data, id);
-                            }
-                        } else {
-                            Act.deActAll(player, data, data.eSlot2.id);
-                        }
-                    } else {
-                        Act.deActAll(player, data, data.eSlot2.id);
-                    }
-                }
-
-                if (Objects.equals(data.eSlot3.id, "null")) {
-                    if (item3 != null && item3.getType() == Material.WOODEN_PICKAXE) {
-                        PersistentDataContainer pdc = item3.getPersistentDataContainer();
-                        if (3 == pdc.get(DataContainer.slot, PersistentDataType.INTEGER)) {
-                            Act.actAll(player, data, pdc.get(DataContainer.id, PersistentDataType.STRING));
-                        }
-                    }
-                } else {
-                    if (item3 != null && item3.getType() == Material.WOODEN_PICKAXE) {
-                        PersistentDataContainer pdc = item3.getPersistentDataContainer();
-                        if (3 == pdc.get(DataContainer.slot, PersistentDataType.INTEGER)) {
-                            String id = pdc.get(DataContainer.id, PersistentDataType.STRING);
-                            if (!Objects.equals(id, data.eSlot3.id)) {
-                                Act.deActAll(player, data, data.eSlot3.id);
-                                Act.actAll(player, data, id);
-                            }
-                        } else {
-                            Act.deActAll(player, data, data.eSlot3.id);
-                        }
-                    } else {
-                        Act.deActAll(player, data, data.eSlot3.id);
-                    }
-                }
-
-                if (Objects.equals(data.eSlot4.id, "null")) {
-                    if (item4 != null && item4.getType() == Material.WOODEN_PICKAXE) {
-                        PersistentDataContainer pdc = item4.getPersistentDataContainer();
-                        if (4 == pdc.get(DataContainer.slot, PersistentDataType.INTEGER)) {
-                            Act.actAll(player, data, pdc.get(DataContainer.id, PersistentDataType.STRING));
-                        }
-                    }
-                } else {
-                    if (item4 != null && item4.getType() == Material.WOODEN_PICKAXE) {
-                        PersistentDataContainer pdc = item4.getPersistentDataContainer();
-                        if (4 == pdc.get(DataContainer.slot, PersistentDataType.INTEGER)) {
-                            String id = pdc.get(DataContainer.id, PersistentDataType.STRING);
-                            if (!Objects.equals(id, data.eSlot4.id)) {
-                                Act.deActAll(player, data, data.eSlot4.id);
-                                Act.actAll(player, data, id);
-                            }
-                        } else {
-                            Act.deActAll(player, data, data.eSlot4.id);
-                        }
-                    } else {
-                        Act.deActAll(player, data, data.eSlot4.id);
-                    }
-                }
-
-                if (Objects.equals(data.eSlot5.id, "null")) {
-                    if (item5 != null && item5.getType() == Material.WOODEN_PICKAXE) {
-                        PersistentDataContainer pdc = item5.getPersistentDataContainer();
-                        if (5 == pdc.get(DataContainer.slot, PersistentDataType.INTEGER)) {
-                            Act.actAll(player, data, pdc.get(DataContainer.id, PersistentDataType.STRING));
-                        }
-                    }
-                } else {
-                    if (item5 != null && item5.getType() == Material.WOODEN_PICKAXE) {
-                        PersistentDataContainer pdc = item5.getPersistentDataContainer();
-                        if (5 == pdc.get(DataContainer.slot, PersistentDataType.INTEGER)) {
-                            String id = pdc.get(DataContainer.id, PersistentDataType.STRING);
-                            if (!Objects.equals(id, data.eSlot5.id)) {
-                                Act.deActAll(player, data, data.eSlot5.id);
-                                Act.actAll(player, data, id);
-                            }
-                        } else {
-                            Act.deActAll(player, data, data.eSlot5.id);
-                        }
-                    } else {
-                        Act.deActAll(player, data, data.eSlot5.id);
-                    }
-                }
-
-                if (Objects.equals(data.eSlot6.id, "null")) {
-                    if (item6 != null && item6.getType() == Material.WOODEN_PICKAXE) {
-                        PersistentDataContainer pdc = item6.getPersistentDataContainer();
-                        if (6 == pdc.get(DataContainer.slot, PersistentDataType.INTEGER)) {
-                            Act.actAll(player, data, pdc.get(DataContainer.id, PersistentDataType.STRING));
-                        }
-                    }
-                } else {
-                    if (item6 != null && item6.getType() == Material.WOODEN_PICKAXE) {
-                        PersistentDataContainer pdc = item6.getPersistentDataContainer();
-                        if (6 == pdc.get(DataContainer.slot, PersistentDataType.INTEGER)) {
-                            String id = pdc.get(DataContainer.id, PersistentDataType.STRING);
-                            if (!Objects.equals(id, data.eSlot6.id)) {
-                                Act.deActAll(player, data, data.eSlot6.id);
-                                Act.actAll(player, data, id);
-                            }
-                        } else {
-                            Act.deActAll(player, data, data.eSlot6.id);
-                        }
-                    } else {
-                        Act.deActAll(player, data, data.eSlot6.id);
-                    }
-                }
-
-                if (Objects.equals(data.eSlot7.id, "null")) {
-                    if (item7 != null && item7.getType() == Material.WOODEN_PICKAXE) {
-                        PersistentDataContainer pdc = item7.getPersistentDataContainer();
-                        if (7 == pdc.get(DataContainer.slot, PersistentDataType.INTEGER)) {
-                            Act.actAll(player, data, pdc.get(DataContainer.id, PersistentDataType.STRING));
-                        }
-                    }
-                } else {
-                    if (item7 != null && item7.getType() == Material.WOODEN_PICKAXE) {
-                        PersistentDataContainer pdc = item7.getPersistentDataContainer();
-                        if (7 == pdc.get(DataContainer.slot, PersistentDataType.INTEGER)) {
-                            String id = pdc.get(DataContainer.id, PersistentDataType.STRING);
-                            if (!Objects.equals(id, data.eSlot7.id)) {
-                                Act.deActAll(player, data, data.eSlot7.id);
-                                Act.actAll(player, data, id);
-                            }
-                        } else {
-                            Act.deActAll(player, data, data.eSlot7.id);
-                        }
-                    } else {
-                        Act.deActAll(player, data, data.eSlot7.id);
-                    }
-                }
-
-                if (Objects.equals(data.eSlot8.id, "null")) {
-                    if (item8 != null && item8.getType() == Material.WOODEN_PICKAXE) {
-                        PersistentDataContainer pdc = item8.getPersistentDataContainer();
-                        if (8 == pdc.get(DataContainer.slot, PersistentDataType.INTEGER)) {
-                            Act.actAll(player, data, pdc.get(DataContainer.id, PersistentDataType.STRING));
-                        }
-                    }
-                } else {
-                    if (item8 != null && item8.getType() == Material.WOODEN_PICKAXE) {
-                        PersistentDataContainer pdc = item8.getPersistentDataContainer();
-                        if (8 == pdc.get(DataContainer.slot, PersistentDataType.INTEGER)) {
-                            String id = pdc.get(DataContainer.id, PersistentDataType.STRING);
-                            if (!Objects.equals(id, data.eSlot8.id)) {
-                                Act.deActAll(player, data, data.eSlot8.id);
-                                Act.actAll(player, data, id);
-                            }
-                        } else {
-                            Act.deActAll(player, data, data.eSlot8.id);
-                        }
-                    } else {
-                        Act.deActAll(player, data, data.eSlot8.id);
-                    }
-                }
-
-                if (Objects.equals(data.eSlot9.id, "null")) {
-                    if (item9 != null && item9.getType() == Material.WOODEN_PICKAXE) {
-                        PersistentDataContainer pdc = item9.getPersistentDataContainer();
-                        if (9 == pdc.get(DataContainer.slot, PersistentDataType.INTEGER)) {
-                            Act.actAll(player, data, pdc.get(DataContainer.id, PersistentDataType.STRING));
-                        }
-                    }
-                } else {
-                    if (item9 != null && item9.getType() == Material.WOODEN_PICKAXE) {
-                        PersistentDataContainer pdc = item9.getPersistentDataContainer();
-                        if (9 == pdc.get(DataContainer.slot, PersistentDataType.INTEGER)) {
-                            String id = pdc.get(DataContainer.id, PersistentDataType.STRING);
-                            if (!Objects.equals(id, data.eSlot9.id)) {
-                                Act.deActAll(player, data, data.eSlot9.id);
-                                Act.actAll(player, data, id);
-                            }
-                        } else {
-                            Act.deActAll(player, data, data.eSlot9.id);
-                        }
-                    } else {
-                        Act.deActAll(player, data, data.eSlot9.id);
-                    }
-                }
-
-                if (Objects.equals(data.eSlot10.id, "null")) {
-                    if (item10 != null && item10.getType() == Material.WOODEN_PICKAXE) {
-                        PersistentDataContainer pdc = item10.getPersistentDataContainer();
-                        if (10 == pdc.get(DataContainer.slot, PersistentDataType.INTEGER)) {
-                            Act.actAll(player, data, pdc.get(DataContainer.id, PersistentDataType.STRING));
-                        }
-                    }
-                } else {
-                    if (item10 != null && item10.getType() == Material.WOODEN_PICKAXE) {
-                        PersistentDataContainer pdc = item10.getPersistentDataContainer();
-                        if (10 == pdc.get(DataContainer.slot, PersistentDataType.INTEGER)) {
-                            String id = pdc.get(DataContainer.id, PersistentDataType.STRING);
-                            if (!Objects.equals(id, data.eSlot10.id)) {
-                                Act.deActAll(player, data, data.eSlot10.id);
-                                Act.actAll(player, data, id);
-                            }
-                        } else {
-                            Act.deActAll(player, data, data.eSlot10.id);
-                        }
-                    } else {
-                        Act.deActAll(player, data, data.eSlot10.id);
-                    }
-                }
-
-
             }
-        }.runTaskAsynchronously(Yuehua.instance);
+
+
+            ItemStack itemStack1 = inventory.getItem(1);
+            String oldId1 = data.eSlot1.id;
+            if (itemStack1 == null) {
+                Act.deActAllEnderChest(data, oldId1);
+            } else {
+                if (itemStack1.getType() == Material.WOODEN_PICKAXE) {
+                    PersistentDataContainer pdc = itemStack1.getPersistentDataContainer();
+                    String newId = pdc.get(DataContainer.id, PersistentDataType.STRING);
+                    if (!newId.equals(oldId1)) {
+                        Act.deActAllEnderChest(data, oldId1);
+                        if (1 == pdc.get(DataContainer.slot, PersistentDataType.INTEGER)) {
+                            Act.actAllEnderChest(data, newId);
+                        }
+                    }
+                }
+            }
+
+            ItemStack itemStack2 = inventory.getItem(2);
+            String oldId2 = data.eSlot2.id;
+            if (itemStack2 == null) {
+                Act.deActAllEnderChest(data, oldId2);
+            } else {
+                if (itemStack2.getType() == Material.WOODEN_PICKAXE) {
+                    PersistentDataContainer pdc = itemStack2.getPersistentDataContainer();
+                    String newId = pdc.get(DataContainer.id, PersistentDataType.STRING);
+                    if (!newId.equals(oldId2)) {
+                        Act.deActAllEnderChest(data, oldId2);
+                        if (2 == pdc.get(DataContainer.slot, PersistentDataType.INTEGER)) {
+                            Act.actAllEnderChest(data, newId);
+                        }
+                    }
+                }
+            }
+
+            ItemStack itemStack3 = inventory.getItem(3);
+            String oldId3 = data.eSlot3.id;
+            if (itemStack3 == null) {
+                Act.deActAllEnderChest(data, oldId3);
+            } else {
+                if (itemStack3.getType() == Material.WOODEN_PICKAXE) {
+                    PersistentDataContainer pdc = itemStack3.getPersistentDataContainer();
+                    String newId = pdc.get(DataContainer.id, PersistentDataType.STRING);
+                    if (!newId.equals(oldId3)) {
+                        Act.deActAllEnderChest(data, oldId3);
+                        if (3 == pdc.get(DataContainer.slot, PersistentDataType.INTEGER)) {
+                            Act.actAllEnderChest(data, newId);
+                        }
+                    }
+                }
+            }
+
+            ItemStack itemStack4 = inventory.getItem(4);
+            String oldId4 = data.eSlot4.id;
+            if (itemStack4 == null) {
+                Act.deActAllEnderChest(data, oldId4);
+            } else {
+                if (itemStack4.getType() == Material.WOODEN_PICKAXE) {
+                    PersistentDataContainer pdc = itemStack4.getPersistentDataContainer();
+                    String newId = pdc.get(DataContainer.id, PersistentDataType.STRING);
+                    if (!newId.equals(oldId4)) {
+                        Act.deActAllEnderChest(data, oldId4);
+                        if (4 == pdc.get(DataContainer.slot, PersistentDataType.INTEGER)) {
+                            Act.actAllEnderChest(data, newId);
+                        }
+                    }
+                }
+            }
+
+            ItemStack itemStack5 = inventory.getItem(5);
+            String oldId5 = data.eSlot5.id;
+            if (itemStack5 == null) {
+                Act.deActAllEnderChest(data, oldId5);
+            } else {
+                if (itemStack5.getType() == Material.WOODEN_PICKAXE) {
+                    PersistentDataContainer pdc = itemStack5.getPersistentDataContainer();
+                    String newId = pdc.get(DataContainer.id, PersistentDataType.STRING);
+                    if (!newId.equals(oldId5)) {
+                        Act.deActAllEnderChest(data, oldId5);
+                        if (5 == pdc.get(DataContainer.slot, PersistentDataType.INTEGER)) {
+                            Act.actAllEnderChest(data, newId);
+                        }
+                    }
+                }
+            }
+
+            ItemStack itemStack6 = inventory.getItem(6);
+            String oldId6 = data.eSlot6.id;
+            if (itemStack6 == null) {
+                Act.deActAllEnderChest(data, oldId6);
+            } else {
+                if (itemStack6.getType() == Material.WOODEN_PICKAXE) {
+                    PersistentDataContainer pdc = itemStack6.getPersistentDataContainer();
+                    String newId = pdc.get(DataContainer.id, PersistentDataType.STRING);
+                    if (!newId.equals(oldId6)) {
+                        Act.deActAllEnderChest(data, oldId6);
+                        if (6 == pdc.get(DataContainer.slot, PersistentDataType.INTEGER)) {
+                            Act.actAllEnderChest(data, newId);
+                        }
+                    }
+                }
+            }
+
+            ItemStack itemStack7 = inventory.getItem(7);
+            String oldId7 = data.eSlot7.id;
+            if (itemStack7 == null) {
+                Act.deActAllEnderChest(data, oldId7);
+            } else {
+                if (itemStack7.getType() == Material.WOODEN_PICKAXE) {
+                    PersistentDataContainer pdc = itemStack7.getPersistentDataContainer();
+                    String newId = pdc.get(DataContainer.id, PersistentDataType.STRING);
+                    if (!newId.equals(oldId7)) {
+                        Act.deActAllEnderChest(data, oldId7);
+                        if (7 == pdc.get(DataContainer.slot, PersistentDataType.INTEGER)) {
+                            Act.actAllEnderChest(data, newId);
+                        }
+                    }
+                }
+            }
+        }
     }
 }

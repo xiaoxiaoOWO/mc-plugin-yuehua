@@ -6,9 +6,7 @@ import com.xiaoxiaoowo.yuehua.data.slot.Slot;
 import com.xiaoxiaoowo.yuehua.data.slot.SlotBuilder;
 import com.xiaoxiaoowo.yuehua.system.Act;
 import com.xiaoxiaoowo.yuehua.system.DataContainer;
-import de.tr7zw.nbtapi.NBTContainer;
-import de.tr7zw.nbtapi.NBTReflectionUtil;
-import de.tr7zw.nbtapi.utils.nmsmappings.ReflectionMethod;
+import com.xiaoxiaoowo.yuehua.utils.SQL;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -19,6 +17,11 @@ import org.bukkit.persistence.PersistentDataType;
 
 
 public class Data {
+    public Player player;
+
+
+    //打开容器时设置为true
+    public boolean open = false;
     //时效性的属性存储于这里，玩家退出后将会消失，为了避免对正常游戏造成影响，尽量少使用长时效的BUFF
     public int attack;
     public int attack_score;
@@ -59,23 +62,48 @@ public class Data {
 
     public int branch;
     public int job;
+    public int race;
+
+    public int money;
+    public int jinCount;
+    public int muCount;
+    public int shuiCount;
+    public int huoCount;
+    public int tuCount;
+
+    public int refinedJinCount;
+    public int refinedMuCount;
+    public int refinedShuiCount;
+    public int refinedHuoCount;
+    public int refinedTuCount;
+
+    public int concentratedJinCount;
+    public int concentratedMuCount;
+    public int concentratedShuiCount;
+    public int concentratedHuoCount;
+    public int concentratedTuCount;
+
+    public Slot slot0;
+    public Slot slot1;
+    public Slot slot2;
+    public Slot slot36;
+    public Slot slot37;
+    public Slot slot38;
+    public Slot slot39;
+    public Slot slot40;
 
     public Slot slot8;
 
-    //兽魂
+
     public EnderChestSlot eSlot0;
     public EnderChestSlot eSlot1;
     public EnderChestSlot eSlot2;
     public EnderChestSlot eSlot3;
-    //饰品
     public EnderChestSlot eSlot4;
-    //太古
     public EnderChestSlot eSlot5;
     public EnderChestSlot eSlot6;
     public EnderChestSlot eSlot7;
-    public EnderChestSlot eSlot8;
-    public EnderChestSlot eSlot9;
-    public EnderChestSlot eSlot10;
+
 
     //乾坤袋
     public Inventory inventory1;
@@ -88,9 +116,14 @@ public class Data {
     public Inventory inventory8;
     public Inventory inventory9;
 
+    //饰品槽
+    public Inventory shipinBar;
+
 
     public Data(Player player) {
-        String name = player.getName();
+
+        this.player = player;
+
 
         PersistentDataContainer pck = player.getPersistentDataContainer();
         //数据
@@ -101,10 +134,49 @@ public class Data {
         pofa_score = pck.get(DataContainer.pofa, PersistentDataType.INTEGER);
         renxing_score = pck.get(DataContainer.renxing, PersistentDataType.INTEGER);
         shengji_score = pck.get(DataContainer.shengji, PersistentDataType.INTEGER);
+
         cool_reduce_score = pck.get(DataContainer.cool_reduce, PersistentDataType.INTEGER);
         job = pck.get(DataContainer.job, PersistentDataType.INTEGER);
-
         branch = pck.get(DataContainer.branch, PersistentDataType.INTEGER);
+        race = pck.get(DataContainer.race, PersistentDataType.INTEGER);
+
+        money = pck.get(DataContainer.money,PersistentDataType.INTEGER);
+        jinCount = pck.get(DataContainer.JinCount, PersistentDataType.INTEGER);
+        muCount = pck.get(DataContainer.MuCount, PersistentDataType.INTEGER);
+        shuiCount = pck.get(DataContainer.ShuiCount, PersistentDataType.INTEGER);
+        huoCount = pck.get(DataContainer.HuoCount, PersistentDataType.INTEGER);
+        tuCount = pck.get(DataContainer.TuCount, PersistentDataType.INTEGER);
+        refinedJinCount = pck.get(DataContainer.RefinedJinCount, PersistentDataType.INTEGER);
+        refinedMuCount = pck.get(DataContainer.RefinedMuCount, PersistentDataType.INTEGER);
+        refinedShuiCount = pck.get(DataContainer.RefinedShuiCount, PersistentDataType.INTEGER);
+        refinedHuoCount = pck.get(DataContainer.RefinedHuoCount, PersistentDataType.INTEGER);
+        refinedTuCount = pck.get(DataContainer.RefinedTuCount, PersistentDataType.INTEGER);
+        concentratedJinCount = pck.get(DataContainer.ConcentratedJinCount, PersistentDataType.INTEGER);
+        concentratedMuCount = pck.get(DataContainer.ConcentratedMuCount, PersistentDataType.INTEGER);
+        concentratedShuiCount = pck.get(DataContainer.ConcentratedShuiCount, PersistentDataType.INTEGER);
+        concentratedHuoCount = pck.get(DataContainer.ConcentratedHuoCount, PersistentDataType.INTEGER);
+        concentratedTuCount = pck.get(DataContainer.ConcentratedTuCount, PersistentDataType.INTEGER);
+
+        String slot8Id = pck.get(DataContainer.slot8, PersistentDataType.STRING);
+        String eSlot0Id = pck.get(DataContainer.eslot0, PersistentDataType.STRING);
+        String eSlot1Id = pck.get(DataContainer.eslot1, PersistentDataType.STRING);
+        String eSlot2Id = pck.get(DataContainer.eslot2, PersistentDataType.STRING);
+        String eSlot3Id = pck.get(DataContainer.eslot3, PersistentDataType.STRING);
+        String eSlot4Id = pck.get(DataContainer.eslot4, PersistentDataType.STRING);
+        String eSlot5Id = pck.get(DataContainer.eslot5, PersistentDataType.STRING);
+        String eSlot6Id = pck.get(DataContainer.eslot6, PersistentDataType.STRING);
+        String eSlot7Id = pck.get(DataContainer.eslot7, PersistentDataType.STRING);
+
+        String slot0ID = pck.get(DataContainer.slot0, PersistentDataType.STRING);
+        String slot1ID = pck.get(DataContainer.slot1, PersistentDataType.STRING);
+        String slot2ID = pck.get(DataContainer.slot2, PersistentDataType.STRING);
+        String slot36ID = pck.get(DataContainer.slot36, PersistentDataType.STRING);
+        String slot37ID = pck.get(DataContainer.slot37, PersistentDataType.STRING);
+        String slot38ID = pck.get(DataContainer.slot38, PersistentDataType.STRING);
+        String slot39ID = pck.get(DataContainer.slot39, PersistentDataType.STRING);
+        String slot40ID = pck.get(DataContainer.slot40, PersistentDataType.STRING);
+
+
 
 
         //其它数据
@@ -137,125 +209,63 @@ public class Data {
         cool_reduce = cool_reduce_score;
         cool_reduce_add = 0;
 
-        PlayerInventory inv = player.getInventory();
 
-        ItemStack item8 = inv.getItem(8);
-        if (item8 != null && item8.getType() == Material.IRON_PICKAXE) {
-            NBTContainer nbti = NBTReflectionUtil.convertNMSItemtoNBTCompound(ReflectionMethod.ITEMSTACK_NMSCOPY.run((Object) null, new Object[]{item8}));
-            slot8 = SlotBuilder.slot8Builder(nbti.getString("id"));
-        } else {
-            slot8 = new Slot("null");
-        }
-        Act.initAll(this, slot8.id);
+        //初始化slot
+        slot8 = SlotBuilder.slot8Builder(slot8Id);
+        eSlot0 = SlotBuilder.enderChestSlotBuilder(eSlot0Id);
+        eSlot1 = SlotBuilder.enderChestSlotBuilder(eSlot1Id);
+        eSlot2 = SlotBuilder.enderChestSlotBuilder(eSlot2Id);
+        eSlot3 = SlotBuilder.enderChestSlotBuilder(eSlot3Id);
+        eSlot4 = SlotBuilder.enderChestSlotBuilder(eSlot4Id);
+        eSlot5 = SlotBuilder.enderChestSlotBuilder(eSlot5Id);
+        eSlot6 = SlotBuilder.enderChestSlotBuilder(eSlot6Id);
+        eSlot7 = SlotBuilder.enderChestSlotBuilder(eSlot7Id);
 
-        Inventory enderChest = player.getEnderChest();
-        ItemStack eItem0 = enderChest.getItem(0);
-        ItemStack eItem1 = enderChest.getItem(1);
-        ItemStack eItem2 = enderChest.getItem(2);
-        ItemStack eItem3 = enderChest.getItem(3);
-        ItemStack eItem4 = enderChest.getItem(4);
-        ItemStack eItem5 = enderChest.getItem(5);
-        ItemStack eItem6 = enderChest.getItem(6);
-        ItemStack eItem7 = enderChest.getItem(7);
-        ItemStack eItem8 = enderChest.getItem(8);
-        ItemStack eItem9 = enderChest.getItem(9);
-        ItemStack eItem10 = enderChest.getItem(10);
+        slot0 = SlotBuilder.slot0Builder(slot0ID);
+        slot1 = SlotBuilder.slot1Builder(slot1ID);
+        slot2 = SlotBuilder.slot2Builder(slot2ID);
+        slot36 = SlotBuilder.slot36Builder(slot36ID);
+        slot37 = SlotBuilder.slot37Builder(slot37ID);
+        slot38 = SlotBuilder.slot38Builder(slot38ID);
+        slot39 = SlotBuilder.slot39Builder(slot39ID);
+        slot40 = SlotBuilder.slot40Builder(slot40ID);
 
-        if (eItem0 != null && eItem0.getType() == Material.WOODEN_PICKAXE) {
-            PersistentDataContainer pck2 = eItem0.getPersistentDataContainer();
-            eSlot0 = SlotBuilder.enderChestSlotBuilder(pck2.get(DataContainer.id, PersistentDataType.STRING));
-        } else {
-            eSlot0 = new EnderChestSlot("null");
-        }
 
-        if (eItem1 != null && eItem1.getType() == Material.WOODEN_PICKAXE) {
-            PersistentDataContainer pck2 = eItem1.getPersistentDataContainer();
-            eSlot1 = SlotBuilder.enderChestSlotBuilder(pck2.get(DataContainer.id, PersistentDataType.STRING));
-        } else {
-            eSlot1 = new EnderChestSlot("null");
-        }
+        Act.initAll(this,slot8Id);
+        Act.initAllEnderChest(this, eSlot0Id);
+        Act.initAllEnderChest(this, eSlot1Id);
+        Act.initAllEnderChest(this, eSlot2Id);
+        Act.initAllEnderChest(this, eSlot3Id);
+        Act.initAllEnderChest(this, eSlot4Id);
+        Act.initAllEnderChest(this, eSlot5Id);
+        Act.initAllEnderChest(this, eSlot6Id);
+        Act.initAllEnderChest(this, eSlot7Id);
 
-        if (eItem2 != null && eItem2.getType() == Material.WOODEN_PICKAXE) {
-            PersistentDataContainer pck2 = eItem2.getPersistentDataContainer();
-            eSlot2 = SlotBuilder.enderChestSlotBuilder(pck2.get(DataContainer.id, PersistentDataType.STRING));
-        } else {
-            eSlot2 = new EnderChestSlot("null");
-        }
-
-        if (eItem3 != null && eItem3.getType() == Material.WOODEN_PICKAXE) {
-            PersistentDataContainer pck2 = eItem3.getPersistentDataContainer();
-            eSlot3 = SlotBuilder.enderChestSlotBuilder(pck2.get(DataContainer.id, PersistentDataType.STRING));
-        } else {
-            eSlot3 = new EnderChestSlot("null");
-        }
-
-        if (eItem4 != null && eItem4.getType() == Material.WOODEN_PICKAXE) {
-            PersistentDataContainer pck2 = eItem4.getPersistentDataContainer();
-            eSlot4 = SlotBuilder.enderChestSlotBuilder(pck2.get(DataContainer.id, PersistentDataType.STRING));
-        } else {
-            eSlot4 = new EnderChestSlot("null");
-        }
-
-        if (eItem5 != null && eItem5.getType() == Material.WOODEN_PICKAXE) {
-            PersistentDataContainer pck2 = eItem5.getPersistentDataContainer();
-            eSlot5 = SlotBuilder.enderChestSlotBuilder(pck2.get(DataContainer.id, PersistentDataType.STRING));
-        } else {
-            eSlot5 = new EnderChestSlot("null");
-        }
-
-        if (eItem6 != null && eItem6.getType() == Material.WOODEN_PICKAXE) {
-            PersistentDataContainer pck2 = eItem6.getPersistentDataContainer();
-            eSlot6 = SlotBuilder.enderChestSlotBuilder(pck2.get(DataContainer.id, PersistentDataType.STRING));
-        } else {
-            eSlot6 = new EnderChestSlot("null");
-        }
-
-        if (eItem7 != null && eItem7.getType() == Material.WOODEN_PICKAXE) {
-            PersistentDataContainer pck2 = eItem7.getPersistentDataContainer();
-            eSlot7 = SlotBuilder.enderChestSlotBuilder(pck2.get(DataContainer.id, PersistentDataType.STRING));
-        } else {
-            eSlot7 = new EnderChestSlot("null");
-        }
-
-        if (eItem8 != null && eItem8.getType() == Material.WOODEN_PICKAXE) {
-            PersistentDataContainer pck2 = eItem8.getPersistentDataContainer();
-            eSlot8 = SlotBuilder.enderChestSlotBuilder(pck2.get(DataContainer.id, PersistentDataType.STRING));
-        } else {
-            eSlot8 = new EnderChestSlot("null");
-        }
-
-        if (eItem9 != null && eItem9.getType() == Material.WOODEN_PICKAXE) {
-            PersistentDataContainer pck2 = eItem9.getPersistentDataContainer();
-            eSlot9 = SlotBuilder.enderChestSlotBuilder(pck2.get(DataContainer.id, PersistentDataType.STRING));
-        } else {
-            eSlot9 = new EnderChestSlot("null");
-        }
-
-        if (eItem10 != null && eItem10.getType() == Material.WOODEN_PICKAXE) {
-            PersistentDataContainer pck2 = eItem10.getPersistentDataContainer();
-            eSlot10 = SlotBuilder.enderChestSlotBuilder(pck2.get(DataContainer.id, PersistentDataType.STRING));
-        } else {
-            eSlot10 = new EnderChestSlot("null");
-        }
-
-        Act.initAll(this, eSlot0.id);
-        Act.initAll(this, eSlot1.id);
-        Act.initAll(this, eSlot2.id);
-        Act.initAll(this, eSlot3.id);
-        Act.initAll(this, eSlot4.id);
-        Act.initAll(this, eSlot5.id);
-        Act.initAll(this, eSlot6.id);
-        Act.initAll(this, eSlot7.id);
-        Act.initAll(this, eSlot8.id);
-        Act.initAll(this, eSlot9.id);
-        Act.initAll(this, eSlot10.id);
 
 
     }
 
     public String toString() {
-        return "attack: " + attack + "\nbaoji: " + baoji + "\nbaojixiaoguo: " + baojixiaoguo + "\nfakang: "
-                + fakang + "\npofa: " + pofa + "\ncool_reduce: " + cool_reduce + "\nslot8id: " + slot8.id;
+        return "attack: " + attack + "\n"
+               + "baoji: " + baoji + "\n"
+               + "baojixiaoguo: " + baojixiaoguo + "\n"
+               + "fakang: " + fakang + "\n"
+               + "pofa: " + pofa + "\n"
+               + "renxing: " + renxing + "\n"
+               + "shengji: " + shengji + "\n"
+               + "cool_reduce: " + cool_reduce + "\n"
+               + "job: " + job + "\n"
+               + "race: " + race + "\n"
+               + "branch: " + branch + "\n"
+               + "slot8: " + slot8.id + "\n"
+               + "eSlot0: " + eSlot0.id + "\n"
+               + "eSlot1: " + eSlot1.id + "\n"
+               + "eSlot2: " + eSlot2.id + "\n"
+               + "eSlot3: " + eSlot3.id + "\n"
+               + "eSlot4: " + eSlot4.id + "\n"
+               + "eSlot5: " + eSlot5.id + "\n"
+               + "eSlot6: " + eSlot6.id + "\n"
+               + "eSlot7: " + eSlot7.id + "\n";
     }
 
     public void updateAttack() {
@@ -272,6 +282,7 @@ public class Data {
 
     public void updateFakang() {
         fakang = Math.max(0, fakang_score + fakang_add);
+        fakang = Math.min(100, fakang);
     }
 
     public void updatePofa() {
@@ -280,6 +291,7 @@ public class Data {
 
     public void updateCoolReduce() {
         cool_reduce = Math.max(0, cool_reduce_score + cool_reduce_add);
+        cool_reduce = Math.min(100, cool_reduce);
     }
 
     public void updateShengji() {
@@ -288,6 +300,7 @@ public class Data {
 
     public void updateRenxing() {
         renxing = Math.max(0, renxing_score + renxing_add);
+        renxing = Math.min(100, renxing);
     }
 
     public void setAttackScore(int value) {
@@ -302,7 +315,7 @@ public class Data {
 
     public void setBaoJiXiaoGuoScore(int value) {
         baojixiaoguo_score = value;
-        updateBaoji();
+        updateBaojixiaoguo();
     }
 
     public void setFakangScore(int value) {
@@ -320,12 +333,12 @@ public class Data {
         updateCoolReduce();
     }
 
-    public void setShengjiScore(int value){
+    public void setShengjiScore(int value) {
         shengji_score = value;
         updateShengji();
     }
 
-    public void setRenxingScore(int value){
+    public void setRenxingScore(int value) {
         renxing_score = value;
         updateRenxing();
     }
@@ -365,7 +378,7 @@ public class Data {
         updateShengji();
     }
 
-    public void updateRenxingAdd(int value){
+    public void updateRenxingAdd(int value) {
         renxing_add += value;
         updateRenxing();
     }

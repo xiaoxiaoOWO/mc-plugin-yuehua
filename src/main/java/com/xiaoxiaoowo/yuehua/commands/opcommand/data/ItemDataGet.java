@@ -10,8 +10,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
-
 public class ItemDataGet implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
@@ -24,7 +22,9 @@ public class ItemDataGet implements CommandExecutor {
             }
 
             if (args.length != 1) {
-                player.sendPlainMessage("§c参数错误");
+                player.sendMessage(
+                        Component.translatable("badarg")
+                );
                 return true;
             }
 
@@ -32,12 +32,16 @@ public class ItemDataGet implements CommandExecutor {
 
             ItemStack item = player.getInventory().getItem(slot);
             if (item == null || item.getType() == Material.AIR) {
-                player.sendPlainMessage("§c物品不存在");
+                player.sendMessage(
+                        Component.translatable("noitem")
+                );
                 return true;
             }
 
             NBTItem nbti = new NBTItem(item);
-            player.sendPlainMessage(Objects.requireNonNull(nbti.toString()));
+            player.sendMessage(
+                    Component.text(nbti.toString()).color(net.kyori.adventure.text.format.NamedTextColor.GREEN)
+            );
         }
         return true;
     }
