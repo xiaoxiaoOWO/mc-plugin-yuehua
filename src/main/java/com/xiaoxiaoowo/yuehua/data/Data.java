@@ -15,10 +15,14 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class Data {
     public Player player;
 
+    public List<Integer> taskIds;
 
     //打开容器时设置为true
     public boolean open = false;
@@ -123,6 +127,8 @@ public class Data {
     public Data(Player player) {
 
         this.player = player;
+
+        taskIds = new ArrayList<>(50);
 
 
         PersistentDataContainer pck = player.getPersistentDataContainer();
@@ -241,6 +247,14 @@ public class Data {
         Act.initAllEnderChest(this, eSlot6Id);
         Act.initAllEnderChest(this, eSlot7Id);
 
+        updateAttack();
+        updateBaoji();
+        updateBaojixiaoguo();
+        updateFakang();
+        updatePofa();
+        updateCoolReduce();
+        updateRenxing();
+        updateShengji();
 
 
     }

@@ -6,10 +6,16 @@ depend: [NBTAPI]
 commands:
   intogame:
     description: intogame
+  markrelife:
+    description: markrelife
+  relife:
+    description: relife
   renou:
     description: renou
   select:
     description: select
+  storerelifestone:
+    description: storerelifestone
   datacountget:
     description: datacountget
   dataget:
@@ -30,8 +36,14 @@ commands:
     description: mytp
   perget:
     description: perget
+  setsign:
+    description: setsign
+  mysummon:
+    description: mysummon
   arrow:
     description: arrow
+  ki:
+    description: ki
   money:
     description: money
   yh:

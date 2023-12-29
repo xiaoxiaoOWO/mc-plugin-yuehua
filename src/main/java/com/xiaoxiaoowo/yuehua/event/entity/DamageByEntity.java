@@ -4,11 +4,10 @@ import com.xiaoxiaoowo.yuehua.Yuehua;
 import com.xiaoxiaoowo.yuehua.data.DanData;
 import com.xiaoxiaoowo.yuehua.data.Data;
 import com.xiaoxiaoowo.yuehua.data.ZhanData;
-import com.xiaoxiaoowo.yuehua.utils.GetEntity;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Arrow;
-import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -43,11 +42,11 @@ public final class DamageByEntity implements Listener {
                                         attack = attack * baojixiaoguo / 100;
                                     }
                                     e.setDamage(attack);
-                                    runZhan(zhanData, (Creature) e.getEntity());
+                                    runZhan(zhanData, (Mob) e.getEntity());
                                 } else {
-                                    player.sendMessage(
+                                    Yuehua.async(() -> player.sendMessage(
                                             Component.translatable("notfull")
-                                    );
+                                    ));
                                     e.setCancelled(true);
                                 }
                             } else {
@@ -65,7 +64,7 @@ public final class DamageByEntity implements Listener {
                                         attack = attack * baojixiaoguo / 100;
                                     }
                                     e.setDamage(attack);
-                                    runZhan(zhanData, (Creature) e.getEntity());
+                                    runZhan(zhanData, (Mob) e.getEntity());
                                 } else if (cool < 0.6f) {
                                     //妙手二段,必定暴击
                                 } else if (cool < 0.8f) {
@@ -80,9 +79,9 @@ public final class DamageByEntity implements Listener {
                                 int attack = data.attack;
                                 e.setDamage(attack);
                             } else {
-                                player.sendMessage(
+                                Yuehua.async(() -> player.sendMessage(
                                         Component.translatable("notfull")
-                                );
+                                ));
                                 e.setCancelled(true);
                             }
                         }
@@ -92,20 +91,20 @@ public final class DamageByEntity implements Listener {
                                 int attack = data.attack;
                                 e.setDamage(attack);
 
-                                runDan(danData, (Creature) e.getEntity());
+                                runDan(danData, (Mob) e.getEntity());
                             } else {
-                                player.sendMessage(
+                                Yuehua.async(() -> player.sendMessage(
                                         Component.translatable("notfull")
-                                );
+                                ));
                                 e.setCancelled(true);
                             }
                         }
                         default -> e.setCancelled(true);
                     }
                 } else {
-                    player.sendMessage(
+                    Yuehua.async(() -> player.sendMessage(
                             Component.translatable("not1a")
-                    );
+                    ));
                     e.setCancelled(true);
                 }
             }
@@ -123,14 +122,14 @@ public final class DamageByEntity implements Listener {
     }
 
 
-    private void runZhan(ZhanData data, Creature creature) {
+    private void runZhan(ZhanData data, Mob mob) {
         switch (data.slot0.id) {
 
         }
     }
 
 
-    private static void runDan(DanData data, Creature creature) {
+    private static void runDan(DanData data, Mob mob) {
         switch (data.slot0.id) {
 
         }

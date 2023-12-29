@@ -15,7 +15,7 @@ public final class SQL {
     private static Connection connection;
     private static int num = 0;
 
-    private final static String url = "jdbc:sqlite:yh.db";
+    private final static String url = "jdbc:sqlite:world/yh.db";
     private static final String storeInventory1 = """
             INSERT OR REPLACE INTO inventory1 (player_name, data)
             VALUES (?, ?);

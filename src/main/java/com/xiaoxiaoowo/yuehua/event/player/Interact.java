@@ -5,10 +5,14 @@ import com.xiaoxiaoowo.yuehua.data.DanData;
 import com.xiaoxiaoowo.yuehua.data.Data;
 import com.xiaoxiaoowo.yuehua.data.GongData;
 import com.xiaoxiaoowo.yuehua.data.ZhanData;
+import com.xiaoxiaoowo.yuehua.display.test.TestRay;
 import com.xiaoxiaoowo.yuehua.system.DataContainer;
+import com.xiaoxiaoowo.yuehua.utils.Damage;
 import com.xiaoxiaoowo.yuehua.utils.GetEntity;
 import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -18,6 +22,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 
 public final class Interact implements Listener {
+
+
     @EventHandler
     public void onInteract(PlayerInteractEvent e) {
         //右键
@@ -36,9 +42,9 @@ public final class Interact implements Listener {
                                     gongData.time_pulling = GetEntity.world.getGameTime();
                                 } else {
                                     e.setCancelled(true);
-                                    player.sendMessage(
+                                    Yuehua.async(() -> player.sendMessage(
                                             Component.translatable("not1b")
-                                    );
+                                    ));
                                 }
                             } else {
                                 player.getInventory().setItemInMainHand(null);
@@ -102,6 +108,12 @@ public final class Interact implements Listener {
                             player.giveExp(xp, false);
                         }
 
+//                        case STONE_PICKAXE -> {
+//                            switch (item.getPersistentDataContainer().get(DataContainer.id, PersistentDataType.STRING)) {
+//
+//                            }
+//                        }
+
                         case SHIELD -> {
                             Player player = e.getPlayer();
                             Data data = Yuehua.playerData.get(player.getUniqueId());
@@ -109,11 +121,23 @@ public final class Interact implements Listener {
                                 player.getInventory().setItemInMainHand(null);
                             } else {
                                 e.setCancelled(true);
-                                player.sendMessage(
+                                Yuehua.async(() -> player.sendMessage(
                                         Component.translatable("notfs")
-                                );
+                                ));
+
                             }
                         }
+//
+//                        case DIAMOND_SWORD -> {
+//                            Player player = e.getPlayer();
+//                            Damage.damage(player,10,0,GetEntity.getRayMonster(player, 10));
+//                            Damage.damage(player,10,0,GetEntity.getRayMonsterWithRoatation(player, 10,Math.PI/6));
+//                            Damage.damage(player,10,0,GetEntity.getRayMonsterWithRoatation(player, 10,-Math.PI/6));
+//                            TestRay.run(player);
+//
+//
+//
+//                        }
                     }
                 } else {
                     switch (type) {
@@ -129,9 +153,21 @@ public final class Interact implements Listener {
                             Data data = Yuehua.playerData.get(player.getUniqueId());
                             if (data.job == 2) {
                                 e.setCancelled(true);
-                                player.sendMessage(
+                                Yuehua.async(() -> player.sendMessage(
                                         Component.translatable("not1b")
-                                );
+                                ));
+                            } else {
+                                player.getInventory().setItemInOffHand(null);
+                            }
+                        }
+                        case CROSSBOW -> {
+                            Player player = e.getPlayer();
+                            Data data = Yuehua.playerData.get(player.getUniqueId());
+                            if (data.job == 2) {
+                                e.setCancelled(true);
+                                Yuehua.async(() -> player.sendMessage(
+                                        Component.translatable("not1c")
+                                ));
                             } else {
                                 player.getInventory().setItemInOffHand(null);
                             }

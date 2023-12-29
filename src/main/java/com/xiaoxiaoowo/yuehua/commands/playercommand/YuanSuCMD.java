@@ -2,7 +2,7 @@ package com.xiaoxiaoowo.yuehua.commands.playercommand;
 
 import com.xiaoxiaoowo.yuehua.Yuehua;
 import com.xiaoxiaoowo.yuehua.data.Data;
-import com.xiaoxiaoowo.yuehua.itemstack.other.YuanSu;
+import com.xiaoxiaoowo.yuehua.itemstack.dz.YuanSu;
 import com.xiaoxiaoowo.yuehua.system.DataContainer;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -73,8 +73,6 @@ public final class YuanSuCMD implements CommandExecutor {
                                     return;
                                 }
                                 data.jinCount -= amount;
-                                ItemStack jin = YuanSu.jin;
-                                jin.setAmount(amount);
                                 player.sendMessage(
                                         Component.translatable("jincount",
                                                 Component.text(data.jinCount).color(NamedTextColor.AQUA)
@@ -84,6 +82,8 @@ public final class YuanSuCMD implements CommandExecutor {
                                 new BukkitRunnable() {
                                     @Override
                                     public void run() {
+                                        ItemStack jin = YuanSu.jin;
+                                        jin.setAmount(amount);
                                         player.getInventory().addItem(jin);
                                     }
                                 }.runTask(Yuehua.instance);
@@ -100,8 +100,6 @@ public final class YuanSuCMD implements CommandExecutor {
                                     return;
                                 }
                                 data.muCount -= amount;
-                                ItemStack mu = YuanSu.mu;
-                                mu.setAmount(amount);
                                 player.sendMessage(
                                         Component.translatable("mucount",
                                                 Component.text(data.muCount).color(NamedTextColor.AQUA)
@@ -110,6 +108,8 @@ public final class YuanSuCMD implements CommandExecutor {
                                 new BukkitRunnable() {
                                     @Override
                                     public void run() {
+                                        ItemStack mu = YuanSu.mu;
+                                        mu.setAmount(amount);
                                         player.getInventory().addItem(mu);
                                     }
                                 }.runTask(Yuehua.instance);
@@ -126,8 +126,6 @@ public final class YuanSuCMD implements CommandExecutor {
                                     return;
                                 }
                                 data.shuiCount -= amount;
-                                ItemStack shui = YuanSu.shui;
-                                shui.setAmount(amount);
                                 player.sendMessage(
                                         Component.translatable("shuicount",
                                                 Component.text(data.shuiCount).color(NamedTextColor.AQUA)
@@ -136,6 +134,8 @@ public final class YuanSuCMD implements CommandExecutor {
                                 new BukkitRunnable() {
                                     @Override
                                     public void run() {
+                                        ItemStack shui = YuanSu.shui;
+                                        shui.setAmount(amount);
                                         player.getInventory().addItem(shui);
                                     }
                                 }.runTask(Yuehua.instance);
@@ -152,8 +152,6 @@ public final class YuanSuCMD implements CommandExecutor {
                                     return;
                                 }
                                 data.huoCount -= amount;
-                                ItemStack huo = YuanSu.huo;
-                                huo.setAmount(amount);
                                 player.sendMessage(
                                         Component.translatable("huocount",
                                                 Component.text(data.huoCount).color(NamedTextColor.AQUA)
@@ -162,6 +160,8 @@ public final class YuanSuCMD implements CommandExecutor {
                                 new BukkitRunnable() {
                                     @Override
                                     public void run() {
+                                        ItemStack huo = YuanSu.huo;
+                                        huo.setAmount(amount);
                                         player.getInventory().addItem(huo);
                                     }
                                 }.runTask(Yuehua.instance);
@@ -178,8 +178,6 @@ public final class YuanSuCMD implements CommandExecutor {
                                     return;
                                 }
                                 data.tuCount -= amount;
-                                ItemStack tu = YuanSu.tu;
-                                tu.setAmount(amount);
                                 player.sendMessage(
                                         Component.translatable("tucount",
                                                 Component.text(data.tuCount).color(NamedTextColor.AQUA)
@@ -188,6 +186,8 @@ public final class YuanSuCMD implements CommandExecutor {
                                 new BukkitRunnable() {
                                     @Override
                                     public void run() {
+                                        ItemStack tu = YuanSu.tu;
+                                        tu.setAmount(amount);
                                         player.getInventory().addItem(tu);
                                     }
                                 }.runTask(Yuehua.instance);
@@ -204,8 +204,6 @@ public final class YuanSuCMD implements CommandExecutor {
                                     return;
                                 }
                                 data.refinedJinCount -= amount;
-                                ItemStack refinedJin = YuanSu.refined_jin;
-                                refinedJin.setAmount(amount);
                                 player.sendMessage(
                                         Component.translatable("rjincount",
                                                 Component.text(data.refinedJinCount).color(NamedTextColor.AQUA)
@@ -214,6 +212,8 @@ public final class YuanSuCMD implements CommandExecutor {
                                 new BukkitRunnable() {
                                     @Override
                                     public void run() {
+                                        ItemStack refinedJin = YuanSu.refined_jin;
+                                        refinedJin.setAmount(amount);
                                         player.getInventory().addItem(refinedJin);
                                     }
                                 }.runTask(Yuehua.instance);
@@ -231,8 +231,6 @@ public final class YuanSuCMD implements CommandExecutor {
                                     return;
                                 }
                                 data.refinedMuCount -= amount;
-                                ItemStack refinedMu = YuanSu.refined_mu;
-                                refinedMu.setAmount(amount);
                                 player.sendMessage(
                                         Component.translatable("rmucount",
                                                 Component.text(data.refinedMuCount).color(NamedTextColor.AQUA)
@@ -241,6 +239,8 @@ public final class YuanSuCMD implements CommandExecutor {
                                 new BukkitRunnable() {
                                     @Override
                                     public void run() {
+                                        ItemStack refinedMu = YuanSu.refined_mu;
+                                        refinedMu.setAmount(amount);
                                         player.getInventory().addItem(refinedMu);
                                     }
                                 }.runTask(Yuehua.instance);
@@ -257,8 +257,6 @@ public final class YuanSuCMD implements CommandExecutor {
                                     return;
                                 }
                                 data.refinedShuiCount -= amount;
-                                ItemStack refinedShui = YuanSu.refined_shui;
-                                refinedShui.setAmount(amount);
                                 player.sendMessage(
                                         Component.translatable("rshuicount",
                                                 Component.text(data.refinedShuiCount).color(NamedTextColor.AQUA)
@@ -267,6 +265,8 @@ public final class YuanSuCMD implements CommandExecutor {
                                 new BukkitRunnable() {
                                     @Override
                                     public void run() {
+                                        ItemStack refinedShui = YuanSu.refined_shui;
+                                        refinedShui.setAmount(amount);
                                         player.getInventory().addItem(refinedShui);
                                     }
                                 }.runTask(Yuehua.instance);
@@ -283,8 +283,6 @@ public final class YuanSuCMD implements CommandExecutor {
                                     return;
                                 }
                                 data.refinedHuoCount -= amount;
-                                ItemStack refinedHuo = YuanSu.refined_huo;
-                                refinedHuo.setAmount(amount);
                                 player.sendMessage(
                                         Component.translatable("rhuocount",
                                                 Component.text(data.refinedHuoCount).color(NamedTextColor.AQUA)
@@ -293,6 +291,8 @@ public final class YuanSuCMD implements CommandExecutor {
                                 new BukkitRunnable() {
                                     @Override
                                     public void run() {
+                                        ItemStack refinedHuo = YuanSu.refined_huo;
+                                        refinedHuo.setAmount(amount);
                                         player.getInventory().addItem(refinedHuo);
                                     }
                                 }.runTask(Yuehua.instance);
@@ -309,8 +309,6 @@ public final class YuanSuCMD implements CommandExecutor {
                                     return;
                                 }
                                 data.refinedTuCount -= amount;
-                                ItemStack refinedTu = YuanSu.refined_tu;
-                                refinedTu.setAmount(amount);
                                 player.sendMessage(
                                         Component.translatable("rtucount",
                                                 Component.text(data.refinedTuCount).color(NamedTextColor.AQUA)
@@ -319,6 +317,8 @@ public final class YuanSuCMD implements CommandExecutor {
                                 new BukkitRunnable() {
                                     @Override
                                     public void run() {
+                                        ItemStack refinedTu = YuanSu.refined_tu;
+                                        refinedTu.setAmount(amount);
                                         player.getInventory().addItem(refinedTu);
                                     }
                                 }.runTask(Yuehua.instance);
@@ -335,8 +335,6 @@ public final class YuanSuCMD implements CommandExecutor {
                                     return;
                                 }
                                 data.concentratedJinCount -= amount;
-                                ItemStack concentratedJin = YuanSu.concentrated_jin;
-                                concentratedJin.setAmount(amount);
                                 player.sendMessage(
                                         Component.translatable("cjincount",
                                                 Component.text(data.concentratedJinCount).color(NamedTextColor.AQUA)
@@ -345,6 +343,8 @@ public final class YuanSuCMD implements CommandExecutor {
                                 new BukkitRunnable() {
                                     @Override
                                     public void run() {
+                                        ItemStack concentratedJin = YuanSu.concentrated_jin;
+                                        concentratedJin.setAmount(amount);
                                         player.getInventory().addItem(concentratedJin);
                                     }
                                 }.runTask(Yuehua.instance);
@@ -361,8 +361,6 @@ public final class YuanSuCMD implements CommandExecutor {
                                     return;
                                 }
                                 data.concentratedMuCount -= amount;
-                                ItemStack concentratedMu = YuanSu.concentrated_mu;
-                                concentratedMu.setAmount(amount);
                                 player.sendMessage(
                                         Component.translatable("cmucount",
                                                 Component.text(data.concentratedMuCount).color(NamedTextColor.AQUA)
@@ -371,6 +369,8 @@ public final class YuanSuCMD implements CommandExecutor {
                                 new BukkitRunnable() {
                                     @Override
                                     public void run() {
+                                        ItemStack concentratedMu = YuanSu.concentrated_mu;
+                                        concentratedMu.setAmount(amount);
                                         player.getInventory().addItem(concentratedMu);
                                     }
                                 }.runTask(Yuehua.instance);
@@ -387,8 +387,6 @@ public final class YuanSuCMD implements CommandExecutor {
                                     return;
                                 }
                                 data.concentratedShuiCount -= amount;
-                                ItemStack concentratedShui = YuanSu.concentrated_shui;
-                                concentratedShui.setAmount(amount);
                                 player.sendMessage(
                                         Component.translatable("cshuicount",
                                                 Component.text(data.concentratedShuiCount).color(NamedTextColor.AQUA)
@@ -397,6 +395,8 @@ public final class YuanSuCMD implements CommandExecutor {
                                 new BukkitRunnable() {
                                     @Override
                                     public void run() {
+                                        ItemStack concentratedShui = YuanSu.concentrated_shui;
+                                        concentratedShui.setAmount(amount);
                                         player.getInventory().addItem(concentratedShui);
                                     }
                                 }.runTask(Yuehua.instance);
@@ -413,8 +413,6 @@ public final class YuanSuCMD implements CommandExecutor {
                                     return;
                                 }
                                 data.concentratedHuoCount -= amount;
-                                ItemStack concentratedHuo = YuanSu.concentrated_huo;
-                                concentratedHuo.setAmount(amount);
                                 player.sendMessage(
                                         Component.translatable("chuocount",
                                                 Component.text(data.concentratedHuoCount).color(NamedTextColor.AQUA)
@@ -423,6 +421,8 @@ public final class YuanSuCMD implements CommandExecutor {
                                 new BukkitRunnable() {
                                     @Override
                                     public void run() {
+                                        ItemStack concentratedHuo = YuanSu.concentrated_huo;
+                                        concentratedHuo.setAmount(amount);
                                         player.getInventory().addItem(concentratedHuo);
                                     }
                                 }.runTask(Yuehua.instance);
@@ -439,8 +439,6 @@ public final class YuanSuCMD implements CommandExecutor {
                                     return;
                                 }
                                 data.concentratedTuCount -= amount;
-                                ItemStack concentratedTu = YuanSu.concentrated_tu;
-                                concentratedTu.setAmount(amount);
                                 player.sendMessage(
                                         Component.translatable("ctucount",
                                                 Component.text(data.concentratedTuCount).color(NamedTextColor.AQUA)
@@ -449,6 +447,8 @@ public final class YuanSuCMD implements CommandExecutor {
                                 new BukkitRunnable() {
                                     @Override
                                     public void run() {
+                                        ItemStack concentratedTu = YuanSu.concentrated_tu;
+                                        concentratedTu.setAmount(amount);
                                         player.getInventory().addItem(concentratedTu);
                                     }
                                 }.runTask(Yuehua.instance);
@@ -479,740 +479,687 @@ public final class YuanSuCMD implements CommandExecutor {
                             return;
                         }
                         switch (args[1]) {
-                            case "金" -> new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    PlayerInventory playerInventory = player.getInventory();
-                                    ItemStack[] itemStacks = playerInventory.getContents();
-                                    int count = 0;
-                                    int length = itemStacks.length;
-                                    List<Integer> slots = new ArrayList<>(length);
-                                    for (int i = 0; i < length; i++) {
-                                        ItemStack itemStack = itemStacks[i];
-                                        if (itemStack == null) {
-                                            continue;
-                                        }
-                                        if (itemStack.getType() != Material.KELP) {
-                                            continue;
-                                        }
-                                        if (!Objects.equals(itemStack.getPersistentDataContainer().get(DataContainer.id, PersistentDataType.STRING), "jin")) {
-                                            continue;
-                                        }
-                                        slots.add(i);
-                                        count += itemStack.getAmount();
+                            case "金" -> {
+                                PlayerInventory playerInventory = player.getInventory();
+                                ItemStack[] itemStacks = playerInventory.getContents();
+                                int count = 0;
+                                int length = itemStacks.length;
+                                List<Integer> slots = new ArrayList<>(length);
+                                for (int i = 0; i < length; i++) {
+                                    ItemStack itemStack = itemStacks[i];
+                                    if (itemStack == null) {
+                                        continue;
                                     }
-
-                                    if (count < amount) {
-                                        player.sendMessage(
-                                                Component.translatable("lessyuansu")
-                                        );
-                                        return;
+                                    if (itemStack.getType() != Material.KELP) {
+                                        continue;
                                     }
-                                    int inamout = amount;
-
-
-                                    for (int slot : slots) {
-                                        ItemStack itemStack = itemStacks[slot];
-                                        int amoutNow = itemStack.getAmount();
-                                        if (inamout > amoutNow) {
-                                            inamout -= amoutNow;
-                                            itemStack.setAmount(0);
-                                        } else {
-                                            itemStack.setAmount(amoutNow - inamout);
-                                            break;
-                                        }
+                                    if (!Objects.equals(itemStack.getPersistentDataContainer().get(DataContainer.id, PersistentDataType.STRING), "jin")) {
+                                        continue;
                                     }
-
-                                    data.jinCount += amount;
-                                    player.sendMessage(
-                                            Component.translatable("jincount",
-                                                    Component.text(data.jinCount).color(NamedTextColor.AQUA)
-                                            )
-                                    );
-                                }
-                            }.runTask(Yuehua.instance);
-                            case "木" -> new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    PlayerInventory playerInventory = player.getInventory();
-                                    ItemStack[] itemStacks = playerInventory.getContents();
-                                    int count = 0;
-                                    int length = itemStacks.length;
-                                    List<Integer> slots = new ArrayList<>(length);
-                                    for (int i = 0; i < length; i++) {
-                                        ItemStack itemStack = itemStacks[i];
-                                        if (itemStack == null) {
-                                            continue;
-                                        }
-                                        if (itemStack.getType() != Material.KELP) {
-                                            continue;
-                                        }
-                                        if (!Objects.equals(itemStack.getPersistentDataContainer().get(DataContainer.id, PersistentDataType.STRING), "mu")) {
-                                            continue;
-                                        }
-                                        slots.add(i);
-                                        count += itemStack.getAmount();
-                                    }
-
-                                    if (count < amount) {
-                                        player.sendMessage(
-                                                Component.translatable("lessyuansu")
-                                        );
-                                        return;
-                                    }
-
-                                    int inamout = amount;
-                                    for (int slot : slots) {
-                                        ItemStack itemStack = itemStacks[slot];
-                                        int amoutNow = itemStack.getAmount();
-                                        if (inamout > amoutNow) {
-                                            inamout -= amoutNow;
-                                            itemStack.setAmount(0);
-                                        } else {
-                                            itemStack.setAmount(amoutNow - inamout);
-                                            break;
-                                        }
-                                    }
-                                    data.muCount += amount;
-                                    player.sendMessage(
-                                            Component.translatable("mucount",
-                                                    Component.text(data.muCount).color(NamedTextColor.AQUA)
-                                            )
-                                    );
-                                }
-                            }.runTask(Yuehua.instance);
-                            case "水" -> new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    PlayerInventory playerInventory = player.getInventory();
-                                    ItemStack[] itemStacks = playerInventory.getContents();
-                                    int count = 0;
-                                    int length = itemStacks.length;
-                                    List<Integer> slots = new ArrayList<>(length);
-                                    for (int i = 0; i < length; i++) {
-                                        ItemStack itemStack = itemStacks[i];
-                                        if (itemStack == null) {
-                                            continue;
-                                        }
-                                        if (itemStack.getType() != Material.KELP) {
-                                            continue;
-                                        }
-                                        if (!Objects.equals(itemStack.getPersistentDataContainer().get(DataContainer.id, PersistentDataType.STRING), "shui")) {
-                                            continue;
-                                        }
-                                        slots.add(i);
-                                        count += itemStack.getAmount();
-                                    }
-
-                                    if (count < amount) {
-                                        player.sendMessage(
-                                                Component.translatable("lessyuansu")
-                                        );
-                                        return;
-                                    }
-
-                                    int inamout = amount;
-                                    for (int slot : slots) {
-                                        ItemStack itemStack = itemStacks[slot];
-                                        int amoutNow = itemStack.getAmount();
-                                        if (inamout > amoutNow) {
-                                            inamout -= amoutNow;
-                                            itemStack.setAmount(0);
-                                        } else {
-                                            itemStack.setAmount(amoutNow - inamout);
-                                            break;
-                                        }
-                                    }
-                                    data.shuiCount += amount;
-                                    player.sendMessage(
-                                            Component.translatable("shuicount",
-                                                    Component.text(data.shuiCount).color(NamedTextColor.AQUA)
-                                            )
-                                    );
-                                }
-                            }.runTask(Yuehua.instance);
-                            case "火" -> new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    PlayerInventory playerInventory = player.getInventory();
-                                    ItemStack[] itemStacks = playerInventory.getContents();
-                                    int count = 0;
-                                    int length = itemStacks.length;
-                                    List<Integer> slots = new ArrayList<>(length);
-                                    for (int i = 0; i < length; i++) {
-                                        ItemStack itemStack = itemStacks[i];
-                                        if (itemStack == null) {
-                                            continue;
-                                        }
-                                        if (itemStack.getType() != Material.KELP) {
-                                            continue;
-                                        }
-                                        if (!Objects.equals(itemStack.getPersistentDataContainer().get(DataContainer.id, PersistentDataType.STRING), "huo")) {
-                                            continue;
-                                        }
-                                        slots.add(i);
-                                        count += itemStack.getAmount();
-                                    }
-
-                                    if (count < amount) {
-                                        player.sendMessage(
-                                                Component.translatable("lessyuansu")
-                                        );
-                                        return;
-                                    }
-
-                                    int inamout = amount;
-                                    for (int slot : slots) {
-                                        ItemStack itemStack = itemStacks[slot];
-                                        int amoutNow = itemStack.getAmount();
-                                        if (inamout > amoutNow) {
-                                            inamout -= amoutNow;
-                                            itemStack.setAmount(0);
-                                        } else {
-                                            itemStack.setAmount(amoutNow - inamout);
-                                            break;
-                                        }
-                                    }
-                                    data.huoCount += amount;
-                                    player.sendMessage(
-                                            Component.translatable("huocount",
-                                                    Component.text(data.huoCount).color(NamedTextColor.AQUA)
-                                            )
-                                    );
-
+                                    slots.add(i);
+                                    count += itemStack.getAmount();
                                 }
 
-                            }.runTask(Yuehua.instance);
-                            case "土" -> new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    PlayerInventory playerInventory = player.getInventory();
-                                    ItemStack[] itemStacks = playerInventory.getContents();
-                                    int count = 0;
-                                    int length = itemStacks.length;
-                                    List<Integer> slots = new ArrayList<>(length);
-                                    for (int i = 0; i < length; i++) {
-                                        ItemStack itemStack = itemStacks[i];
-                                        if (itemStack == null) {
-                                            continue;
-                                        }
-                                        if (itemStack.getType() != Material.KELP) {
-                                            continue;
-                                        }
-                                        if (!Objects.equals(itemStack.getPersistentDataContainer().get(DataContainer.id, PersistentDataType.STRING), "tu")) {
-                                            continue;
-                                        }
-                                        slots.add(i);
-                                        count += itemStack.getAmount();
-                                    }
-                                    if (count < amount) {
-                                        player.sendMessage(
-                                                Component.translatable("lessyuansu")
-                                        );
-                                        return;
-                                    }
-                                    int inamout = amount;
-                                    for (int slot : slots) {
-                                        ItemStack itemStack = itemStacks[slot];
-                                        int amoutNow = itemStack.getAmount();
-                                        if (inamout > amoutNow) {
-                                            inamout -= amoutNow;
-                                            itemStack.setAmount(0);
-                                        } else {
-                                            itemStack.setAmount(amoutNow - inamout);
-                                            break;
-                                        }
-                                    }
-                                    data.tuCount += amount;
+                                if (count < amount) {
                                     player.sendMessage(
-                                            Component.translatable("tucount",
-                                                    Component.text(data.tuCount).color(NamedTextColor.AQUA)
-                                            )
+                                            Component.translatable("lessyuansu")
                                     );
+                                    return;
+                                }
+                                int inamout = amount;
 
-                                }
-                            }.runTask(Yuehua.instance);
-                            case "精炼金" -> new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    PlayerInventory playerInventory = player.getInventory();
-                                    ItemStack[] itemStacks = playerInventory.getContents();
-                                    int count = 0;
-                                    int length = itemStacks.length;
-                                    List<Integer> slots = new ArrayList<>(length);
-                                    for (int i = 0; i < length; i++) {
-                                        ItemStack itemStack = itemStacks[i];
-                                        if (itemStack == null) {
-                                            continue;
-                                        }
-                                        if (itemStack.getType() != Material.KELP) {
-                                            continue;
-                                        }
-                                        if (!Objects.equals(itemStack.getPersistentDataContainer().get(DataContainer.id, PersistentDataType.STRING), "refined_jin")) {
-                                            continue;
-                                        }
-                                        slots.add(i);
-                                        count += itemStack.getAmount();
-                                    }
-                                    if (count < amount) {
-                                        player.sendMessage(
-                                                Component.translatable("lessyuansu")
-                                        );
-                                        return;
-                                    }
-                                    int inamout = amount;
-                                    for (int slot : slots) {
-                                        ItemStack itemStack = itemStacks[slot];
-                                        int amoutNow = itemStack.getAmount();
-                                        if (inamout > amoutNow) {
-                                            inamout -= amoutNow;
-                                            itemStack.setAmount(0);
-                                        } else {
-                                            itemStack.setAmount(amoutNow - inamout);
-                                            break;
-                                        }
-                                    }
-                                    data.refinedJinCount += amount;
-                                    player.sendMessage(
-                                            Component.translatable("rjincount",
-                                                    Component.text(data.refinedJinCount).color(NamedTextColor.AQUA)
-                                            )
-                                    );
-                                }
-                            }.runTask(Yuehua.instance);
-                            case "精炼木" -> new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    PlayerInventory playerInventory = player.getInventory();
-                                    ItemStack[] itemStacks = playerInventory.getContents();
-                                    int count = 0;
-                                    int length = itemStacks.length;
-                                    List<Integer> slots = new ArrayList<>(length);
-                                    for (int i = 0; i < length; i++) {
-                                        ItemStack itemStack = itemStacks[i];
-                                        if (itemStack == null) {
-                                            continue;
-                                        }
-                                        if (itemStack.getType() != Material.KELP) {
-                                            continue;
-                                        }
-                                        if (!Objects.equals(itemStack.getPersistentDataContainer().get(DataContainer.id, PersistentDataType.STRING), "refined_mu")) {
-                                            continue;
-                                        }
-                                        slots.add(i);
-                                        count += itemStack.getAmount();
-                                    }
-                                    if (count < amount) {
-                                        player.sendMessage(
-                                                Component.translatable("lessyuansu")
-                                        );
-                                        return;
-                                    }
-                                    int inamout = amount;
-                                    for (int slot : slots) {
-                                        ItemStack itemStack = itemStacks[slot];
-                                        int amoutNow = itemStack.getAmount();
-                                        if (inamout > amoutNow) {
-                                            inamout -= amoutNow;
-                                            itemStack.setAmount(0);
-                                        } else {
-                                            itemStack.setAmount(amoutNow - inamout);
-                                            break;
-                                        }
-                                    }
-                                    data.refinedMuCount += amount;
-                                    player.sendMessage(
-                                            Component.translatable("rmucount",
-                                                    Component.text(data.refinedMuCount).color(NamedTextColor.AQUA)
-                                            )
-                                    );
-                                }
-                            }.runTask(Yuehua.instance);
-                            case "精炼水" -> new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    PlayerInventory playerInventory = player.getInventory();
-                                    ItemStack[] itemStacks = playerInventory.getContents();
-                                    int count = 0;
-                                    int length = itemStacks.length;
-                                    List<Integer> slots = new ArrayList<>(length);
-                                    for (int i = 0; i < length; i++) {
-                                        ItemStack itemStack = itemStacks[i];
-                                        if (itemStack == null) {
-                                            continue;
-                                        }
-                                        if (itemStack.getType() != Material.KELP) {
-                                            continue;
-                                        }
-                                        if (!Objects.equals(itemStack.getPersistentDataContainer().get(DataContainer.id, PersistentDataType.STRING), "refined_shui")) {
-                                            continue;
-                                        }
-                                        slots.add(i);
-                                        count += itemStack.getAmount();
-                                    }
-                                    if (count < amount) {
-                                        player.sendMessage(
-                                                Component.translatable("lessyuansu")
-                                        );
-                                        return;
-                                    }
-                                    int inamout = amount;
-                                    for (int slot : slots) {
-                                        ItemStack itemStack = itemStacks[slot];
-                                        int amoutNow = itemStack.getAmount();
-                                        if (inamout > amoutNow) {
-                                            inamout -= amoutNow;
-                                            itemStack.setAmount(0);
-                                        } else {
-                                            itemStack.setAmount(amoutNow - inamout);
-                                            break;
-                                        }
-                                    }
-                                    data.refinedShuiCount += amount;
-                                    player.sendMessage(
-                                            Component.translatable("rshuicount",
-                                                    Component.text(data.refinedShuiCount).color(NamedTextColor.AQUA)
-                                            )
-                                    );
-                                }
-                            }.runTask(Yuehua.instance);
-                            case "精炼火" -> new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    PlayerInventory playerInventory = player.getInventory();
-                                    ItemStack[] itemStacks = playerInventory.getContents();
-                                    int count = 0;
-                                    int length = itemStacks.length;
-                                    List<Integer> slots = new ArrayList<>(length);
-                                    for (int i = 0; i < length; i++) {
-                                        ItemStack itemStack = itemStacks[i];
-                                        if (itemStack == null) {
-                                            continue;
-                                        }
-                                        if (itemStack.getType() != Material.KELP) {
-                                            continue;
-                                        }
-                                        if (!Objects.equals(itemStack.getPersistentDataContainer().get(DataContainer.id, PersistentDataType.STRING), "refined_huo")) {
-                                            continue;
-                                        }
-                                        slots.add(i);
-                                        count += itemStack.getAmount();
-                                    }
-                                    if (count < amount) {
-                                        player.sendMessage(
-                                                Component.translatable("lessyuansu")
-                                        );
-                                        return;
-                                    }
-                                    int inamout = amount;
-                                    for (int slot : slots) {
-                                        ItemStack itemStack = itemStacks[slot];
-                                        int amoutNow = itemStack.getAmount();
-                                        if (inamout > amoutNow) {
-                                            inamout -= amoutNow;
-                                            itemStack.setAmount(0);
-                                        } else {
-                                            itemStack.setAmount(amoutNow - inamout);
-                                            break;
-                                        }
-                                    }
-                                    data.refinedHuoCount += amount;
-                                    player.sendMessage(
-                                            Component.translatable("rhuocount",
-                                                    Component.text(data.refinedHuoCount).color(NamedTextColor.AQUA)
-                                            )
-                                    );
-                                }
-                            }.runTask(Yuehua.instance);
-                            case "精炼土" -> new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    PlayerInventory playerInventory = player.getInventory();
-                                    ItemStack[] itemStacks = playerInventory.getContents();
-                                    int count = 0;
-                                    int length = itemStacks.length;
-                                    List<Integer> slots = new ArrayList<>(length);
-                                    for (int i = 0; i < length; i++) {
-                                        ItemStack itemStack = itemStacks[i];
-                                        if (itemStack == null) {
-                                            continue;
-                                        }
-                                        if (itemStack.getType() != Material.KELP) {
-                                            continue;
-                                        }
-                                        if (!Objects.equals(itemStack.getPersistentDataContainer().get(DataContainer.id, PersistentDataType.STRING), "refined_tu")) {
-                                            continue;
-                                        }
-                                        slots.add(i);
-                                        count += itemStack.getAmount();
-                                    }
-                                    if (count < amount) {
-                                        player.sendMessage(
-                                                Component.translatable("lessyuansu")
-                                        );
-                                        return;
-                                    }
-                                    int inamout = amount;
-                                    for (int slot : slots) {
-                                        ItemStack itemStack = itemStacks[slot];
-                                        int amoutNow = itemStack.getAmount();
-                                        if (inamout > amoutNow) {
-                                            inamout -= amoutNow;
-                                            itemStack.setAmount(0);
-                                        } else {
-                                            itemStack.setAmount(amoutNow - inamout);
-                                            break;
-                                        }
-                                    }
-                                    data.refinedTuCount += amount;
-                                    player.sendMessage(
-                                            Component.translatable("rtucount",
-                                                    Component.text(data.refinedTuCount).color(NamedTextColor.AQUA)
-                                            )
-                                    );
 
+                                for (int slot : slots) {
+                                    ItemStack itemStack = itemStacks[slot];
+                                    int amoutNow = itemStack.getAmount();
+                                    if (inamout > amoutNow) {
+                                        inamout -= amoutNow;
+                                        itemStack.setAmount(0);
+                                    } else {
+                                        itemStack.setAmount(amoutNow - inamout);
+                                        break;
+                                    }
                                 }
-                            }.runTask(Yuehua.instance);
-                            case "浓缩金" -> new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    PlayerInventory playerInventory = player.getInventory();
-                                    ItemStack[] itemStacks = playerInventory.getContents();
-                                    int count = 0;
-                                    int length = itemStacks.length;
-                                    List<Integer> slots = new ArrayList<>(length);
-                                    for (int i = 0; i < length; i++) {
-                                        ItemStack itemStack = itemStacks[i];
-                                        if (itemStack == null) {
-                                            continue;
-                                        }
-                                        if (itemStack.getType() != Material.KELP) {
-                                            continue;
-                                        }
-                                        if (!Objects.equals(itemStack.getPersistentDataContainer().get(DataContainer.id, PersistentDataType.STRING), "concentrated_jin")) {
-                                            continue;
-                                        }
-                                        slots.add(i);
-                                        count += itemStack.getAmount();
+
+                                data.jinCount += amount;
+                                player.sendMessage(
+                                        Component.translatable("jincount",
+                                                Component.text(data.jinCount).color(NamedTextColor.AQUA)
+                                        )
+                                );
+                            }
+                            case "木" -> {
+                                PlayerInventory playerInventory = player.getInventory();
+                                ItemStack[] itemStacks = playerInventory.getContents();
+                                int count = 0;
+                                int length = itemStacks.length;
+                                List<Integer> slots = new ArrayList<>(length);
+                                for (int i = 0; i < length; i++) {
+                                    ItemStack itemStack = itemStacks[i];
+                                    if (itemStack == null) {
+                                        continue;
                                     }
-                                    if (count < amount) {
-                                        player.sendMessage(
-                                                Component.translatable("lessyuansu")
-                                        );
-                                        return;
+                                    if (itemStack.getType() != Material.KELP) {
+                                        continue;
                                     }
-                                    int inamount = amount;
-                                    for (int slot : slots) {
-                                        ItemStack itemStack = itemStacks[slot];
-                                        int amountNow = itemStack.getAmount();
-                                        if (inamount > amountNow) {
-                                            inamount -= amountNow;
-                                            itemStack.setAmount(0);
-                                        } else {
-                                            itemStack.setAmount(amountNow - inamount);
-                                            break;
-                                        }
+                                    if (!Objects.equals(itemStack.getPersistentDataContainer().get(DataContainer.id, PersistentDataType.STRING), "mu")) {
+                                        continue;
                                     }
-                                    data.concentratedJinCount += amount;
+                                    slots.add(i);
+                                    count += itemStack.getAmount();
+                                }
+
+                                if (count < amount) {
                                     player.sendMessage(
-                                            Component.translatable("cjincount",
-                                                    Component.text(data.concentratedJinCount).color(NamedTextColor.AQUA)
-                                            )
+                                            Component.translatable("lessyuansu")
                                     );
+                                    return;
                                 }
-                            }.runTask(Yuehua.instance);
-                            case "浓缩木" -> new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    PlayerInventory playerInventory = player.getInventory();
-                                    ItemStack[] itemStacks = playerInventory.getContents();
-                                    int count = 0;
-                                    int length = itemStacks.length;
-                                    List<Integer> slots = new ArrayList<>(length);
-                                    for (int i = 0; i < length; i++) {
-                                        ItemStack itemStack = itemStacks[i];
-                                        if (itemStack == null) {
-                                            continue;
-                                        }
-                                        if (itemStack.getType() != Material.KELP) {
-                                            continue;
-                                        }
-                                        if (!Objects.equals(itemStack.getPersistentDataContainer().get(DataContainer.id, PersistentDataType.STRING), "concentrated_mu")) {
-                                            continue;
-                                        }
-                                        slots.add(i);
-                                        count += itemStack.getAmount();
+
+                                int inamout = amount;
+                                for (int slot : slots) {
+                                    ItemStack itemStack = itemStacks[slot];
+                                    int amoutNow = itemStack.getAmount();
+                                    if (inamout > amoutNow) {
+                                        inamout -= amoutNow;
+                                        itemStack.setAmount(0);
+                                    } else {
+                                        itemStack.setAmount(amoutNow - inamout);
+                                        break;
                                     }
-                                    if (count < amount) {
-                                        player.sendMessage(
-                                                Component.translatable("lessyuansu")
-                                        );
-                                        return;
+                                }
+                                data.muCount += amount;
+                                player.sendMessage(
+                                        Component.translatable("mucount",
+                                                Component.text(data.muCount).color(NamedTextColor.AQUA)
+                                        )
+                                );
+                            }
+                            case "水" -> {
+                                PlayerInventory playerInventory = player.getInventory();
+                                ItemStack[] itemStacks = playerInventory.getContents();
+                                int count = 0;
+                                int length = itemStacks.length;
+                                List<Integer> slots = new ArrayList<>(length);
+                                for (int i = 0; i < length; i++) {
+                                    ItemStack itemStack = itemStacks[i];
+                                    if (itemStack == null) {
+                                        continue;
                                     }
-                                    int inamount = amount;
-                                    for (int slot : slots) {
-                                        ItemStack itemStack = itemStacks[slot];
-                                        int amountNow = itemStack.getAmount();
-                                        if (inamount > amountNow) {
-                                            inamount -= amountNow;
-                                            itemStack.setAmount(0);
-                                        } else {
-                                            itemStack.setAmount(amountNow - inamount);
-                                            break;
-                                        }
+                                    if (itemStack.getType() != Material.KELP) {
+                                        continue;
                                     }
-                                    data.concentratedMuCount += amount;
+                                    if (!Objects.equals(itemStack.getPersistentDataContainer().get(DataContainer.id, PersistentDataType.STRING), "shui")) {
+                                        continue;
+                                    }
+                                    slots.add(i);
+                                    count += itemStack.getAmount();
+                                }
+
+                                if (count < amount) {
                                     player.sendMessage(
-                                            Component.translatable("cmucount",
-                                                    Component.text(data.concentratedMuCount).color(NamedTextColor.AQUA)
-                                            )
+                                            Component.translatable("lessyuansu")
                                     );
+                                    return;
                                 }
-                            }.runTask(Yuehua.instance);
-                            case "浓缩水" -> new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    PlayerInventory playerInventory = player.getInventory();
-                                    ItemStack[] itemStacks = playerInventory.getContents();
-                                    int count = 0;
-                                    int length = itemStacks.length;
-                                    List<Integer> slots = new ArrayList<>(length);
-                                    for (int i = 0; i < length; i++) {
-                                        ItemStack itemStack = itemStacks[i];
-                                        if (itemStack == null) {
-                                            continue;
-                                        }
-                                        if (itemStack.getType() != Material.KELP) {
-                                            continue;
-                                        }
-                                        if (!Objects.equals(itemStack.getPersistentDataContainer().get(DataContainer.id, PersistentDataType.STRING), "concentrated_shui")) {
-                                            continue;
-                                        }
-                                        slots.add(i);
-                                        count += itemStack.getAmount();
+
+                                int inamout = amount;
+                                for (int slot : slots) {
+                                    ItemStack itemStack = itemStacks[slot];
+                                    int amoutNow = itemStack.getAmount();
+                                    if (inamout > amoutNow) {
+                                        inamout -= amoutNow;
+                                        itemStack.setAmount(0);
+                                    } else {
+                                        itemStack.setAmount(amoutNow - inamout);
+                                        break;
                                     }
-                                    if (count < amount) {
-                                        player.sendMessage(
-                                                Component.translatable("lessyuansu")
-                                        );
-                                        return;
+                                }
+                                data.shuiCount += amount;
+                                player.sendMessage(
+                                        Component.translatable("shuicount",
+                                                Component.text(data.shuiCount).color(NamedTextColor.AQUA)
+                                        )
+                                );
+                            }
+                            case "火" -> {PlayerInventory playerInventory = player.getInventory();
+                                ItemStack[] itemStacks = playerInventory.getContents();
+                                int count = 0;
+                                int length = itemStacks.length;
+                                List<Integer> slots = new ArrayList<>(length);
+                                for (int i = 0; i < length; i++) {
+                                    ItemStack itemStack = itemStacks[i];
+                                    if (itemStack == null) {
+                                        continue;
                                     }
-                                    int inamount = amount;
-                                    for (int slot : slots) {
-                                        ItemStack itemStack = itemStacks[slot];
-                                        int amountNow = itemStack.getAmount();
-                                        if (inamount > amountNow) {
-                                            inamount -= amountNow;
-                                            itemStack.setAmount(0);
-                                        } else {
-                                            itemStack.setAmount(amountNow - inamount);
-                                            break;
-                                        }
+                                    if (itemStack.getType() != Material.KELP) {
+                                        continue;
                                     }
-                                    data.concentratedShuiCount += amount;
+                                    if (!Objects.equals(itemStack.getPersistentDataContainer().get(DataContainer.id, PersistentDataType.STRING), "huo")) {
+                                        continue;
+                                    }
+                                    slots.add(i);
+                                    count += itemStack.getAmount();
+                                }
+
+                                if (count < amount) {
                                     player.sendMessage(
-                                            Component.translatable("cshuicount",
-                                                    Component.text(data.concentratedShuiCount).color(NamedTextColor.AQUA)
-                                            )
+                                            Component.translatable("lessyuansu")
                                     );
+                                    return;
                                 }
-                            }.runTask(Yuehua.instance);
-                            case "浓缩火" -> new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    PlayerInventory playerInventory = player.getInventory();
-                                    ItemStack[] itemStacks = playerInventory.getContents();
-                                    int count = 0;
-                                    int length = itemStacks.length;
-                                    List<Integer> slots = new ArrayList<>(length);
-                                    for (int i = 0; i < length; i++) {
-                                        ItemStack itemStack = itemStacks[i];
-                                        if (itemStack == null) {
-                                            continue;
-                                        }
-                                        if (itemStack.getType() != Material.KELP) {
-                                            continue;
-                                        }
-                                        if (!Objects.equals(itemStack.getPersistentDataContainer().get(DataContainer.id, PersistentDataType.STRING), "concentrated_huo")) {
-                                            continue;
-                                        }
-                                        slots.add(i);
-                                        count += itemStack.getAmount();
+
+                                int inamout = amount;
+                                for (int slot : slots) {
+                                    ItemStack itemStack = itemStacks[slot];
+                                    int amoutNow = itemStack.getAmount();
+                                    if (inamout > amoutNow) {
+                                        inamout -= amoutNow;
+                                        itemStack.setAmount(0);
+                                    } else {
+                                        itemStack.setAmount(amoutNow - inamout);
+                                        break;
                                     }
-                                    if (count < amount) {
-                                        player.sendMessage(
-                                                Component.translatable("lessyuansu")
-                                        );
-                                        return;
+                                }
+                                data.huoCount += amount;
+                                player.sendMessage(
+                                        Component.translatable("huocount",
+                                                Component.text(data.huoCount).color(NamedTextColor.AQUA)
+                                        )
+                                );}
+                            case "土" -> {
+                                PlayerInventory playerInventory = player.getInventory();
+                                ItemStack[] itemStacks = playerInventory.getContents();
+                                int count = 0;
+                                int length = itemStacks.length;
+                                List<Integer> slots = new ArrayList<>(length);
+                                for (int i = 0; i < length; i++) {
+                                    ItemStack itemStack = itemStacks[i];
+                                    if (itemStack == null) {
+                                        continue;
                                     }
-                                    int inamount = amount;
-                                    for (int slot : slots) {
-                                        ItemStack itemStack = itemStacks[slot];
-                                        int amountNow = itemStack.getAmount();
-                                        if (inamount > amountNow) {
-                                            inamount -= amountNow;
-                                            itemStack.setAmount(0);
-                                        } else {
-                                            itemStack.setAmount(amountNow - inamount);
-                                            break;
-                                        }
+                                    if (itemStack.getType() != Material.KELP) {
+                                        continue;
                                     }
-                                    data.concentratedHuoCount += amount;
+                                    if (!Objects.equals(itemStack.getPersistentDataContainer().get(DataContainer.id, PersistentDataType.STRING), "tu")) {
+                                        continue;
+                                    }
+                                    slots.add(i);
+                                    count += itemStack.getAmount();
+                                }
+                                if (count < amount) {
                                     player.sendMessage(
-                                            Component.translatable("chuocount",
-                                                    Component.text(data.concentratedHuoCount).color(NamedTextColor.AQUA)
-                                            )
+                                            Component.translatable("lessyuansu")
                                     );
+                                    return;
                                 }
-                            }.runTask(Yuehua.instance);
-                            case "浓缩土" -> new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    PlayerInventory playerInventory = player.getInventory();
-                                    ItemStack[] itemStacks = playerInventory.getContents();
-                                    int count = 0;
-                                    int length = itemStacks.length;
-                                    List<Integer> slots = new ArrayList<>(length);
-                                    for (int i = 0; i < length; i++) {
-                                        ItemStack itemStack = itemStacks[i];
-                                        if (itemStack == null) {
-                                            continue;
-                                        }
-                                        if (itemStack.getType() != Material.KELP) {
-                                            continue;
-                                        }
-                                        if (!Objects.equals(itemStack.getPersistentDataContainer().get(DataContainer.id, PersistentDataType.STRING), "concentrated_tu")) {
-                                            continue;
-                                        }
-                                        slots.add(i);
-                                        count += itemStack.getAmount();
+                                int inamout = amount;
+                                for (int slot : slots) {
+                                    ItemStack itemStack = itemStacks[slot];
+                                    int amoutNow = itemStack.getAmount();
+                                    if (inamout > amoutNow) {
+                                        inamout -= amoutNow;
+                                        itemStack.setAmount(0);
+                                    } else {
+                                        itemStack.setAmount(amoutNow - inamout);
+                                        break;
                                     }
-                                    if (count < amount) {
-                                        player.sendMessage(
-                                                Component.translatable("lessyuansu")
-                                        );
-                                        return;
+                                }
+                                data.tuCount += amount;
+                                player.sendMessage(
+                                        Component.translatable("tucount",
+                                                Component.text(data.tuCount).color(NamedTextColor.AQUA)
+                                        )
+                                );
+                            }
+                            case "精炼金" -> {PlayerInventory playerInventory = player.getInventory();
+                                ItemStack[] itemStacks = playerInventory.getContents();
+                                int count = 0;
+                                int length = itemStacks.length;
+                                List<Integer> slots = new ArrayList<>(length);
+                                for (int i = 0; i < length; i++) {
+                                    ItemStack itemStack = itemStacks[i];
+                                    if (itemStack == null) {
+                                        continue;
                                     }
-                                    int inamount = amount;
-                                    for (int slot : slots) {
-                                        ItemStack itemStack = itemStacks[slot];
-                                        int amountNow = itemStack.getAmount();
-                                        if (inamount > amountNow) {
-                                            inamount -= amountNow;
-                                            itemStack.setAmount(0);
-                                        } else {
-                                            itemStack.setAmount(amountNow - inamount);
-                                            break;
-                                        }
+                                    if (itemStack.getType() != Material.KELP) {
+                                        continue;
                                     }
-                                    data.concentratedTuCount += amount;
+                                    if (!Objects.equals(itemStack.getPersistentDataContainer().get(DataContainer.id, PersistentDataType.STRING), "refined_jin")) {
+                                        continue;
+                                    }
+                                    slots.add(i);
+                                    count += itemStack.getAmount();
+                                }
+                                if (count < amount) {
                                     player.sendMessage(
-                                            Component.translatable("ctucount",
-                                                    Component.text(data.concentratedTuCount).color(NamedTextColor.AQUA)
-                                            )
+                                            Component.translatable("lessyuansu")
                                     );
+                                    return;
                                 }
-                            }.runTask(Yuehua.instance);
+                                int inamout = amount;
+                                for (int slot : slots) {
+                                    ItemStack itemStack = itemStacks[slot];
+                                    int amoutNow = itemStack.getAmount();
+                                    if (inamout > amoutNow) {
+                                        inamout -= amoutNow;
+                                        itemStack.setAmount(0);
+                                    } else {
+                                        itemStack.setAmount(amoutNow - inamout);
+                                        break;
+                                    }
+                                }
+                                data.refinedJinCount += amount;
+                                player.sendMessage(
+                                        Component.translatable("rjincount",
+                                                Component.text(data.refinedJinCount).color(NamedTextColor.AQUA)
+                                        )
+                                );}
+                            case "精炼木" -> {
+                                PlayerInventory playerInventory = player.getInventory();
+                                ItemStack[] itemStacks = playerInventory.getContents();
+                                int count = 0;
+                                int length = itemStacks.length;
+                                List<Integer> slots = new ArrayList<>(length);
+                                for (int i = 0; i < length; i++) {
+                                    ItemStack itemStack = itemStacks[i];
+                                    if (itemStack == null) {
+                                        continue;
+                                    }
+                                    if (itemStack.getType() != Material.KELP) {
+                                        continue;
+                                    }
+                                    if (!Objects.equals(itemStack.getPersistentDataContainer().get(DataContainer.id, PersistentDataType.STRING), "refined_mu")) {
+                                        continue;
+                                    }
+                                    slots.add(i);
+                                    count += itemStack.getAmount();
+                                }
+                                if (count < amount) {
+                                    player.sendMessage(
+                                            Component.translatable("lessyuansu")
+                                    );
+                                    return;
+                                }
+                                int inamout = amount;
+                                for (int slot : slots) {
+                                    ItemStack itemStack = itemStacks[slot];
+                                    int amoutNow = itemStack.getAmount();
+                                    if (inamout > amoutNow) {
+                                        inamout -= amoutNow;
+                                        itemStack.setAmount(0);
+                                    } else {
+                                        itemStack.setAmount(amoutNow - inamout);
+                                        break;
+                                    }
+                                }
+                                data.refinedMuCount += amount;
+                                player.sendMessage(
+                                        Component.translatable("rmucount",
+                                                Component.text(data.refinedMuCount).color(NamedTextColor.AQUA)
+                                        )
+                                );
+                            }
+                            case "精炼水" -> {
+                                PlayerInventory playerInventory = player.getInventory();
+                                ItemStack[] itemStacks = playerInventory.getContents();
+                                int count = 0;
+                                int length = itemStacks.length;
+                                List<Integer> slots = new ArrayList<>(length);
+                                for (int i = 0; i < length; i++) {
+                                    ItemStack itemStack = itemStacks[i];
+                                    if (itemStack == null) {
+                                        continue;
+                                    }
+                                    if (itemStack.getType() != Material.KELP) {
+                                        continue;
+                                    }
+                                    if (!Objects.equals(itemStack.getPersistentDataContainer().get(DataContainer.id, PersistentDataType.STRING), "refined_shui")) {
+                                        continue;
+                                    }
+                                    slots.add(i);
+                                    count += itemStack.getAmount();
+                                }
+                                if (count < amount) {
+                                    player.sendMessage(
+                                            Component.translatable("lessyuansu")
+                                    );
+                                    return;
+                                }
+                                int inamout = amount;
+                                for (int slot : slots) {
+                                    ItemStack itemStack = itemStacks[slot];
+                                    int amoutNow = itemStack.getAmount();
+                                    if (inamout > amoutNow) {
+                                        inamout -= amoutNow;
+                                        itemStack.setAmount(0);
+                                    } else {
+                                        itemStack.setAmount(amoutNow - inamout);
+                                        break;
+                                    }
+                                }
+                                data.refinedShuiCount += amount;
+                                player.sendMessage(
+                                        Component.translatable("rshuicount",
+                                                Component.text(data.refinedShuiCount).color(NamedTextColor.AQUA)
+                                        )
+                                );
+                            }
+                            case "精炼火" -> {
+                                PlayerInventory playerInventory = player.getInventory();
+                                ItemStack[] itemStacks = playerInventory.getContents();
+                                int count = 0;
+                                int length = itemStacks.length;
+                                List<Integer> slots = new ArrayList<>(length);
+                                for (int i = 0; i < length; i++) {
+                                    ItemStack itemStack = itemStacks[i];
+                                    if (itemStack == null) {
+                                        continue;
+                                    }
+                                    if (itemStack.getType() != Material.KELP) {
+                                        continue;
+                                    }
+                                    if (!Objects.equals(itemStack.getPersistentDataContainer().get(DataContainer.id, PersistentDataType.STRING), "refined_huo")) {
+                                        continue;
+                                    }
+                                    slots.add(i);
+                                    count += itemStack.getAmount();
+                                }
+                                if (count < amount) {
+                                    player.sendMessage(
+                                            Component.translatable("lessyuansu")
+                                    );
+                                    return;
+                                }
+                                int inamout = amount;
+                                for (int slot : slots) {
+                                    ItemStack itemStack = itemStacks[slot];
+                                    int amoutNow = itemStack.getAmount();
+                                    if (inamout > amoutNow) {
+                                        inamout -= amoutNow;
+                                        itemStack.setAmount(0);
+                                    } else {
+                                        itemStack.setAmount(amoutNow - inamout);
+                                        break;
+                                    }
+                                }
+                                data.refinedHuoCount += amount;
+                                player.sendMessage(
+                                        Component.translatable("rhuocount",
+                                                Component.text(data.refinedHuoCount).color(NamedTextColor.AQUA)
+                                        )
+                                );
+                            }
+                            case "精炼土" -> {
+                                PlayerInventory playerInventory = player.getInventory();
+                                ItemStack[] itemStacks = playerInventory.getContents();
+                                int count = 0;
+                                int length = itemStacks.length;
+                                List<Integer> slots = new ArrayList<>(length);
+                                for (int i = 0; i < length; i++) {
+                                    ItemStack itemStack = itemStacks[i];
+                                    if (itemStack == null) {
+                                        continue;
+                                    }
+                                    if (itemStack.getType() != Material.KELP) {
+                                        continue;
+                                    }
+                                    if (!Objects.equals(itemStack.getPersistentDataContainer().get(DataContainer.id, PersistentDataType.STRING), "refined_tu")) {
+                                        continue;
+                                    }
+                                    slots.add(i);
+                                    count += itemStack.getAmount();
+                                }
+                                if (count < amount) {
+                                    player.sendMessage(
+                                            Component.translatable("lessyuansu")
+                                    );
+                                    return;
+                                }
+                                int inamout = amount;
+                                for (int slot : slots) {
+                                    ItemStack itemStack = itemStacks[slot];
+                                    int amoutNow = itemStack.getAmount();
+                                    if (inamout > amoutNow) {
+                                        inamout -= amoutNow;
+                                        itemStack.setAmount(0);
+                                    } else {
+                                        itemStack.setAmount(amoutNow - inamout);
+                                        break;
+                                    }
+                                }
+                                data.refinedTuCount += amount;
+                                player.sendMessage(
+                                        Component.translatable("rtucount",
+                                                Component.text(data.refinedTuCount).color(NamedTextColor.AQUA)
+                                        )
+                                );
+                            }
+                            case "浓缩金" -> {
+                                PlayerInventory playerInventory = player.getInventory();
+                                ItemStack[] itemStacks = playerInventory.getContents();
+                                int count = 0;
+                                int length = itemStacks.length;
+                                List<Integer> slots = new ArrayList<>(length);
+                                for (int i = 0; i < length; i++) {
+                                    ItemStack itemStack = itemStacks[i];
+                                    if (itemStack == null) {
+                                        continue;
+                                    }
+                                    if (itemStack.getType() != Material.KELP) {
+                                        continue;
+                                    }
+                                    if (!Objects.equals(itemStack.getPersistentDataContainer().get(DataContainer.id, PersistentDataType.STRING), "concentrated_jin")) {
+                                        continue;
+                                    }
+                                    slots.add(i);
+                                    count += itemStack.getAmount();
+                                }
+                                if (count < amount) {
+                                    player.sendMessage(
+                                            Component.translatable("lessyuansu")
+                                    );
+                                    return;
+                                }
+                                int inamount = amount;
+                                for (int slot : slots) {
+                                    ItemStack itemStack = itemStacks[slot];
+                                    int amountNow = itemStack.getAmount();
+                                    if (inamount > amountNow) {
+                                        inamount -= amountNow;
+                                        itemStack.setAmount(0);
+                                    } else {
+                                        itemStack.setAmount(amountNow - inamount);
+                                        break;
+                                    }
+                                }
+                                data.concentratedJinCount += amount;
+                                player.sendMessage(
+                                        Component.translatable("cjincount",
+                                                Component.text(data.concentratedJinCount).color(NamedTextColor.AQUA)
+                                        )
+                                );
+                            }
+                            case "浓缩木" -> {
+                                PlayerInventory playerInventory = player.getInventory();
+                                ItemStack[] itemStacks = playerInventory.getContents();
+                                int count = 0;
+                                int length = itemStacks.length;
+                                List<Integer> slots = new ArrayList<>(length);
+                                for (int i = 0; i < length; i++) {
+                                    ItemStack itemStack = itemStacks[i];
+                                    if (itemStack == null) {
+                                        continue;
+                                    }
+                                    if (itemStack.getType() != Material.KELP) {
+                                        continue;
+                                    }
+                                    if (!Objects.equals(itemStack.getPersistentDataContainer().get(DataContainer.id, PersistentDataType.STRING), "concentrated_mu")) {
+                                        continue;
+                                    }
+                                    slots.add(i);
+                                    count += itemStack.getAmount();
+                                }
+                                if (count < amount) {
+                                    player.sendMessage(
+                                            Component.translatable("lessyuansu")
+                                    );
+                                    return;
+                                }
+                                int inamount = amount;
+                                for (int slot : slots) {
+                                    ItemStack itemStack = itemStacks[slot];
+                                    int amountNow = itemStack.getAmount();
+                                    if (inamount > amountNow) {
+                                        inamount -= amountNow;
+                                        itemStack.setAmount(0);
+                                    } else {
+                                        itemStack.setAmount(amountNow - inamount);
+                                        break;
+                                    }
+                                }
+                                data.concentratedMuCount += amount;
+                                player.sendMessage(
+                                        Component.translatable("cmucount",
+                                                Component.text(data.concentratedMuCount).color(NamedTextColor.AQUA)
+                                        )
+                                );
+                            }
+                            case "浓缩水" -> {
+                                PlayerInventory playerInventory = player.getInventory();
+                                ItemStack[] itemStacks = playerInventory.getContents();
+                                int count = 0;
+                                int length = itemStacks.length;
+                                List<Integer> slots = new ArrayList<>(length);
+                                for (int i = 0; i < length; i++) {
+                                    ItemStack itemStack = itemStacks[i];
+                                    if (itemStack == null) {
+                                        continue;
+                                    }
+                                    if (itemStack.getType() != Material.KELP) {
+                                        continue;
+                                    }
+                                    if (!Objects.equals(itemStack.getPersistentDataContainer().get(DataContainer.id, PersistentDataType.STRING), "concentrated_shui")) {
+                                        continue;
+                                    }
+                                    slots.add(i);
+                                    count += itemStack.getAmount();
+                                }
+                                if (count < amount) {
+                                    player.sendMessage(
+                                            Component.translatable("lessyuansu")
+                                    );
+                                    return;
+                                }
+                                int inamount = amount;
+                                for (int slot : slots) {
+                                    ItemStack itemStack = itemStacks[slot];
+                                    int amountNow = itemStack.getAmount();
+                                    if (inamount > amountNow) {
+                                        inamount -= amountNow;
+                                        itemStack.setAmount(0);
+                                    } else {
+                                        itemStack.setAmount(amountNow - inamount);
+                                        break;
+                                    }
+                                }
+                                data.concentratedShuiCount += amount;
+                                player.sendMessage(
+                                        Component.translatable("cshuicount",
+                                                Component.text(data.concentratedShuiCount).color(NamedTextColor.AQUA)
+                                        )
+                                );
+                            }
+                            case "浓缩火" -> {
+                                PlayerInventory playerInventory = player.getInventory();
+                                ItemStack[] itemStacks = playerInventory.getContents();
+                                int count = 0;
+                                int length = itemStacks.length;
+                                List<Integer> slots = new ArrayList<>(length);
+                                for (int i = 0; i < length; i++) {
+                                    ItemStack itemStack = itemStacks[i];
+                                    if (itemStack == null) {
+                                        continue;
+                                    }
+                                    if (itemStack.getType() != Material.KELP) {
+                                        continue;
+                                    }
+                                    if (!Objects.equals(itemStack.getPersistentDataContainer().get(DataContainer.id, PersistentDataType.STRING), "concentrated_huo")) {
+                                        continue;
+                                    }
+                                    slots.add(i);
+                                    count += itemStack.getAmount();
+                                }
+                                if (count < amount) {
+                                    player.sendMessage(
+                                            Component.translatable("lessyuansu")
+                                    );
+                                    return;
+                                }
+                                int inamount = amount;
+                                for (int slot : slots) {
+                                    ItemStack itemStack = itemStacks[slot];
+                                    int amountNow = itemStack.getAmount();
+                                    if (inamount > amountNow) {
+                                        inamount -= amountNow;
+                                        itemStack.setAmount(0);
+                                    } else {
+                                        itemStack.setAmount(amountNow - inamount);
+                                        break;
+                                    }
+                                }
+                                data.concentratedHuoCount += amount;
+                                player.sendMessage(
+                                        Component.translatable("chuocount",
+                                                Component.text(data.concentratedHuoCount).color(NamedTextColor.AQUA)
+                                        )
+                                );
+                            }
+                            case "浓缩土" -> {
+                                PlayerInventory playerInventory = player.getInventory();
+                                ItemStack[] itemStacks = playerInventory.getContents();
+                                int count = 0;
+                                int length = itemStacks.length;
+                                List<Integer> slots = new ArrayList<>(length);
+                                for (int i = 0; i < length; i++) {
+                                    ItemStack itemStack = itemStacks[i];
+                                    if (itemStack == null) {
+                                        continue;
+                                    }
+                                    if (itemStack.getType() != Material.KELP) {
+                                        continue;
+                                    }
+                                    if (!Objects.equals(itemStack.getPersistentDataContainer().get(DataContainer.id, PersistentDataType.STRING), "concentrated_tu")) {
+                                        continue;
+                                    }
+                                    slots.add(i);
+                                    count += itemStack.getAmount();
+                                }
+                                if (count < amount) {
+                                    player.sendMessage(
+                                            Component.translatable("lessyuansu")
+                                    );
+                                    return;
+                                }
+                                int inamount = amount;
+                                for (int slot : slots) {
+                                    ItemStack itemStack = itemStacks[slot];
+                                    int amountNow = itemStack.getAmount();
+                                    if (inamount > amountNow) {
+                                        inamount -= amountNow;
+                                        itemStack.setAmount(0);
+                                    } else {
+                                        itemStack.setAmount(amountNow - inamount);
+                                        break;
+                                    }
+                                }
+                                data.concentratedTuCount += amount;
+                                player.sendMessage(
+                                        Component.translatable("ctucount",
+                                                Component.text(data.concentratedTuCount).color(NamedTextColor.AQUA)
+                                        )
+                                );
+                            }
                             default -> player.sendMessage(
                                     Component.translatable("badarg")
                             );

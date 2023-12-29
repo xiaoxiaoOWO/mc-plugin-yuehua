@@ -3,47 +3,44 @@ package com.xiaoxiaoowo.yuehua.commands;
 
 import com.xiaoxiaoowo.yuehua.Yuehua;
 import com.xiaoxiaoowo.yuehua.commands.playercommand.Yh;
-import com.xiaoxiaoowo.yuehua.data.DanData;
-import com.xiaoxiaoowo.yuehua.data.Data;
-import com.xiaoxiaoowo.yuehua.data.GongData;
-import com.xiaoxiaoowo.yuehua.data.ZhanData;
+import com.xiaoxiaoowo.yuehua.data.*;
+import com.xiaoxiaoowo.yuehua.display.test.TestRay;
 import com.xiaoxiaoowo.yuehua.event.player.Death;
 import com.xiaoxiaoowo.yuehua.itemstack.other.Food;
 import com.xiaoxiaoowo.yuehua.system.DataContainer;
 import com.xiaoxiaoowo.yuehua.task.test.TestTask;
+import com.xiaoxiaoowo.yuehua.task.test.TestTask3;
 import com.xiaoxiaoowo.yuehua.utils.GetEntity;
 import com.xiaoxiaoowo.yuehua.utils.SQL;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
+import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.RayTraceResult;
+import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 
 /* ①取实体数据，缓存第一快(缓存受到map容量影响，不过我的加载因子设置的很小，影响不大)，
-Tags第二快（缺点是只能存string,所以只适合存标记，不适合存数据，也可以持久化），
+Tags第二快（缺点是只能存string,所以只适合存标记(true,false代表有无tag，boolean很适合)，不适合存数据，也可以持久化），
 其次persistentDataContainer（好处是持久化），
 最慢是计分板（全是坏处）
  * */
 
 /* ②取物品数据，取type最快，几乎0消耗，所以能用种类区别最好用种类；
-CMD略快于Per，persistentDataContainer第二快,但是CMD可读性差
+CMD略快于Per，persistentDataContainer第二快,但是CMD可读性差(差不多一个MSPT增长21，一个23，只慢了10%但是可读性大幅度提升，而且CMD不能跨种类)
+在物品确定了type，且只需要取唯一标识，用cmd
 NBT第三快,
 最慢是disPlayName和lore;
 * */
@@ -62,31 +59,53 @@ NBT第三快,
 /* ⑥setKiller是很轻量级的操作
  * */
 
-/* ⑦玩家Inv可以异步操作,但不安全
+/* ⑦玩家Inv可以异步操作,但不安全，综合考虑还是不要异步操作Inv
  * */
 
-/* ⑧玩家PDC可以异步，但是如果玩家已经不在线将会失效，包括Attribute，Effect，PDC等
+/* ⑧玩家PDC可以异步，但是如果玩家已经不在线将会失效，包括Attribute，Effect，PDC,TAG等
  * */
 
-/* ⑨GetNearByEntity,不如传入filter。不要new List,直接返回强转
+/* ⑨GetNearByEntity,不如传入filter，底层原因估计是filter可以先筛再进行碰撞箱
  * */
 
-/* ⑩instanceof 快于 tag,但在filter里面 tag更快
+/* ⑩instanceof 快于 tag,但在filter里面 tag更快,
+结合九十，综合测试，得出结论，instanceof当类型符合时会更快，但类型大部分情况下不符合时tag更快.
+原因是，JVM会在类的继承树中向上追溯，比较对象的类信息与instanceof右侧指定的类。当符合时，很快就能
+完成匹配，而不符合时，将不断向上追溯
+所以目前只有在getEntity里面用tag，因为大部分entity都不是玩家
  * */
 
 /* PerSistentDataContainer底层应该是HashMap,即使5048项数据也不怎么影响get,TagSet同理
  * */
 
+/* ray使用先范围get再计算距离直线距离的算法，最快
+ * */
 
+/* 生成粒子，当粒子多时必选异步，当粒子为10时，同步平均损耗：23950，异步平均损耗:33370，即使粒子很多异步消耗也不多，但带宽损耗多
+ * */
+
+/* sendMessage应该全部异步,send一个Component即使很短也比同步快2倍，同步平均：59068.75.异步平均： 34375.44.
+发生信息，broadCast,sendTitle,sendActionBar,sendComponent,sendPlayerListHeader,sendPlayerListFooter,sendPlayerListHeaderAndFooter
+这种发包的全部异步
+ * */
+
+/* 当玩家退出再进入后，之前的player不再生效
+当实体被卸载再加载后，也会失效
+* */
+
+
+/*生成展示实体和tp都很耗费时间，相比之下粒子特效好很多
+ * */
 @SuppressWarnings("deprecation")
 public final class Test implements CommandExecutor {
     //    private static ItemStack testItem;
     private static Player player;
+    private static Entity entity;
     //    private static Entity entity;
     private static long a = 0;
 //    private static LivingEntity entity;
 //    private static PlayerInventory playerInventory;
-//    private static Location location = new Location(GetEntity.world, 1305, 75, 44);
+//    private static Location location;
 //    private static CommandSender commandSender = Bukkit.getConsoleSender();
 //    private static final NamespacedKey NAMESPACED_KEY = DataContainer.attack;
 
@@ -101,11 +120,13 @@ public final class Test implements CommandExecutor {
         final int SHIWAN = 100000;
         final int WUSHIWAN = 500000;
         final int BAIWAN = 1000000;
-        if (sender instanceof Player player) {
-            player.sendMessage(
-                    Component.translatable("notpermit")
-            );
-            return true;
+        final int SanBaiWan = 3000000;
+        if (sender instanceof Player player1) {
+            if (!player1.isOp()) {
+                player1.sendMessage(
+                        Component.translatable("notpermit")
+                );
+            }
         }
 
         if (args.length != 1) {
@@ -114,6 +135,164 @@ public final class Test implements CommandExecutor {
 
 
         switch (args[0]) {
+
+            case "addr" -> testEntityAddr();
+
+            case "monsper" -> {
+                player = Bukkit.getPlayer("xiaoxiaoOWO");
+                entity = GetEntity.getNearestMonster(player.getLocation(), 5, 5, 5);
+                testMspt(Test::getMonPer, WUSHIWAN);
+            }
+
+            case "yinyong" -> {
+                player = Bukkit.getPlayer("xiaoxiaoOWO");
+                testTimeCost(Test::testYinYong);
+            }
+
+            case "parx" -> {
+                player = Bukkit.getPlayer("xiaoxiaoOWO");
+                testTimeCost(Test::testParX);
+            }
+
+            case "ca" -> {
+                player = Bukkit.getPlayer("xiaoxiaoOWO");
+                testCancle();
+            }
+
+
+            case "withTag" -> {
+                player = Bukkit.getPlayer("xiaoxiaoOWO");
+                entity = GetEntity.getNearestMonster(player.getLocation(), 5, 5, 5);
+                testMspt(Test::testWithTag, BAIWAN);
+            }
+
+            case "withPer" -> {
+                player = Bukkit.getPlayer("xiaoxiaoOWO");
+                entity = GetEntity.getNearestMonster(player.getLocation(), 5, 5, 5);
+                testMspt(Test::testWithPer, BAIWAN);
+            }
+
+            case "put" -> testTimeCost(Test::testAddToData);
+
+            case "addrini" -> {
+                player = Bukkit.getPlayer("xiaoxiaoOWO");
+                entity = GetEntity.getNearestMonster(player.getLocation(), 5, 5, 5);
+            }
+
+            case "addrp" -> testPlayerAddr();
+
+            case "addrer" -> testEntityAddr();
+
+            case "title" -> {
+                player = Bukkit.getPlayer("xiaoxiaoOWO");
+                testTimeCost(Test::testSendTitle);
+            }
+
+            case "atitle" -> {
+                player = Bukkit.getPlayer("xiaoxiaoOWO");
+                testTimeCost(Test::testSendTitleAysnc);
+            }
+
+
+            case "par" -> {
+                player = Bukkit.getPlayer("xiaoxiaoOWO");
+                testTimeCost(Test::testPar);
+            }
+
+            case "display" -> {
+                player = Bukkit.getPlayer("xiaoxiaoOWO");
+                testTimeCost(Test::testSummon);
+            }
+
+            case "tp" -> {
+                player = Bukkit.getPlayer("xiaoxiaoOWO");
+                testTimeCost(Test::testTp);
+            }
+
+            case "tag" -> {
+                player = Bukkit.getPlayer("xiaoxiaoOWO");
+                entity = GetEntity.getNearestMonster(player.getLocation(), 5, 5, 5);
+                testMspt(Test::testTag, SanBaiWan);
+            }
+
+
+            case "instanceof" -> {
+                player = Bukkit.getPlayer("xiaoxiaoOWO");
+                entity = GetEntity.getNearestMonster(player.getLocation(), 5, 5, 5);
+                testMspt(Test::testInstanceOf, SanBaiWan);
+            }
+
+            case "type" -> {
+                player = Bukkit.getPlayer("xiaoxiaoOWO");
+                entity = GetEntity.getNearestMonster(player.getLocation(), 5, 5, 5);
+                testMspt(Test::testType, SanBaiWan);
+            }
+
+            case "vec" -> {
+                player = Bukkit.getPlayer("xiaoxiaoOWO");
+                testVec();
+            }
+
+            case "msg" -> {
+                player = Bukkit.getPlayer("xiaoxiaoOWO");
+                testTimeCost(Test::testSendMes);
+            }
+
+            case "msg2" -> {
+                player = Bukkit.getPlayer("xiaoxiaoOWO");
+                testTimeCost(Test::testSendMes2);
+            }
+
+//            test ray3
+//            test ray4
+//            test ray5
+            //test msg2
+
+            case "par1" -> {
+                player = Bukkit.getPlayer("xiaoxiaoOWO");
+                testTimeCost(Test::testPar1);
+            }
+
+            case "par2" -> {
+                player = Bukkit.getPlayer("xiaoxiaoOWO");
+                testTimeCost(Test::testPar2);
+            }
+
+            case "par3" -> {
+                player = Bukkit.getPlayer("xiaoxiaoOWO");
+                testTimeCost(Test::testPar3);
+            }
+
+            case "par4" -> {
+                player = Bukkit.getPlayer("xiaoxiaoOWO");
+                testTimeCost(Test::testPar4);
+            }
+
+            case "ray1" -> testTimeCost(Test::testRay1);
+
+            case "ray2" -> testTimeCost(Test::testRay2);
+
+            case "ray3" -> testMspt(Test::testRay3, ERWAN);
+
+//            case "ray4" -> testMspt(Test::testRay4, ERWAN);
+
+            case "ray5" -> testMspt(Test::testRay5, ERWAN);
+
+            case "ray6" -> testMspt(Test::testRay6, ERWAN);
+
+//            case "sp" -> {
+//                player = Bukkit.getPlayer("xiaoxiaoOWO");
+//                location = player.getLocation();
+//                testTimeCost(Test::testSpawn1);
+//            }
+//
+//            case "sp2" -> {
+//                player = Bukkit.getPlayer("xiaoxiaoOWO");
+//                location = player.getLocation();
+//                testTimeCost(Test::testSpawn2);
+//            }
+
+
             case "initQkdTrue" -> {
                 player = Bukkit.getPlayer("xiaoxiaoOWO");
                 Data data = Yuehua.playerData.get(player.getUniqueId());
@@ -206,10 +385,10 @@ public final class Test implements CommandExecutor {
 
             case "tran" -> testTranAtt();
 
-            case "tag" -> {
-                player = Bukkit.getPlayer("xiaoxiaoOWO");
-                testMspt(Test::testTag, BAIWAN);
-            }
+//            case "tag" -> {
+//                player = Bukkit.getPlayer("xiaoxiaoOWO");
+//                testMspt(Test::testTag, BAIWAN);
+//            }
 
 //            case "instance" -> {
 //                player = Bukkit.getPlayer("xiaoxiaoOWO");
@@ -234,23 +413,23 @@ public final class Test implements CommandExecutor {
 //
             case "getP1" -> {
                 player = Bukkit.getPlayer("xiaoxiaoOWO");
-                testMspt(Test::testGetPlayer1, BAIWAN);
+                testMspt(Test::testGetPlayer1, WUWAN);
             }
 
-            case "getP2" -> {
-                player = Bukkit.getPlayer("xiaoxiaoOWO");
-                testMspt(Test::testGetPlayer2, BAIWAN);
-            }
+//            case "getP2" -> {
+//                player = Bukkit.getPlayer("xiaoxiaoOWO");
+//                testMspt(Test::testGetPlayer2, WUWAN);
+//            }
 
 
-            case "cache" -> {
-                player = Bukkit.getPlayer("xiaoxiaoOWO");
-                for (int i = 0; i < BAIWAN * 5; i++) {
-                    if (Yuehua.playerData.get(player.getUniqueId()).attack == 1) {
-                        a++;
-                    }
-                }
-            }
+//            case "cache" -> {
+//                player = Bukkit.getPlayer("xiaoxiaoOWO");
+//                for (int i = 0; i < BAIWAN * 5; i++) {
+//                    if (Yuehua.playerData.get(player.getUniqueId()).attack == 1) {
+//                        a++;
+//                    }
+//                }
+//            }
 
             case "add100" -> {
                 player = Bukkit.getPlayer("xiaoxiaoOWO");
@@ -313,15 +492,15 @@ public final class Test implements CommandExecutor {
 //            case "getItemPer" -> {
 //                player = Bukkit.getPlayer("xiaoxiaoOWO");
 //                testItem = player.getInventory().getItemInMainHand();
-//                testMspt(Test::testGetItemPer, WUWAN);
+//                testMspt(Test::testGetItemPer, SHIWAN);
 //            }
 //
 //            case "getItemCMD" -> {
 //                player = Bukkit.getPlayer("xiaoxiaoOWO");
 //                testItem = player.getInventory().getItemInMainHand();
-//                testMspt(Test::testGetItemCMD, WUWAN);
+//                testMspt(Test::testGetItemCMD, SHIWAN);
 //            }
-//
+
 //            case "getItemName" -> {
 //                player = Bukkit.getPlayer("xiaoxiaoOWO");
 //                testItem = player.getInventory().getItemInMainHand();
@@ -341,7 +520,7 @@ public final class Test implements CommandExecutor {
 //
 //            case "getPer" -> {
 //                player = Bukkit.getPlayer("xiaoxiaoOWO");
-//                testMspt(Test::testGetPersistentDataContainerData, WUSHIWAN);
+//                testMspt(Test::, WUSHIWAN);
 //            }
 
             case "newData" -> {
@@ -368,15 +547,15 @@ public final class Test implements CommandExecutor {
                 player = Bukkit.getPlayer("xiaoxiaoOWO");
                 testMspt(Test::testGetTag, BAIWAN);
             }
-//            case "getEntity" -> {
-//                player = Bukkit.getPlayer("xiaoxiaoOWO");
-//                testMspt(Test::testGetEntity,ERWAN);
-//            }
+            case "getEntity" -> {
+                player = Bukkit.getPlayer("xiaoxiaoOWO");
+                testMspt(Test::testGetEntity, ERWAN);
+            }
 
-//            case "getEntity2" -> {
-//                player = Bukkit.getPlayer("xiaoxiaoOWO");
-//                testMspt(Test::testGetEntityWithPredict,ERWAN);
-//            }
+            case "getEntity2" -> {
+                player = Bukkit.getPlayer("xiaoxiaoOWO");
+                testMspt(Test::testGetEntity2, ERWAN);
+            }
 //
 //            case "getEntity3" -> {
 //                player = Bukkit.getPlayer("xiaoxiaoOWO");
@@ -687,9 +866,9 @@ public final class Test implements CommandExecutor {
 //                testMspt(Test::testGetPlayerCache,BAIWAN);
 //            }
 //
-            case "getA" -> {
-                getA();
-            }
+//            case "getA" -> {
+//                getA();
+//            }
 
 //            case "Entity" -> {
 //                player = Bukkit.getPlayer("xiaoxiaoOWO");
@@ -720,6 +899,10 @@ public final class Test implements CommandExecutor {
         }
 
         return true;
+    }
+
+    private static void testParX() {
+        TestRay.run(player);
     }
 
 
@@ -824,19 +1007,19 @@ public final class Test implements CommandExecutor {
     }
 
     //测试取附件怪物
-//    private static void testGetEntity() {
-//        ArrayList<Creature> creatures = GetEntity.getMonsters(player.getLocation(), 4, 4, 4);
-//        for (Creature creature : creatures){
-//            creature.setHealth(10);
-//        }
-//    }
+    private static void testGetEntity() {
+        Collection<Entity> mobs = GetEntity.getMonsters(player.getLocation(), 4, 4, 4);
+        for (Entity entity : mobs) {
+            a++;
+        }
+    }
 
-//    private static void testGetEntityWithPredict() {
-//        ArrayList<Creature> entities = GetEntity.getMonstersWithPredict(player.getLocation(), 4, 4, 4);
-//        for (Creature creature : entities){
-//            creature.setHealth(10);
-//        }
-//    }
+    private static void testGetEntity2() {
+        Collection<Entity> mobs = GetEntity.getMonsters2(player.getLocation(), 4, 4, 4);
+        for (Entity entity : mobs) {
+            a++;
+        }
+    }
 //
 //    private static void testGetEntity3() {
 //        Collection<Creature> creatures = GetEntity.getMonstersWithPredictByType(player.getLocation(), 4, 4, 4);
@@ -859,7 +1042,7 @@ public final class Test implements CommandExecutor {
         Yuehua.playerData.get(player.getUniqueId()).attack = 1;
     }
 
-//    //测试PersistentDataContainer
+    //测试PersistentDataContainer
 //    private static void testSetPersistentDataContainer() {
 //        ItemMeta itemMeta = testItem.getItemMeta();
 //        itemMeta.getPersistentDataContainer().set(NAMESPACED_KEY, PersistentDataType.STRING, "test");
@@ -1110,9 +1293,9 @@ public final class Test implements CommandExecutor {
 //        Yuehua.playerData.get(player.getUniqueId()).attack = 1;
 //    }
 //
-    private static void getA() {
-        Bukkit.broadcast(Component.text(a));
-    }
+//    private static void getA() {
+//        Bukkit.broadcast(Component.text(a));
+//    }
 
 
 //    private static void getNumEntity(){
@@ -1212,11 +1395,11 @@ public final class Test implements CommandExecutor {
 //        }
 //    }
 //
-    private static void testTag() {
-        if (player.getScoreboardTags().contains("test")) {
-            a++;
-        }
-    }
+//    private static void testTag() {
+//        if (player.getScoreboardTags().contains("test")) {
+//            a++;
+//        }
+//    }
 
     private static void add100Tag() {
         for (int i = 0; i < 100; i++) {
@@ -1263,9 +1446,9 @@ public final class Test implements CommandExecutor {
         Collection<Entity> entities = GetEntity.getPlayers(player.getLocation(), 4, 4, 4);
     }
 
-    private static void testGetPlayer2() {
-        Collection<Entity> entities = GetEntity.getPlayers2(player.getLocation(), 4, 4, 4);
-    }
+//    private static void testGetPlayer2() {
+//        Collection<Entity> entities = GetEntity.getPlayers2(player.getLocation(), 4, 4, 4);
+//    }
 
     private static void testSetPlayerPer() {
         player.getPersistentDataContainer().set(DataContainer.attack, PersistentDataType.INTEGER, 10);
@@ -1279,6 +1462,276 @@ public final class Test implements CommandExecutor {
         PersistentDataContainer pdc = player.getPersistentDataContainer();
         pdc.getKeys().forEach(pdc::remove);
     }
+
+//    private static void testSpawn1() {
+//        TestSkeleton.spawn(location);
+//    }
+//
+//    private static void testSpawn2() {
+//        TestSkeleton.spawn2(location);
+//    }
+
+    private static void testVec() {
+        Vector vector = player.getEyeLocation().getDirection();
+        Bukkit.broadcast(Component.text(vector.length()));
+    }
+
+
+    private static void testRay1() {
+        //无意义了
+        Entity entity = player.getTargetEntity(50);
+        Bukkit.broadcast(Component.text(String.valueOf(entity.getUniqueId())));
+    }
+
+    private static void testRay2() {
+        Entity entity = player.rayTraceEntities(50).getHitEntity();
+        Bukkit.broadcast(Component.text(String.valueOf(entity.getUniqueId())));
+    }
+
+    //取直线第一个遇到的用
+    private static void testRay3() {
+        Location location = player.getEyeLocation();
+        Vector direction = location.getDirection();
+        RayTraceResult rayTraceResult = GetEntity.world.rayTraceEntities(location, direction, 100, it -> it.getScoreboardTags().contains("monster"));
+        if (rayTraceResult != null) {
+            Entity entity1 = rayTraceResult.getHitEntity();
+        }
+    }
+
+
+    //不好的方式
+//    private static void testRay4() {
+//        Location location = player.getEyeLocation();
+//        Vector direction = location.getDirection();
+//        double dx = direction.getX() / 2;
+//        double dy = direction.getY() / 2;
+//        double dz = direction.getZ() / 2;
+//        for (int i = 0; i < 100; i++) { // 假设最大距离为50，每次移动1
+//            Entity entity = GetEntity.getOneMonster(location, dx, dy, dz);
+//            if (entity != null) {
+//                break;
+//            }
+//            location.add(direction);
+//        }
+//    }
+
+    //不好的方式
+    private static void testRay6() {
+        Location location = player.getEyeLocation();
+        Vector direction = location.getDirection();
+        double dx = direction.getX() / 2;
+        double dy = direction.getY() / 2;
+        double dz = direction.getZ() / 2;
+        List<Creature> creatures = new ArrayList<>(20);
+        for (int i = 0; i < 100; i++) { // 假设最大距离为50，每次移动1
+            Collection<Entity> monsters = GetEntity.getMonsters(location, dx, dy, dz);
+            for (Entity entity1 : monsters) {
+                if (entity1 instanceof Creature creature) {
+                    creatures.add(creature);
+                }
+            }
+            location.add(direction);
+        }
+    }
+
+    //取群体用
+    private static void testRay5() {
+        Location location = player.getEyeLocation();
+        double x = location.getX();
+        double y = location.getY();
+        double z = location.getZ();
+        Vector direction = location.getDirection();
+        double dx = direction.getX() * 50;
+        double dy = direction.getY() * 50;
+        double dz = direction.getZ() * 50;
+        Location midPoint = new Location(GetEntity.world, x + dx, y + dy, z + dz);
+        Collection<Entity> monsters = GetEntity.getMonsters(midPoint, dx + 0.5, dy + 0.5, dz + 0.5);
+        List<Creature> creatures = new ArrayList<>(monsters.size());
+        Vector eyeVector = location.toVector();
+        for (Entity entity1 : monsters) {
+            if (entity1 instanceof Creature creature) {
+                Vector eyeToEntityFeet = creature.getLocation().toVector();
+                eyeToEntityFeet.setY(eyeToEntityFeet.getY() + 1).subtract(eyeVector);
+                double distance = eyeToEntityFeet.crossProduct(direction).length();
+                if (distance < 1.25) {
+                    creatures.add(creature);
+                }
+            }
+        }
+    }
+
+    private static void testPar1() {
+        Location location = player.getEyeLocation();
+        Vector direction = location.getDirection();
+
+        Color startColor = Color.fromRGB(255, 0, 0); // 红色
+        Color endColor = Color.fromRGB(0, 0, 255);   // 蓝色
+        Particle.DustTransition dustTransition = new Particle.DustTransition(startColor, endColor, 1); // 最后一个参数是粒子大小
+
+        for (int i = 0; i < 10; i++) {
+            GetEntity.world.spawnParticle(Particle.DUST_COLOR_TRANSITION, location, 1, 0, 0, 0, dustTransition);
+            location.add(direction);
+        }
+    }
+
+    private static void testPar2() {
+        Yuehua.scheduler.runTaskAsynchronously(Yuehua.instance, () -> {
+            Location location = player.getEyeLocation();
+            Vector direction = location.getDirection();
+
+            Color startColor = Color.fromRGB(255, 0, 0); // 红色
+            Color endColor = Color.fromRGB(0, 0, 255);   // 蓝色
+            Particle.DustTransition dustTransition = new Particle.DustTransition(startColor, endColor, 1); // 最后一个参数是粒子大小
+
+            for (int i = 0; i < 10; i++) {
+                GetEntity.world.spawnParticle(Particle.DUST_COLOR_TRANSITION, location, 1, 0, 0, 0, dustTransition);
+                location.add(direction);
+            }
+        });
+    }
+
+    private static void testPar3() {
+        Location location = player.getEyeLocation();
+        Vector direction = location.getDirection();
+
+        Color startColor = Color.fromRGB(255, 0, 0); // 红色
+        Color endColor = Color.fromRGB(0, 0, 255);   // 蓝色
+        Particle.DustTransition dustTransition = new Particle.DustTransition(startColor, endColor, 1); // 最后一个参数是粒子大小
+
+        for (int i = 0; i < 10000; i++) {
+            GetEntity.world.spawnParticle(Particle.DUST_COLOR_TRANSITION, location, 1, 0, 0, 0, dustTransition);
+            location.add(direction);
+        }
+    }
+
+    private static void testPar4() {
+        Yuehua.scheduler.runTaskAsynchronously(Yuehua.instance, () -> {
+            Location location = player.getEyeLocation();
+            Vector direction = location.getDirection();
+
+            Color startColor = Color.fromRGB(255, 0, 0); // 红色
+            Color endColor = Color.fromRGB(0, 0, 255);   // 蓝色
+            Particle.DustTransition dustTransition = new Particle.DustTransition(startColor, endColor, 1); // 最后一个参数是粒子大小
+
+            for (int i = 0; i < 10000; i++) {
+                GetEntity.world.spawnParticle(Particle.DUST_COLOR_TRANSITION, location, 1, 0, 0, 0, dustTransition);
+                location.add(direction);
+            }
+        });
+    }
+
+    //
+    private static void testTag() {
+        if (entity.getScoreboardTags().contains("p")) {
+        }
+    }
+
+    private static void testInstanceOf() {
+        if (entity instanceof Player) {
+        }
+    }
+
+    private static void testType() {
+        if (entity.getType() == EntityType.PLAYER) {
+        }
+    }
+
+    private static void testSendMes() {
+        player.sendMessage(
+                Component.translatable("badarg")
+        );
+    }
+
+    private static void testSendMes2() {
+        Yuehua.scheduler.runTaskAsynchronously(Yuehua.instance, () -> {
+            player.sendMessage(
+                    Component.translatable("badarg")
+            );
+        });
+
+    }
+
+    private static void testSendTitle() {
+        player.showTitle(Death.title);
+    }
+
+    private static void testSendTitleAysnc() {
+        Yuehua.async(() -> {
+            player.showTitle(Death.title);
+        });
+    }
+
+    private static void testTp() {
+        player.teleport(player.getLocation().add(new Vector(0, 1, 0)));
+    }
+
+    private static void testSummon() {
+        GetEntity.world.spawn(player.getLocation(), ItemDisplay.class, it -> it.setItemStack(Food.baoZi));
+    }
+
+    private static void testPar() {
+        GetEntity.world.spawnParticle(Particle.FLAME, player.getLocation(), 1, 0, 0, 0, 0);
+    }
+
+
+    private static void testPlayerAddr() {
+        if (player == Bukkit.getPlayer("xiaoxiaoOWO")) {
+            Bukkit.broadcast(Component.text("true"));
+        }
+    }
+
+    private static void testEntityAddr() {
+       entity = GetEntity.getNearestMonster(player.getLocation(), 4, 4, 4);
+       Bukkit.broadcast(Component.text(entity.toString()));
+    }
+
+    private static void testAddToData() {
+        MonsterData monsterData = new MonsterData(1, 1, 1, "1");
+        Yuehua.monsterData.put(UUID.randomUUID(), monsterData);
+    }
+
+    private static void testWithTag() {
+        Iterator<String> iterator = entity.getScoreboardTags().iterator();
+        while (iterator.hasNext()) {
+            switch (iterator.next()) {
+                case "m" -> {
+                }
+                case "test" -> a++;
+            }
+        }
+    }
+
+    private static void testWithPer() {
+        switch (entity.getPersistentDataContainer().get(DataContainer.id, PersistentDataType.STRING)) {
+            case "m" -> {
+            }
+            case "test" -> a++;
+        }
+    }
+
+    private static void testCancle() {
+        int taskId = Yuehua.syncTimerWithId(new TestTask3(), 0, 20);
+        Yuehua.playerData.get(player.getUniqueId()).taskIds.add(taskId);
+    }
+
+    private static void testYinYong(){
+        entity = GetEntity.getNearestMonster(player.getLocation(), 4, 4, 4);
+        Yuehua.syncTimer(()->{
+            Bukkit.broadcast(
+                    Component.text(entity.isDead())
+            );
+        },0,20);
+    }
+
+    private static void getMonPer(){
+        PersistentDataContainer pdc = entity.getPersistentDataContainer();
+        switch (pdc.get(DataContainer.id, PersistentDataType.STRING)){
+            case "renou" -> {
+            }
+            case "test" -> a++;
+        }
+    }
+
 
 
 }

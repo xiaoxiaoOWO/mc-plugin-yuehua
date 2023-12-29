@@ -53,6 +53,7 @@ public final class DanData extends Data {
         Act.initDan(this,slot39.id);
         Act.initDan(this,slot40.id);
 
+        updateZhenfa();
 
 
 

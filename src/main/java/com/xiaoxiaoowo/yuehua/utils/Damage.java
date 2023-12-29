@@ -5,37 +5,46 @@ import com.xiaoxiaoowo.yuehua.data.Data;
 import com.xiaoxiaoowo.yuehua.data.MonsterData;
 import com.xiaoxiaoowo.yuehua.system.DataContainer;
 import net.kyori.adventure.text.Component;
-import org.bukkit.entity.Creature;
+import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
-import java.util.Collection;
+import java.util.ArrayList;
+
 public final class Damage {
-    public static void damage(Collection<Creature> creatures, Player player, int damage, int pofa) {
-        for (Creature creature : creatures) {
+    public static void damage(Player player, int damage, int pofa, Mob mob) {
+
+        //仇恨
+        if (mob.getTarget() == null) {
+            mob.setTarget(player);
+        }
+
+        //取数据
+        int fakang = Yuehua.monsterData.get(mob.getUniqueId()).fakang;
+        int x = Math.max(0, fakang - pofa);
+        int y = Math.min(100, x);
+        //造成伤害设置杀死
+        mob.setKiller(player);
+        mob.damage(damage * (1 - y / 100.0));
+
+    }
+
+
+    public static void damage(Player player, int damage, int pofa, ArrayList<Mob> mobs) {
+        for (Mob mob : mobs) {
             //仇恨
-            if (creature.getTarget() == null) {
-                creature.setTarget(player);
+            if (mob.getTarget() == null) {
+                mob.setTarget(player);
             }
-            MonsterData monsterData = Yuehua.monsterData.get(creature.getUniqueId());
+            MonsterData monsterData = Yuehua.monsterData.get(mob.getUniqueId());
             //取数据
-            int fakang;
-            if (monsterData == null) {
-                PersistentDataContainer pck = creature.getPersistentDataContainer();
-                fakang = pck.get(DataContainer.fakang, PersistentDataType.INTEGER);
-                int renxing = pck.get(DataContainer.renxing, PersistentDataType.INTEGER);
-                int shengji = pck.get(DataContainer.shengji,PersistentDataType.INTEGER);
-                String id = pck.get(DataContainer.id, PersistentDataType.STRING);
-                Yuehua.monsterData.put(creature.getUniqueId(), new MonsterData(fakang,renxing,shengji,id));
-            } else {
-                fakang = monsterData.fakang;
-            }
+            int fakang = Yuehua.monsterData.get(mob.getUniqueId()).fakang;
             int x = Math.max(0, fakang - pofa);
             int y = Math.min(100, x);
             //造成伤害设置杀死
-            creature.setKiller(player);
-            creature.damage(damage * (1 - y / 100.0));
+            mob.setKiller(player);
+            mob.damage(damage * (1 - y / 100.0));
         }
     }
 
@@ -50,10 +59,8 @@ public final class Damage {
     public static void damageHuo(Player player, double damage) {
 
         Data data = Yuehua.playerData.get(player.getUniqueId());
-        if(data.race == 5){
-            player.sendMessage(
-                    Component.translatable("zhaneffect")
-            );
+        if (data.race == 5) {
+            Yuehua.sendMes(Component.translatable("zhaneffect"),player);
             return;
         }
 
@@ -63,7 +70,7 @@ public final class Damage {
         player.damage(damage * (1 - fakang / 100.0));
     }
 
-    public static void damage(double damage, Player... players) {
+    public static void damage(double damage, ArrayList<Player> players) {
         for (Player player : players) {
             //取数据
             int fakang = Yuehua.playerData.get(player.getUniqueId()).fakang;
@@ -72,13 +79,11 @@ public final class Damage {
         }
     }
 
-    public static void damageHuo(double damage, Player... players) {
+    public static void damageHuo(double damage, ArrayList<Player> players) {
         for (Player player : players) {
             Data data = Yuehua.playerData.get(player.getUniqueId());
-            if(data.race == 5){
-                player.sendMessage(
-                        Component.translatable("zhaneffect")
-                );
+            if (data.race == 5) {
+                Yuehua.sendMes(Component.translatable("zhaneffect"),player);
                 return;
             }
 

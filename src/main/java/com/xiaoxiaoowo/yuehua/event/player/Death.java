@@ -28,11 +28,11 @@ public final class Death implements Listener {
     @EventHandler
     public void onDeath(PlayerDeathEvent e) {
         Player player = e.getPlayer();
-        player.showTitle(title);
         PersistentDataContainer pdc = player.getPersistentDataContainer();
         switch (pdc.get(DataContainer.fuben, PersistentDataType.INTEGER)) {
 
         }
+        Yuehua.async(()-> player.showTitle(title));
         Yuehua.scheduler.runTask(Yuehua.instance, () -> {
             Data data = Yuehua.playerData.get(player.getUniqueId());
             //种族BUFF

@@ -1,4 +1,4 @@
-package com.xiaoxiaoowo.yuehua.itemstack.other;
+package com.xiaoxiaoowo.yuehua.itemstack.dz;
 
 import com.xiaoxiaoowo.yuehua.system.DataContainer;
 import net.kyori.adventure.text.Component;

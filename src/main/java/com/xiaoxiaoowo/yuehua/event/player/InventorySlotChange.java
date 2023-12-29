@@ -62,6 +62,9 @@ public final class InventorySlotChange implements Listener {
                                 PersistentDataContainer pdc = now.getItemMeta().getPersistentDataContainer();
                                 Act.actGong(gongData, pdc.get(DataContainer.id, PersistentDataType.STRING));
                             }
+                        }else {
+                            gongData.readyBow = true;
+                            gongData.readyCrossBow = true;
                         }
                     }
                     case 3 -> {

@@ -1,5 +1,6 @@
 package com.xiaoxiaoowo.yuehua.commands.blockcommand;
 
+import com.xiaoxiaoowo.yuehua.Yuehua;
 import com.xiaoxiaoowo.yuehua.utils.GetEntity;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -17,12 +18,15 @@ public final class RenOu implements CommandExecutor {
     private static Skeleton skeleton;
     private static Location location;
 
+
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender instanceof Player player) {
-            player.sendMessage(
-                    Component.translatable("notpermit")
-            );
+            Yuehua.scheduler.runTaskAsynchronously(Yuehua.instance, () -> {
+                player.sendMessage(
+                        Component.translatable("notpermit")
+                );
+            });
             return true;
         }
 
@@ -44,12 +48,14 @@ public final class RenOu implements CommandExecutor {
             }
             for (Entity entity : GetEntity.getPlayers(location, 8, 8, 3)) {
                 Player player = (Player) entity;
-                player.sendMessage(
-                        Component
-                                .translatable("renou",
-                                        Component.text(damage).color(NamedTextColor.RED))
+                Yuehua.scheduler.runTaskAsynchronously(Yuehua.instance, () -> {
+                    player.sendMessage(
+                            Component
+                                    .translatable("renou",
+                                            Component.text(damage))
 
-                );
+                    );
+                });
             }
         }
         return true;

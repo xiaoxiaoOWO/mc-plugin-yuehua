@@ -29,8 +29,7 @@ public final class Click implements Listener {
                         if (whoClicked.getPersistentDataContainer().get(DataContainer.fuben, PersistentDataType.INTEGER) == 0) {
                             whoClicked.openInventory(Yh.QIAN_KUN_BAG);
                         } else {
-
-                            whoClicked.sendMessage(Component.translatable("nomainland"));
+                            Yuehua.async(() -> whoClicked.sendMessage(Component.translatable("nomainland")));
                             whoClicked.closeInventory();
 
                         }
@@ -80,9 +79,9 @@ public final class Click implements Listener {
                                         if (whoClicked.getScoreboardTags().contains("qkd1")) {
                                             data.inventory1 = SQL.retrievePlayerInventory1(whoClicked);
                                         } else {
+                                            whoClicked.sendMessage(Component.translatable("unqkd"));
                                             Yuehua.scheduler.runTask(
                                                     Yuehua.instance, () -> {
-                                                        whoClicked.sendMessage(Component.translatable("unqkd"));
                                                         whoClicked.closeInventory();
                                                     }
                                             );
@@ -99,9 +98,9 @@ public final class Click implements Listener {
                                         if (whoClicked.getScoreboardTags().contains("qkd2")) {
                                             data.inventory2 = SQL.retrievePlayerInventory2(whoClicked);
                                         } else {
+                                            whoClicked.sendMessage(Component.translatable("unqkd"));
                                             Yuehua.scheduler.runTask(
                                                     Yuehua.instance, () -> {
-                                                        whoClicked.sendMessage(Component.translatable("unqkd"));
                                                         whoClicked.closeInventory();
                                                     }
                                             );
@@ -118,9 +117,9 @@ public final class Click implements Listener {
                                         if (whoClicked.getScoreboardTags().contains("qkd3")) {
                                             data.inventory3 = SQL.retrievePlayerInventory3(whoClicked);
                                         } else {
+                                            whoClicked.sendMessage(Component.translatable("unqkd"));
                                             Yuehua.scheduler.runTask(
                                                     Yuehua.instance, () -> {
-                                                        whoClicked.sendMessage(Component.translatable("unqkd"));
                                                         whoClicked.closeInventory();
                                                     }
                                             );
@@ -137,9 +136,9 @@ public final class Click implements Listener {
                                         if (whoClicked.getScoreboardTags().contains("qkd4")) {
                                             data.inventory4 = SQL.retrievePlayerInventory4(whoClicked);
                                         } else {
+                                            whoClicked.sendMessage(Component.translatable("unqkd"));
                                             Yuehua.scheduler.runTask(
                                                     Yuehua.instance, () -> {
-                                                        whoClicked.sendMessage(Component.translatable("unqkd"));
                                                         whoClicked.closeInventory();
                                                     }
                                             );
@@ -157,9 +156,9 @@ public final class Click implements Listener {
                                         if (whoClicked.getScoreboardTags().contains("qkd5")) {
                                             data.inventory5 = SQL.retrievePlayerInventory5(whoClicked);
                                         } else {
+                                            whoClicked.sendMessage(Component.translatable("unqkd"));
                                             Yuehua.scheduler.runTask(
                                                     Yuehua.instance, () -> {
-                                                        whoClicked.sendMessage(Component.translatable("unqkd"));
                                                         whoClicked.closeInventory();
                                                     }
                                             );
@@ -177,9 +176,9 @@ public final class Click implements Listener {
                                         if (whoClicked.getScoreboardTags().contains("qkd6")) {
                                             data.inventory6 = SQL.retrievePlayerInventory6(whoClicked);
                                         } else {
+                                            whoClicked.sendMessage(Component.translatable("unqkd"));
                                             Yuehua.scheduler.runTask(
                                                     Yuehua.instance, () -> {
-                                                        whoClicked.sendMessage(Component.translatable("unqkd"));
                                                         whoClicked.closeInventory();
                                                     }
                                             );
@@ -196,9 +195,9 @@ public final class Click implements Listener {
                                         if (whoClicked.getScoreboardTags().contains("qkd7")) {
                                             data.inventory7 = SQL.retrievePlayerInventory7(whoClicked);
                                         } else {
+                                            whoClicked.sendMessage(Component.translatable("unqkd"));
                                             Yuehua.scheduler.runTask(
                                                     Yuehua.instance, () -> {
-                                                        whoClicked.sendMessage(Component.translatable("unqkd"));
                                                         whoClicked.closeInventory();
                                                     }
                                             );
@@ -215,9 +214,9 @@ public final class Click implements Listener {
                                         if (whoClicked.getScoreboardTags().contains("qkd8")) {
                                             data.inventory8 = SQL.retrievePlayerInventory8(whoClicked);
                                         } else {
+                                            whoClicked.sendMessage(Component.translatable("unqkd"));
                                             Yuehua.scheduler.runTask(
                                                     Yuehua.instance, () -> {
-                                                        whoClicked.sendMessage(Component.translatable("unqkd"));
                                                         whoClicked.closeInventory();
                                                     }
                                             );
@@ -234,9 +233,9 @@ public final class Click implements Listener {
                                         if (whoClicked.getScoreboardTags().contains("qkd9")) {
                                             data.inventory9 = SQL.retrievePlayerInventory9(whoClicked);
                                         } else {
+                                            whoClicked.sendMessage(Component.translatable("unqkd"));
                                             Yuehua.scheduler.runTask(
                                                     Yuehua.instance, () -> {
-                                                        whoClicked.sendMessage(Component.translatable("unqkd"));
                                                         whoClicked.closeInventory();
                                                     }
                                             );
@@ -287,9 +286,9 @@ public final class Click implements Listener {
                     case YELLOW_DYE -> {
                         event.setCancelled(true);
                         Player whoClicked = (Player) event.getWhoClicked();
+                        whoClicked.sendMessage(Component.translatable("unsp"));
                         Yuehua.scheduler.runTask(
                                 Yuehua.instance, () -> {
-                                    whoClicked.sendMessage(Component.translatable("unsp"));
                                     whoClicked.closeInventory();
                                 }
                         );

@@ -73,8 +73,6 @@ public final class ArrowCMD implements CommandExecutor {
                                 return;
                             }
                             gongData.arrow_count -= amount;
-                            ItemStack arrow = Other.ARROW;
-                            arrow.setAmount(amount);
                             player.sendMessage(
                                     Component.translatable("arrowcount",
                                             Component.text(gongData.arrow_count).color(NamedTextColor.AQUA)
@@ -84,6 +82,8 @@ public final class ArrowCMD implements CommandExecutor {
                             new BukkitRunnable() {
                                 @Override
                                 public void run() {
+                                    ItemStack arrow = Other.ARROW;
+                                    arrow.setAmount(amount);
                                     player.getInventory().addItem(arrow);
                                 }
                             }.runTask(Yuehua.instance);
@@ -126,45 +126,40 @@ public final class ArrowCMD implements CommandExecutor {
                                 return;
                             }
 
-                            new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    PlayerInventory playerInventory = player.getInventory();
-                                    int count = 0;
-                                    Collection<ItemStack> itemStacks = (Collection<ItemStack>) playerInventory.all(Material.ARROW).values();
+                            PlayerInventory playerInventory = player.getInventory();
+                            int count = 0;
+                            Collection<ItemStack> itemStacks = (Collection<ItemStack>) playerInventory.all(Material.ARROW).values();
 
-                                    for (ItemStack itemStack : itemStacks) {
-                                        count += itemStack.getAmount();
-                                    }
+                            for (ItemStack itemStack : itemStacks) {
+                                count += itemStack.getAmount();
+                            }
 
-                                    if (count < amount) {
-                                        player.sendMessage(
-                                                Component.translatable("lessarrow")
-                                        );
-                                        return;
-                                    }
-                                    int inamout = amount;
+                            if (count < amount) {
+                                player.sendMessage(
+                                        Component.translatable("lessarrow")
+                                );
+                                return;
+                            }
+                            int inamout = amount;
 
 
-                                    for (ItemStack itemStack : itemStacks) {
-                                        int amoutNow = itemStack.getAmount();
-                                        if (inamout > amoutNow) {
-                                            inamout -= amoutNow;
-                                            itemStack.setAmount(0);
-                                        } else {
-                                            itemStack.setAmount(amoutNow - inamout);
-                                            break;
-                                        }
-                                    }
-
-                                    gongData.arrow_count = total;
-                                    player.sendMessage(
-                                            Component.translatable("arrowcount",
-                                                    Component.text(gongData.arrow_count).color(NamedTextColor.AQUA)
-                                            )
-                                    );
+                            for (ItemStack itemStack : itemStacks) {
+                                int amoutNow = itemStack.getAmount();
+                                if (inamout > amoutNow) {
+                                    inamout -= amoutNow;
+                                    itemStack.setAmount(0);
+                                } else {
+                                    itemStack.setAmount(amoutNow - inamout);
+                                    break;
                                 }
-                            }.runTask(Yuehua.instance);
+                            }
+
+                            gongData.arrow_count = total;
+                            player.sendMessage(
+                                    Component.translatable("arrowcount",
+                                            Component.text(gongData.arrow_count).color(NamedTextColor.AQUA)
+                                    )
+                            );
 
 
                         }

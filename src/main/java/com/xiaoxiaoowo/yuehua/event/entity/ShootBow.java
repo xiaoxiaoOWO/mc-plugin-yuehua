@@ -43,9 +43,6 @@ public final class ShootBow implements Listener {
             //射箭技能
             shoot(data, arrowEntity);
 
-            Yuehua.scheduler.runTaskLater(
-                    Yuehua.instance, () -> data.readyBow = true, 2L
-            );
 
 
         }

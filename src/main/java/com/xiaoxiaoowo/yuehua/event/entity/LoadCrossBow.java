@@ -20,20 +20,15 @@ public final class LoadCrossBow implements Listener {
             Data data = Yuehua.playerData.get(player.getUniqueId());
             PlayerInventory inventory = player.getInventory();
             if (data.job == 2) {
-                //判断是否在第一格且副手没有弩
-                if (inventory.getHeldItemSlot() == 0 && inventory.getItemInOffHand().getType() != Material.CROSSBOW) {
+                //判断是否在第一格
+                if (inventory.getHeldItemSlot() == 0) {
                     GongData gongData = (GongData) data;
                     gongData.readyCrossBow = false;
-                    Yuehua.scheduler.runTaskLater(
-                            Yuehua.instance, () -> gongData.readyCrossBow = true, 2L
-                    );
-
-
                 } else {
                     e.setCancelled(true);
-                    player.sendMessage(
+                    Yuehua.async(() -> player.sendMessage(
                             Component.translatable("not1c")
-                    );
+                    ));
                 }
             } else {
                 ItemStack mainHand = inventory.getItemInMainHand();

@@ -11,7 +11,6 @@ import com.xiaoxiaoowo.yuehua.utils.GetEntity;
 import com.xiaoxiaoowo.yuehua.utils.SQL;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
@@ -35,7 +34,7 @@ public final class Join implements Listener {
         Player player = e.getPlayer();
         Location location = player.getLocation();
         player.teleport(WAITING);
-        Yuehua.scheduler.runTaskLaterAsynchronously(Yuehua.instance, () -> {
+        Yuehua.scheduler.runTaskAsynchronously(Yuehua.instance, () -> {
             InetSocketAddress inetSocketAddress = player.getAddress();
             if (inetSocketAddress == null) {
                 player.kick(Component.translatable("badnet"));
@@ -60,9 +59,8 @@ public final class Join implements Listener {
             }
 
 
+
             PersistentDataContainer persistentDataContainer = player.getPersistentDataContainer();
-
-
             if (!persistentDataContainer.has(DataContainer.attack)) {
                 //初始化视频槽
                 Inventory shipinBar = Bukkit.createInventory(player, 9, Component.translatable("sp"));
@@ -81,7 +79,7 @@ public final class Join implements Listener {
                 //初始攻击速度
                 player.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(1);
                 //初始化
-                persistentDataContainer.set(DataContainer.money,PersistentDataType.INTEGER,0);
+                persistentDataContainer.set(DataContainer.money, PersistentDataType.INTEGER, 0);
                 persistentDataContainer.set(DataContainer.slot0, PersistentDataType.STRING, "null");
                 persistentDataContainer.set(DataContainer.slot1, PersistentDataType.STRING, "null");
                 persistentDataContainer.set(DataContainer.slot2, PersistentDataType.STRING, "null");
@@ -100,8 +98,10 @@ public final class Join implements Listener {
                 persistentDataContainer.set(DataContainer.eslot6, PersistentDataType.STRING, "null");
                 persistentDataContainer.set(DataContainer.eslot7, PersistentDataType.STRING, "null");
 
+                persistentDataContainer.set(DataContainer.task, PersistentDataType.INTEGER, 0);
                 persistentDataContainer.set(DataContainer.fuben, PersistentDataType.INTEGER, 0);
                 persistentDataContainer.set(DataContainer.relife, PersistentDataType.INTEGER, 0);
+                persistentDataContainer.set(DataContainer.relifeStoneCount, PersistentDataType.INTEGER, 0);
 
                 persistentDataContainer.set(DataContainer.race, PersistentDataType.INTEGER, 0);
                 persistentDataContainer.set(DataContainer.job, PersistentDataType.INTEGER, 0);
@@ -146,28 +146,21 @@ public final class Join implements Listener {
                 default -> new Data(player);
             };
 
+            Yuehua.sync(() -> Yuehua.playerData.put(player.getUniqueId(), data));
 
-            Yuehua.scheduler.runTask(Yuehua.instance, () -> {
-                Yuehua.playerData.put(player.getUniqueId(), data);
-                //OP,玩家处理
-                if (player.isOp()) {
-                    player.setGameMode(GameMode.CREATIVE);
-                    player.addPotionEffect(effect);
-                    player.teleport(location);
-                } else {
-                    //判断是否在大陆
-                    if (persistentDataContainer.get(DataContainer.fuben, PersistentDataType.INTEGER) != 0) {
-                        player.setHealth(0);
-                        player.sendMessage(
-                                Component.translatable("notmainland")
-                        );
-                    } else {
-                        player.teleport(location);
-                    }
-                }
-            });
+            if (persistentDataContainer.get(DataContainer.fuben, PersistentDataType.INTEGER) != 0) {
+                player.setHealth(0);
+                player.sendMessage(
+                        Component.translatable("notmainland")
+                );
+            } else {
+                player.teleportAsync(location);
+            }
 
-        }, 1L);
+
+
+
+        });
 
 
     }

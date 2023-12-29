@@ -5,7 +5,9 @@ import com.xiaoxiaoowo.yuehua.data.DanData;
 import com.xiaoxiaoowo.yuehua.data.GongData;
 import com.xiaoxiaoowo.yuehua.data.ZhanData;
 import com.xiaoxiaoowo.yuehua.event.player.Death;
+import com.xiaoxiaoowo.yuehua.itemstack.liandan.Dan;
 import com.xiaoxiaoowo.yuehua.itemstack.other.*;
+import com.xiaoxiaoowo.yuehua.itemstack.dz.YuanSu;
 import com.xiaoxiaoowo.yuehua.system.DataContainer;
 import com.xiaoxiaoowo.yuehua.utils.GetEntity;
 import net.kyori.adventure.text.Component;
@@ -27,19 +29,21 @@ import java.util.UUID;
 
 @SuppressWarnings("deprecation")
 public final class IntoGame implements CommandExecutor {
-    private static final Location TP_SHEN = new Location(GetEntity.world, 3208, 73, 381, 90, 0);
-    private static final Location TP_XIAN = new Location(GetEntity.world, 3179, 127, 783, -90, 0);
-    private static final Location TP_REN = new Location(GetEntity.world, 1689, 140, 138, 90, 0);
-    private static final Location TP_YAO = new Location(GetEntity.world, 2845, 48, 899, 180, -20);
-    private static final Location TP_ZHAN = new Location(GetEntity.world, 3299, 22, -138, 90, 0);
+    public static final Location TP_SHEN = new Location(GetEntity.world, 3208, 73, 381, 90, 0);
+    public static final Location TP_XIAN = new Location(GetEntity.world, 3179, 127, 783, -90, 0);
+    public static final Location TP_REN = new Location(GetEntity.world, 1689, 140, 138, 90, 0);
+    public static final Location TP_YAO = new Location(GetEntity.world, 2845, 48, 899, 180, -20);
+    public static final Location TP_ZHAN = new Location(GetEntity.world, 3299, 22, -138, 90, 0);
     private static final Location SPAWN = new Location(GetEntity.world, 205, 54, -1771);
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender instanceof Player player) {
-            player.sendMessage(
-                    Component.translatable("notpermit")
-            );
+            Yuehua.scheduler.runTaskAsynchronously(Yuehua.instance,()->{
+                player.sendMessage(
+                        Component.translatable("notpermit")
+                );
+            });
             return true;
         }
         BlockCommandSender blockCommandSender = (BlockCommandSender) sender;
@@ -72,9 +76,6 @@ public final class IntoGame implements CommandExecutor {
         tongqian.setAmount(64);
         //NPC对话泡泡
         ItemStack npc_paopao = Other.NPC_PAOPAO;
-        //战士特供道具 额外120个包子
-        ItemStack baozi2 = Food.baoZi;
-        baozi2.setAmount(120);
         //弓箭手特供道具 十组箭
         ItemStack arrow = Other.ARROW;
         arrow.setAmount(640);
@@ -97,8 +98,10 @@ public final class IntoGame implements CommandExecutor {
         //给予物品
         PlayerInventory inventory = player.getInventory();
         switch (job) {
-            case 1 ->
-                inventory.addItem(baozi, tongqian, npc_paopao, race_province, baozi2);
+            case 1 ->{
+                baozi.setAmount(192);
+                inventory.addItem(baozi, tongqian, npc_paopao, race_province);
+            }
 
             case 2 ->
                 inventory.addItem(baozi, tongqian, npc_paopao, race_province, arrow);
@@ -123,23 +126,23 @@ public final class IntoGame implements CommandExecutor {
         switch (race) {
             case 1 -> {
                 player.addPotionEffect(Death.shen);
-                player.teleport(TP_SHEN);
+                player.teleportAsync(TP_SHEN);
             }
             case 2 -> {
                 player.addPotionEffect(Death.xian);
-                player.teleport(TP_XIAN);
+                player.teleportAsync(TP_XIAN);
             }
             case 3 -> {
                 player.addPotionEffect(Death.ren);
-                player.teleport(TP_REN);
+                player.teleportAsync(TP_REN);
             }
             case 4 -> {
                 player.addPotionEffect(Death.yao);
-                player.teleport(TP_YAO);
+                player.teleportAsync(TP_YAO);
             }
             case 5 -> {
                 player.addPotionEffect(Death.zhan);
-                player.teleport(TP_ZHAN);
+                player.teleportAsync(TP_ZHAN);
             }
         }
 

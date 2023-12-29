@@ -20,7 +20,8 @@ public final class Quit implements org.bukkit.event.Listener {
         Player player = e.getPlayer();
         UUID uuid = player.getUniqueId();
         Data data = Yuehua.playerData.get(uuid);
-        Yuehua.playerData.remove(uuid);
+        data.taskIds.forEach(it -> Yuehua.scheduler.cancelTask(it));
+        Yuehua.monsterData.remove(uuid);
 
         PersistentDataContainer pdc = player.getPersistentDataContainer();
         pdc.set(DataContainer.money, PersistentDataType.INTEGER, data.money);

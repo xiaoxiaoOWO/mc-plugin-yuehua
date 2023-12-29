@@ -9,8 +9,12 @@ public final class DataContainer {
     public static final NamespacedKey enchantid;
     public static final NamespacedKey insertid;
     //实体数据
-    //复活点标记,副本标记
+    //剧情完成标记
+    public static final NamespacedKey task;
+
+    //复活点标记,副本标记,
     public static final NamespacedKey relife;
+    public static final NamespacedKey relifeStoneCount;
     public static final NamespacedKey fuben;
 
     //基础数据
@@ -152,8 +156,10 @@ public final class DataContainer {
         ConcentratedHuoCount = new NamespacedKey(namespace, "concentratedhuocount");
         ConcentratedTuCount = new NamespacedKey(namespace, "concentratedtucount");
 
+        task = new NamespacedKey(namespace, "task");
         relife = new NamespacedKey(namespace, "relife");
         fuben = new NamespacedKey(namespace, "fuben");
+        relifeStoneCount = new NamespacedKey(namespace, "relifestonecount");
 
         slot0 = new NamespacedKey(namespace, "slot0");
         slot1 = new NamespacedKey(namespace, "slot1");

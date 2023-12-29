@@ -54,7 +54,7 @@ public final class GongData extends Data {
         Act.initGong(this, slot40.id);
 
 
-
+        updateArrow();
     }
 
     public String toString() {

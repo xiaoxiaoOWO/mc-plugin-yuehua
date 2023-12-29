@@ -1,5 +1,6 @@
 package com.xiaoxiaoowo.yuehua.event.player;
 
+import com.xiaoxiaoowo.yuehua.Yuehua;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
@@ -13,9 +14,9 @@ public final class DropItem implements Listener {
         switch (type) {
             case DIAMOND_PICKAXE, IRON_PICKAXE, WOODEN_PICKAXE, GOLDEN_PICKAXE, BOW, CROSSBOW, SHIELD -> {
                 e.setCancelled(true);
-                e.getPlayer().sendMessage(
+                Yuehua.async(() -> e.getPlayer().sendMessage(
                         Component.translatable("cannotdrop")
-                );
+                ));
             }
         }
     }

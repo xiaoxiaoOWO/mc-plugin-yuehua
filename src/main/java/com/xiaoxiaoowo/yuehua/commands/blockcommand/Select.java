@@ -1,9 +1,11 @@
 package com.xiaoxiaoowo.yuehua.commands.blockcommand;
 
+import com.xiaoxiaoowo.yuehua.Yuehua;
 import com.xiaoxiaoowo.yuehua.system.DataContainer;
 import com.xiaoxiaoowo.yuehua.system.Team;
 import com.xiaoxiaoowo.yuehua.utils.GetEntity;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Location;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.Command;
@@ -24,9 +26,11 @@ public final class Select implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender instanceof Player player) {
-            player.sendMessage(
-                    Component.translatable("notpermit")
-            );
+            Yuehua.scheduler.runTaskAsynchronously(Yuehua.instance,()->{
+                player.sendMessage(
+                        Component.translatable("notpermit")
+                );
+            });
             return true;
         }
         if (args.length != 2) {
@@ -103,7 +107,7 @@ public final class Select implements CommandExecutor {
                         player.addScoreboardTag("zhan");
                     }
                 }
-                player.teleport(TP);
+                player.teleportAsync(TP);
 
             }
             case "job" -> {
@@ -130,7 +134,7 @@ public final class Select implements CommandExecutor {
                         persistentDataContainer.set(DataContainer.slot5, PersistentDataType.STRING, "null");
                     }
                 }
-                player.teleport(TO_FINAL);
+                player.teleportAsync(TO_FINAL);
             }
             case "other" -> {
 
@@ -149,7 +153,7 @@ public final class Select implements CommandExecutor {
                         persistentDataContainer.remove(DataContainer.slot3);
                         persistentDataContainer.remove(DataContainer.slot4);
                         persistentDataContainer.remove(DataContainer.slot5);
-                        player.teleport(BACK_TO_SELECT_JOB);
+                        player.teleportAsync(BACK_TO_SELECT_JOB);
                     }
                     case "reSelect" -> {
                         persistentDataContainer.set(DataContainer.job, PersistentDataType.INTEGER, 0);
@@ -171,9 +175,9 @@ public final class Select implements CommandExecutor {
                         persistentDataContainer.remove(DataContainer.slot3);
                         persistentDataContainer.remove(DataContainer.slot4);
                         persistentDataContainer.remove(DataContainer.slot5);
-                        player.teleport(RE_SELECT);
+                        player.teleportAsync(RE_SELECT);
                     }
-                    case "toFinal" -> player.teleport(TO_FINAL);
+                    case "toFinal" -> player.teleportAsync(TO_FINAL);
 
                 }
             }

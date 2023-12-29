@@ -1,6 +1,6 @@
 package com.xiaoxiaoowo.yuehua.task.test;
 
-import com.xiaoxiaoowo.yuehua.entity.monster.TestSkeleton;
+import com.xiaoxiaoowo.yuehua.entity.test.TestSkeleton;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 

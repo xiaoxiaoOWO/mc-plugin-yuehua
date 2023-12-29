@@ -1,24 +1,17 @@
 package com.xiaoxiaoowo.yuehua;
 
 import com.xiaoxiaoowo.yuehua.commands.Test;
-import com.xiaoxiaoowo.yuehua.commands.blockcommand.IntoGame;
-import com.xiaoxiaoowo.yuehua.commands.blockcommand.RenOu;
-import com.xiaoxiaoowo.yuehua.commands.blockcommand.Select;
-import com.xiaoxiaoowo.yuehua.commands.opcommand.Clearup;
-import com.xiaoxiaoowo.yuehua.commands.opcommand.GI;
-import com.xiaoxiaoowo.yuehua.commands.opcommand.MyTp;
-import com.xiaoxiaoowo.yuehua.commands.opcommand.MyTpTab;
+import com.xiaoxiaoowo.yuehua.commands.blockcommand.*;
+import com.xiaoxiaoowo.yuehua.commands.opcommand.*;
 import com.xiaoxiaoowo.yuehua.commands.opcommand.data.DataCountGet;
 import com.xiaoxiaoowo.yuehua.commands.opcommand.data.DataGet;
 import com.xiaoxiaoowo.yuehua.commands.opcommand.data.DataSet;
 import com.xiaoxiaoowo.yuehua.commands.opcommand.data.ItemDataGet;
-import com.xiaoxiaoowo.yuehua.commands.playercommand.ArrowCMD;
-import com.xiaoxiaoowo.yuehua.commands.playercommand.MoneyCMD;
-import com.xiaoxiaoowo.yuehua.commands.playercommand.Yh;
-import com.xiaoxiaoowo.yuehua.commands.playercommand.YuanSuCMD;
+import com.xiaoxiaoowo.yuehua.commands.playercommand.*;
 import com.xiaoxiaoowo.yuehua.commands.playercommand.completer.ArrowCom;
 import com.xiaoxiaoowo.yuehua.commands.playercommand.completer.YuanSuCom;
 import com.xiaoxiaoowo.yuehua.data.Data;
+import com.xiaoxiaoowo.yuehua.data.DisPlayData;
 import com.xiaoxiaoowo.yuehua.data.GongData;
 import com.xiaoxiaoowo.yuehua.data.MonsterData;
 import com.xiaoxiaoowo.yuehua.event.Inventory.Click;
@@ -34,6 +27,7 @@ import com.xiaoxiaoowo.yuehua.system.Team;
 import com.xiaoxiaoowo.yuehua.utils.GetEntity;
 import com.xiaoxiaoowo.yuehua.utils.MyLootTable;
 import com.xiaoxiaoowo.yuehua.utils.SQL;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -52,16 +46,21 @@ public final class Yuehua extends JavaPlugin {
     public static Collection<? extends Player> players;
     public static Map<UUID, Data> playerData;
     public static Map<UUID, MonsterData> monsterData;
+    public static Map<UUID, DisPlayData> disPlayData;
 
 
     @Override
     public void onEnable() {
         instance = this;
         scheduler = Bukkit.getScheduler();
-        console = Bukkit.getConsoleSender();
+        console = Bukkit.createCommandSender(it -> {
+        });
         players = Bukkit.getOnlinePlayers();
+        //对map进行put,get,remove都要注意是在主线程中，对数据本身的操作可以在异步线程中
+        //同样的由于ItemStack在加入玩家背包之前，在加入配方之前都是共享的，也不可以异步
         playerData = new HashMap<>(200);
         monsterData = new HashMap<>(8000);
+        disPlayData = new HashMap<>(200);
         //数据库
         SQL.connect();
 
@@ -75,6 +74,71 @@ public final class Yuehua extends JavaPlugin {
         registerCommand();
 
 
+    }
+
+    public static void sendMes(Component mes, Player player) {
+        scheduler.runTaskAsynchronously(instance, () -> player.sendMessage(mes));
+    }
+
+    public static void sendMes(Component mes, Collection<Player> players) {
+        scheduler.runTaskAsynchronously(instance, () -> players.forEach(it -> it.sendMessage(mes)));
+    }
+
+    public static void sendMes(Collection<Component> mess, Player player) {
+        scheduler.runTaskAsynchronously(instance, () -> mess.forEach(player::sendMessage));
+    }
+
+    public static void sendMes(Collection<Component> mess, Collection<Player> players) {
+        scheduler.runTaskAsynchronously(instance, () -> players.forEach(it -> mess.forEach(it::sendMessage)));
+    }
+
+
+    public static void async(Runnable runnable) {
+        scheduler.runTaskAsynchronously(instance, runnable);
+    }
+
+    public static int asyncWithId(Runnable runnable) {
+        return scheduler.runTaskAsynchronously(instance, runnable).getTaskId();
+    }
+
+    public static void asyncLater(Runnable runnable, long delay) {
+        scheduler.runTaskLater(instance, runnable, delay);
+    }
+
+    public static int asyncLaterWithId(Runnable runnable, long delay) {
+        return scheduler.runTaskLater(instance, runnable, delay).getTaskId();
+    }
+
+    public static void asyncTimer(Runnable runnable, long delay, long period) {
+        scheduler.runTaskTimer(instance, runnable, delay, period);
+    }
+
+    public static int asyncTimerWithId(Runnable runnable, long delay, long period) {
+        return scheduler.runTaskTimer(instance, runnable, delay, period).getTaskId();
+    }
+
+    public static void sync(Runnable runnable) {
+        scheduler.runTask(instance, runnable);
+    }
+
+    public static int syncWithId(Runnable runnable) {
+        return scheduler.runTask(instance, runnable).getTaskId();
+    }
+
+    public static void syncLater(Runnable runnable, long delay) {
+        scheduler.runTaskLater(instance, runnable, delay);
+    }
+
+    public static int syncLaterWithId(Runnable runnable, long delay) {
+        return scheduler.runTaskLater(instance, runnable, delay).getTaskId();
+    }
+
+    public static void syncTimer(Runnable runnable, long delay, long period) {
+        scheduler.runTaskTimer(instance, runnable, delay, period);
+    }
+
+    public static int syncTimerWithId(Runnable runnable, long delay, long period) {
+        return scheduler.runTaskTimer(instance, runnable, delay, period).getTaskId();
     }
 
 
@@ -136,7 +200,7 @@ public final class Yuehua extends JavaPlugin {
             if (data.inventory9 != null) {
                 SQL.storePlayerInventory9(name, data.inventory9);
             }
-            if (data.shipinBar != null){
+            if (data.shipinBar != null) {
                 SQL.storeShiPin(name, data.shipinBar);
             }
         }
@@ -159,12 +223,14 @@ public final class Yuehua extends JavaPlugin {
 
 
         //entity
+        pluginManager.registerEvents(new AddToWorld(), this);
         pluginManager.registerEvents(new Breed(), this);
         pluginManager.registerEvents(new DamageByEntity(), this);
         pluginManager.registerEvents(new Death(), this);
         pluginManager.registerEvents(new LoadCrossBow(), this);
         pluginManager.registerEvents(new PotionSpLash(), this);
         pluginManager.registerEvents(new RegainHealth(), this);
+        pluginManager.registerEvents(new RemoveFromWorld(), this);
         pluginManager.registerEvents(new ShootBow(), this);
         pluginManager.registerEvents(new SlimeSpilt(), this);
         pluginManager.registerEvents(new Transform(), this);
@@ -194,13 +260,17 @@ public final class Yuehua extends JavaPlugin {
 
         //Spawner
         pluginManager.registerEvents(new Spawn(), this);
+
     }
 
     private void registerCommand() {
         //blockcommand
         Objects.requireNonNull(Bukkit.getPluginCommand("intogame")).setExecutor(new IntoGame());
+        Objects.requireNonNull(Bukkit.getPluginCommand("markrelife")).setExecutor(new MarkRelife());
+        Objects.requireNonNull(Bukkit.getPluginCommand("relife")).setExecutor(new Relife());
         Objects.requireNonNull(Bukkit.getPluginCommand("renou")).setExecutor(new RenOu());
         Objects.requireNonNull(Bukkit.getPluginCommand("select")).setExecutor(new Select());
+        Objects.requireNonNull(Bukkit.getPluginCommand("storerelifestone")).setExecutor(new StoreRelifeStone());
 
         //opcommand
         //DATA
@@ -214,12 +284,15 @@ public final class Yuehua extends JavaPlugin {
         Objects.requireNonNull(Bukkit.getPluginCommand("mytp")).setExecutor(new MyTp());
         Objects.requireNonNull(Bukkit.getPluginCommand("mytp")).setTabCompleter(new MyTpTab());
         Objects.requireNonNull(Bukkit.getPluginCommand("perget")).setExecutor(new com.xiaoxiaoowo.yuehua.commands.opcommand.PerGet());
+        Objects.requireNonNull(Bukkit.getPluginCommand("setsign")).setExecutor(new SetSign());
+        Objects.requireNonNull(Bukkit.getPluginCommand("mysummon")).setExecutor(new Summon());
 
         //playercommand
         Objects.requireNonNull(Bukkit.getPluginCommand("arrow")).setTabCompleter(new ArrowCom());
         Objects.requireNonNull(Bukkit.getPluginCommand("money")).setTabCompleter(new com.xiaoxiaoowo.yuehua.commands.playercommand.completer.MoneyCom());
         Objects.requireNonNull(Bukkit.getPluginCommand("ys")).setTabCompleter(new YuanSuCom());
         Objects.requireNonNull(Bukkit.getPluginCommand("arrow")).setExecutor(new ArrowCMD());
+        Objects.requireNonNull(Bukkit.getPluginCommand("ki")).setExecutor(new Kill());
         Objects.requireNonNull(Bukkit.getPluginCommand("money")).setExecutor(new MoneyCMD());
         Objects.requireNonNull(Bukkit.getPluginCommand("yh")).setExecutor(new Yh());
         Objects.requireNonNull(Bukkit.getPluginCommand("ys")).setExecutor(new YuanSuCMD());
